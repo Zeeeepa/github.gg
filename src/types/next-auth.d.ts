@@ -1,25 +1,26 @@
 import type { DefaultSession, DefaultUser } from "next-auth"
-import type { DefaultJWT } from "next-auth/jwt"
 
 declare module "next-auth" {
   interface Session {
-    accessToken?: string // To store GitHub access token
+    accessToken?: string | null
     user: {
-      id: string // Our internal user ID
-      githubId?: string // User's GitHub ID
-    } & DefaultSession["user"]
+      id: string // Your internal user ID
+      githubId?: string | null // GitHub's user ID
+    } & DefaultSession["user"] // Extends default user properties (name, email, image)
   }
 
   interface User extends DefaultUser {
-    // Add custom properties to the User object (from your database)
-    // This is the user object returned by the adapter's getUser/createUser methods
-    githubId?: string // Ensure our adapter provides this
+    // DefaultUser already has id, name, email, image
+    // If your adapter returns githubId directly on the user object, you can add it here.
+    // However, we are primarily sourcing it from account.providerAccountId in the jwt callback.
+    githubId?: string | null
   }
 }
 
 declare module "next-auth/jwt" {
-  interface JWT extends DefaultJWT {
-    accessToken?: string
-    githubId?: string
+  interface JWT {
+    accessToken?: string | null
+    githubId?: string | null
+    userId?: string | null // Your internal user ID
   }
 }

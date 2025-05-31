@@ -34,36 +34,26 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-      // Add githubId and id from token to session object
-      if (token) {
-        session.user.id = token.sub as string // token.sub is typically the user's ID from the provider or adapter
-        // If using DrizzleAdapter, token.sub might be the adapter user ID.
-        // We might need to fetch the GitHub ID separately or ensure it's in the token.
-        // For now, let's assume token.sub is the user's primary ID in our system.
-        // We'll also want to store the GitHub access token if we need to make API calls on behalf of the user.
+      // token contains properties we added in the jwt callback
+      if (token.userId && session.user) {
+        session.user.id = token.userId as string
       }
-      if (token && token.accessToken) {
-        // @ts-expect-error // session.accessToken is not a default property
-        session.accessToken = token.accessToken as string
-      }
-      if (token && token.githubId) {
-        // @ts-expect-error
+      if (token.githubId && session.user) {
+        // @ts-expect-error // Add githubId to session user if not already defined
         session.user.githubId = token.githubId as string
       }
-
+      if (token.accessToken) {
+        // @ts-expect-error // Add accessToken to session if not already defined
+        session.accessToken = token.accessToken as string
+      }
       return session
     },
     async jwt({ token, user, account }) {
-      // Persist the OAuth access_token and user's GitHub ID to the token right after signin
+      // user and account are only passed on initial sign-in
       if (account && user) {
         token.accessToken = account.access_token
-        // The user object here comes from the adapter after it creates/links the user.
-        // We need to ensure our adapter's user schema (or the main users schema) has githubId.
-        // @ts-expect-error
-        token.githubId = user.githubId || (user as any).id // Fallback if githubId isn't directly on user
-      }
-      if (user) {
-        token.sub = user.id // Ensure the JWT sub claim is our internal user ID
+        token.githubId = account.providerAccountId // This is the GitHub user ID (string)
+        token.userId = user.id // This is your internal database user ID from the adapter
       }
       return token
     },
