@@ -4,8 +4,9 @@
 - [x] Create `src/app/providers.tsx` for `SessionProvider` and `ThemeProvider`.
 - [x] Update `src/app/layout.tsx` to use `Providers`.
 - [x] Generate and apply Drizzle migrations for NextAuth.js adapter tables.
-- [ ] Implement Header component with Sign In/Sign Out functionality.
-- [ ] Implement basic landing page structure based on screenshot (`src/app/page.tsx`).
+- [x] Implement Header component with Sign In/Sign Out functionality.
+- [x] Implement basic landing page structure based on screenshot (`src/app/page.tsx`).
+- [ ] Setup Zustand for global state management (`src/store/store.ts`).
 - [ ] Implement Repository Search/Input functionality.
 - [ ] Implement Repository Ingestion Service.
   - [ ] Securely clone repository.
@@ -21,5 +22,4 @@
   - [ ] Persistent chat panel component.
   - [ ] Context-aware (current repository, page).
   - [ ] Backend API route to stream responses from Gemini.
-- [ ] Implement Zustand store for global state management (`src/store/store.ts`).
 - [ ] Create mock data for rapid component development (`src/lib/mock-data.ts`).
