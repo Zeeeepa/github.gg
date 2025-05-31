@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useRepositoryStore } from "@/store/store"
+import { useRepositoryStore } from "../store/store"
 import { Button } from "@/components/ui/button"
 
 export default function Home() {
