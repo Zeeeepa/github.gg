@@ -8,7 +8,7 @@
 - [x] Set up GitHub OAuth with NextAuth.js (`src/app/api/auth/[...nextauth]/route.ts`, `src/lib/db/schema/auth-adapter-schema.ts`, `src/types/next-auth.d.ts`).
 - [x] Define Drizzle Adapter Schemas for NextAuth.js (`accounts`, `sessions`, `verificationTokens`).
 - [x] Generate and apply Drizzle migrations for NextAuth.js adapter tables.
-- [ ] **[In Progress]** Resolve NextAuth.js `CLIENT_FETCH_ERROR` (Verify Vercel Env Vars, GitHub OAuth Callback, Vercel Logs, Schema for `accounts.userId` and `sessions.userId` to `integer`).
+- [ ] **[On Hold - User Directive]** Resolve NextAuth.js `CLIENT_FETCH_ERROR`.
 
 ### Global State & UI
 - [x] Setup Zustand for global state management (`src/store/store.ts`).
@@ -18,12 +18,13 @@
 - [x] Implement basic landing page structure based on screenshot (`src/app/page.tsx`).
 - [x] Implement Zustand store for `currentRepositoryUrl`.
 - [x] Connect Search Input to Zustand store.
-- [ ] **[Current Task]** Update Zustand store for repository details (loading, data, error).
-- [ ] **[Current Task]** Call repository details API from frontend and display data/loading/error states.
+- [x] Update Zustand store for repository details (loading, data, error).
+- [x] Call repository details API from frontend and display data/loading/error states (initial setup in `page.tsx`).
+- [ ] **[Current Task]** Create `RepositoryInfoCard.tsx` component to display fetched details.
 
 ### Core Functionality
 - [x] Create API Route to Fetch Basic Repository Details from GitHub
-  - [x] Use authenticated user's GitHub token
+  - [x] Use authenticated user's GitHub token (Note: This will fail if auth is broken)
   - [x] Fetch from `api.github.com/repos/{owner}/{repo}`
   - [x] Return name, description, stars, forks, default branch, etc.
 - [x] Implement Repository Search/Input functionality.
@@ -33,7 +34,7 @@
   - [x] Analyze commit history.
   - [x] Store processed data in Vercel Blob.
   - [x] Trigger AI Knowledge Base Generation.
-- [ ] Display Fetched Repository Details on Frontend.
+- [x] Display Fetched Repository Details on Frontend (via `RepositoryInfoCard`).
 
 ### AI & Knowledge Base
 - [x] Implement AI-Generated Knowledge Base (DeepWiki Style).
