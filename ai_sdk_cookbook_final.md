@@ -156,7 +156,7 @@ A situation may arise when you need to generate text based on a prompt. For exam
 
 Let's create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt.
 
-```jsx
+\`\`\`jsx
 import { useState } from 'react';
 
 export default function Page() {
@@ -187,7 +187,7 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
@@ -195,7 +195,7 @@ Let's create a route handler for `/api/completion` that will generate text based
 
 app/api/completion/route.ts
 
-```typescript
+\`\`\`typescript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -210,7 +210,7 @@ export async function POST(req: Request) {
   
   return Response.json({ text });
 }
-```
+\`\`\`
 # Generate Text with Chat Prompt
 
 Previously, you were able to generate text and objects using either a single message prompt, a system prompt, or a combination of both of them. However, there may be times when you want to generate text based on a series of messages.
@@ -221,7 +221,7 @@ A chat completion allows you to generate text based on a series of messages. Thi
 
 Let's create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt.
 
-```jsx
+\`\`\`jsx
 import { useState } from 'react';
 
 export default function Page() {
@@ -252,7 +252,7 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
@@ -260,7 +260,7 @@ Let's create a route handler for `/api/completion` that will generate text based
 
 app/api/completion/route.ts
 
-```typescript
+\`\`\`typescript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -275,7 +275,7 @@ export async function POST(req: Request) {
   
   return Response.json({ text });
 }
-```
+\`\`\`
 # Generate Image with Chat Prompt
 
 When building a chatbot, you may want to allow the user to generate an image. This can be done by creating a tool that generates an image using the `experimental_generateImage` function from the AI SDK.
@@ -284,7 +284,7 @@ When building a chatbot, you may want to allow the user to generate an image. Th
 
 Let's create an endpoint at `/api/chat` that generates the assistant's response based on the conversation history. You will also define a tool called `generateImage` that will generate an image based on the assistant's response.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { openai } from '@ai-sdk/openai';
 import { experimental_generateImage, Message, streamText, tool } from 'ai';
@@ -336,13 +336,13 @@ export async function POST(request: Request) {
 
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will display a chat interface and allow the user to generate images.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -391,7 +391,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 With this implementation, users can ask the AI to generate images, and the AI will use the `generateImage` tool to create and display the requested images in the chat interface.
 # Stream Text
@@ -402,7 +402,7 @@ Text generation can sometimes take a long time to complete, especially when you'
 
 Let's create a simple React component that imports the `useCompletion` hook from the `@ai-sdk/react` module. The `useCompletion` hook will call the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt and stream it to the client.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useCompletion } from 'ai/react';
@@ -433,13 +433,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/completion` that will generate text based on the input prompt and stream it to the client.
 
-```typescript
+\`\`\`typescript
 // app/api/completion/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -457,7 +457,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows for real-time text streaming, providing a more responsive user experience compared to waiting for the entire generation to complete before displaying anything.
 # Stream Text with Chat Prompt
@@ -468,7 +468,7 @@ Chat completion can sometimes take a long time to finish, especially when the re
 
 Let's create a React component that imports the `useChat` hook from the `@ai-sdk/react` module. The `useChat` hook will call the `/api/chat` endpoint when the user sends a message. The endpoint will generate the assistant's response based on the conversation history and stream it to the client.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -500,13 +500,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -523,7 +523,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows for real-time streaming of chat responses, providing a more responsive user experience compared to waiting for the entire response to complete before displaying anything.
 # Stream Text with Image Prompt
@@ -536,7 +536,7 @@ Vision models such as GPT-4 can process both text and images. In this example, w
 
 We split the user's message into two parts: the text and the image URL. We then send both parts to the model. The last message is the user's message, and we add the image URL to it.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
@@ -582,13 +582,13 @@ export async function POST(req: Request) {
 
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will allow the user to enter a message and an image URL, and then send both to the server.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -648,7 +648,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows users to provide both text and image inputs, enabling the AI to analyze and respond to visual content alongside textual queries.
 # Chat with PDFs
@@ -663,7 +663,7 @@ This example requires a provider that supports PDFs, such as Anthropic's Claude 
 
 Create a route handler that will use Anthropic's Claude model to process messages and PDFs:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
@@ -707,13 +707,13 @@ export async function POST(req: Request) {
 
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will allow the user to upload a PDF and chat with the AI about its contents:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -802,7 +802,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows users to upload PDF documents and ask questions about their contents, with the AI model processing and responding to queries based on the PDF's information.
 # Stream Text Multi-Step
@@ -813,7 +813,7 @@ With `createDataStreamResponse` and `sendFinish` / `sendStart` options when merg
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { openai } from '@ai-sdk/openai';
 import { createDataStreamResponse, streamText, tool } from 'ai';
@@ -862,13 +862,13 @@ export async function POST(req: Request) {
     },
   });
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will display the chat interface:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -901,7 +901,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows for multi-step processing in a single assistant response, enabling more complex interactions while maintaining a seamless user experience.
 # Markdown Chatbot with Memoization
@@ -914,7 +914,7 @@ This recipe uses memoization - a performance optimization technique where the re
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -930,13 +930,13 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Memoized Markdown Component
 
 Create a memoized Markdown component that efficiently renders Markdown content:
 
-```tsx
+\`\`\`tsx
 // components/MemoizedMarkdown.tsx
 'use client';
 
@@ -981,13 +981,13 @@ const MemoizedMarkdown = memo(
 MemoizedMarkdown.displayName = 'MemoizedMarkdown';
 
 export default MemoizedMarkdown;
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a chat interface that uses the memoized Markdown component:
 
-```tsx
+\`\`\`tsx
 // app/page.tsx
 'use client';
 
@@ -1048,7 +1048,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation significantly improves performance when rendering Markdown in streaming chat responses, especially for longer conversations, by avoiding redundant parsing and rendering operations.
 # Generate Object
@@ -1061,7 +1061,7 @@ The function requires you to provide a schema using [zod](https://zod.dev/), a l
 
 Let's create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will return the generated object based on the input prompt and we'll display it.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -1120,13 +1120,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/completion` that will generate an object based on the input prompt. The route will call the `generateObject` function from the `ai` module, which will then generate an object based on the input prompt and return it.
 
-```typescript
+\`\`\`typescript
 // app/api/completion/route.ts
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -1158,7 +1158,7 @@ export async function POST(req: Request) {
   
   return Response.json(notification);
 }
-```
+\`\`\`
 
 This implementation allows you to generate structured data objects that conform to a specified schema, making it easier to work with AI-generated content in a type-safe manner.
 # Generate Object with File Prompt through Form Submission
@@ -1171,7 +1171,7 @@ With select models, you can send PDFs (files) as part of your prompt. Let's crea
 
 On the frontend, create a form that allows the user to upload a PDF. When the form is submitted, send the PDF to the `/api/analyze` route.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useState } from 'react';
@@ -1273,13 +1273,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Create a route handler that processes the uploaded PDF and uses the `generateObject` function to analyze it:
 
-```typescript
+\`\`\`typescript
 // app/api/analyze/route.ts
 import { generateObject } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
@@ -1338,7 +1338,7 @@ export async function POST(req: Request) {
     );
   }
 }
-```
+\`\`\`
 
 This implementation allows users to upload PDF files and receive structured analysis results based on their specific queries about the document content.
 # Stream Object
@@ -1353,7 +1353,7 @@ The `streamObject` function allows you to specify different output strategies us
 
 It is helpful to set up the schema in a separate file that is imported on both the client and server.
 
-```typescript
+\`\`\`typescript
 // lib/schema.ts
 import { z } from 'zod';
 
@@ -1371,13 +1371,13 @@ export const notificationSchema = z.object({
 });
 
 export type Notification = z.infer<typeof notificationSchema>;
-```
+\`\`\`
 
 ## Client
 
 Let's create a React component that will display the notification as it's being generated:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -1464,13 +1464,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/stream-object` that will stream the object generation process:
 
-```typescript
+\`\`\`typescript
 // app/api/stream-object/route.ts
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -1488,7 +1488,7 @@ export async function POST(req: Request) {
   
   return new Response(objectStream);
 }
-```
+\`\`\`
 
 ## Loading State and Stopping the Stream
 
@@ -1500,7 +1500,7 @@ The `streamObject` function also supports an `array` output mode, which is usefu
 
 ## Schema
 
-```typescript
+\`\`\`typescript
 // lib/schema.ts
 import { z } from 'zod';
 
@@ -1514,11 +1514,11 @@ export const todoItemSchema = z.object({
 export type TodoItem = z.infer<typeof todoItemSchema>;
 
 export const todoListSchema = z.array(todoItemSchema);
-```
+\`\`\`
 
 ## Client
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -1606,11 +1606,11 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/stream-array/route.ts
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -1629,7 +1629,7 @@ export async function POST(req: Request) {
   
   return new Response(objectStream);
 }
-```
+\`\`\`
 
 ## No Schema Mode
 
@@ -1637,7 +1637,7 @@ You can also use `streamObject` without a schema, which will stream the raw JSON
 
 ## Client
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -1702,11 +1702,11 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/stream-raw/route.ts
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -1722,7 +1722,7 @@ export async function POST(req: Request) {
   
   return new Response(objectStream);
 }
-```
+\`\`\`
 # Call Tools
 
 Some models allow developers to provide a list of tools that can be called at any time during a generation. This is useful for extending the capabilities of a language model to either use logic or data to interact with systems external to the model.
@@ -1731,7 +1731,7 @@ Some models allow developers to provide a list of tools that can be called at an
 
 Let's create a React component that imports the `useChat` hook from the `@ai-sdk/react` module. The `useChat` hook will call the `/api/chat` endpoint when the user sends a message. The endpoint will generate the assistant's response based on the conversation history and stream it to the client. If the assistant responds with a tool call, the hook will automatically display them as well.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -1790,13 +1790,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client. We'll define two tools: one for getting the weather and another for searching the web.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -1858,7 +1858,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows the AI to call tools when needed to provide more accurate and up-to-date information to the user. The tools are defined on the server side and can execute any logic or API calls needed to fulfill the user's request.
 # Call Tools in Parallel
@@ -1869,7 +1869,7 @@ Some language models support calling tools in parallel. This is particularly use
 
 Let's create a React component that imports the `useChat` hook from the `@ai-sdk/react` module. The `useChat` hook will call the `/api/chat` endpoint when the user sends a message. The endpoint will generate the assistant's response based on the conversation history and stream it to the client. If the assistant responds with tool calls, the hook will automatically display them as well.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -1930,13 +1930,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client. We'll define multiple tools that can be called in parallel.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -2019,7 +2019,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 You will use the `maxSteps` to specify the maximum number of steps that the model can take when generating a response. This allows the model to make multiple tool calls in parallel during a single step, which can significantly improve response time when dealing with independent operations.
 
@@ -2034,7 +2034,7 @@ Let's create a React component that imports the `useChat` hook from the `@ai-sdk
 
 To call tools in multiple steps, you can use the `maxSteps` option to specify the maximum number of steps that can be made before the model or the user responds with a text message. In this example, you will set it to `5` to allow for multiple tool calls.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -2095,13 +2095,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client. We'll define multiple tools that can be called in sequence to solve a complex task.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -2221,7 +2221,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows the AI to call tools in a sequence to complete a complex task, such as searching for flights, getting details about a specific flight, booking the flight, and sending a confirmation email. The `maxSteps` parameter ensures that the model can make multiple tool calls in sequence before generating a final text response to the user.
 # Model Context Protocol (MCP) Tools
@@ -2234,11 +2234,11 @@ Let's create a route handler for `/api/completion` that will generate text based
 
 To use the `StreamableHTTPClientTransport`, you will need to install the official Typescript SDK for Model Context Protocol:
 
-```bash
+\`\`\`bash
 $ pnpm install @modelcontextprotocol/sdk
-```
+\`\`\`
 
-```typescript
+\`\`\`typescript
 // app/api/completion/route.ts
 import { experimental_createMCPClient, streamText } from 'ai';
 import { Experimental_StdioMCPTransport } from 'ai/mcp-stdio';
@@ -2276,11 +2276,11 @@ export async function POST(req: Request) {
     await client.close();
   }
 }
-```
+\`\`\`
 
 You'll also need to create a Python script that implements the MCP server:
 
-```python
+\`\`\`python
 # mcp_server.py
 import json
 import sys
@@ -2384,13 +2384,13 @@ while True:
         })
     elif message["type"] == "close":
         break
-```
+\`\`\`
 
 ## Client
 
 On the client side, you can create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt and any tool calls that the model makes.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useState } from 'react';
@@ -2478,7 +2478,7 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows you to use tools defined in a separate MCP server with your AI models, providing a flexible way to extend the capabilities of your AI applications.
 # Human-in-the-Loop with Next.js
@@ -2491,7 +2491,7 @@ To understand how to implement this functionality, let's look at how tool callin
 
 On the frontend, use the `useChat` hook to manage the message state and user interaction (including input and form submission handlers).
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -2520,11 +2520,11 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 On the backend, use the `streamText` function with tools to enable the model to call functions:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -2564,7 +2564,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Adding a Confirmation Step
 
@@ -2574,7 +2574,7 @@ To add human-in-the-loop functionality, we need to modify this flow to require u
 
 First, we need to modify the route handler to forward tool calls to the client instead of executing them immediately:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -2612,13 +2612,13 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Intercept Tool Call
 
 Next, we need to modify the client to intercept tool calls that need confirmation:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -2691,13 +2691,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Handle Confirmation Response
 
 Finally, we need to handle the user's confirmation response:
 
-```jsx
+\`\`\`jsx
 // Add this function to the Chat component
 const handleConfirmation = async (approved) => {
   if (!pendingToolCall) return;
@@ -2751,11 +2751,11 @@ const handleConfirmation = async (approved) => {
   // Clear the pending tool call
   setPendingToolCall(null);
 }
-```
+\`\`\`
 
 And create a new API route to execute the tool:
 
-```typescript
+\`\`\`typescript
 // app/api/execute-tool/route.ts
 import { z } from 'zod';
 
@@ -2782,7 +2782,7 @@ export async function POST(req: Request) {
     error: 'Unknown tool',
   }, { status: 400 });
 }
-```
+\`\`\`
 
 ## Building your own abstraction
 
@@ -2792,7 +2792,7 @@ The above implementation is quite low-level. Let's create a more reusable abstra
 
 First, let's create some utility functions:
 
-```typescript
+\`\`\`typescript
 // lib/hitl.ts
 import { z } from 'zod';
 import { Tool } from 'ai';
@@ -2846,13 +2846,13 @@ export async function executeConfirmedTool<T extends z.ZodType>(
   // Execute the tool with the original arguments
   return tool.execute(__originalArgs || cleanArgs);
 }
-```
+\`\`\`
 
 ## Update Route Handler
 
 Now, let's update our route handlers:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -2935,13 +2935,13 @@ export async function POST(req: Request) {
     error: 'Unknown tool',
   }, { status: 400 });
 }
-```
+\`\`\`
 
 ## Update Frontend
 
 Finally, let's create a reusable component for handling confirmations:
 
-```jsx
+\`\`\`jsx
 // components/ConfirmationDialog.jsx
 export default function ConfirmationDialog({ toolCall, onConfirm, onReject }) {
   if (!toolCall) return null;
@@ -3085,7 +3085,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Full Example
 
@@ -3116,7 +3116,7 @@ The `experimental_prepareRequestBody` option allows you to customize the body co
 
 Let's create a chat interface that allows users to select a language for translation:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -3176,13 +3176,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 On the server side, we can access the custom body structure:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -3208,7 +3208,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows you to send additional data along with the chat messages, which can be useful for customizing the behavior of your AI application based on user preferences or other contextual information.
 # Render Visual Interface in Chat
@@ -3219,7 +3219,7 @@ An interesting consequence of language models that can call tools is that this a
 
 Let's build an assistant that gets the weather for any city by calling the `getWeatherInformation` tool. Instead of returning text during the tool call, you will render a React component that displays the weather information on the client.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -3302,13 +3302,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/chat` that will handle the weather tool:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -3350,7 +3350,7 @@ After displaying the weather data, provide a brief natural language summary of t
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows you to render rich, interactive UI components in response to user queries, creating a more engaging and informative chat experience. The weather card is just one example - you could create various specialized components for different types of information:
 
@@ -3367,7 +3367,7 @@ By combining the power of language models with custom UI components, you can cre
 
 Let's create a simple chat interface that allows users to send messages to the assistant and receive responses. You will integrate the `useAssistant` hook from `@ai-sdk/react` to stream the messages and status.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -3407,13 +3407,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/assistant` that will process the messages and generate responses using the OpenAI Assistant API:
 
-```typescript
+\`\`\`typescript
 // app/api/assistant/route.ts
 import { StreamingTextResponse, AssistantResponse } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -3446,7 +3446,7 @@ export async function POST(req: Request) {
   // Create a response with the thread ID
   return AssistantResponse({ threadId: thread.id, runId: run.id }, { headers: { 'Content-Type': 'text/plain' } });
 }
-```
+\`\`\`
 
 This implementation allows you to create a chat interface that uses the OpenAI Assistant API to generate responses. The `useAssistant` hook handles the streaming of messages and status updates, providing a seamless user experience.
 
@@ -3464,7 +3464,7 @@ Let's create a simple chat interface that allows users to send messages to the a
 
 You will need to provide the list of tools on the OpenAI [Assistant Dashboard](https://platform.openai.com/assistants). You can use the following schema to create a tool to convert celsius to fahrenheit.
 
-```json
+\`\`\`json
 {
   "name": "celsiusToFahrenheit",
   "description": "convert celsius to fahrenheit.",
@@ -3479,13 +3479,13 @@ You will need to provide the list of tools on the OpenAI [Assistant Dashboard](h
     "required": ["value"]
   }
 }
-```
+\`\`\`
 
 ## Client
 
 Let's create a chat interface that allows users to interact with an assistant that can convert temperatures:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -3554,13 +3554,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/assistant` that will process the messages and generate responses using the OpenAI Assistant API with tool support:
 
-```typescript
+\`\`\`typescript
 // app/api/assistant/route.ts
 import { StreamingTextResponse, AssistantResponse } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -3612,11 +3612,11 @@ export async function POST(req: Request) {
 
   return new Response('Tool output submitted', { status: 200 });
 }
-```
+\`\`\`
 
 For this example to work, you need to implement the actual tool functionality. Here's how you could implement the temperature conversion tool:
 
-```typescript
+\`\`\`typescript
 // lib/tools.ts
 export function celsiusToFahrenheit(celsius: number): number {
   return (celsius * 9/5) + 32;
@@ -3641,7 +3641,7 @@ export async function POST(req: Request) {
   
   return Response.json({ error: 'Unknown tool' }, { status: 400 });
 }
-```
+\`\`\`
 
 This implementation allows you to create a chat interface that uses the OpenAI Assistant API with tools to generate responses. The `useAssistant` hook handles the streaming of messages and status updates, providing a seamless user experience.
 
@@ -3661,7 +3661,7 @@ Let's create a simple chat interface that uses `LanguageModelMiddleware` to cach
 
 Let's create a simple chat interface that allows users to send messages to the assistant and receive responses. You will integrate the `useChat` hook from `@ai-sdk/react` to stream responses.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -3696,13 +3696,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Middleware
 
 To implement caching, we'll create a middleware that uses a KV store to cache responses. This will help reduce API costs and improve response times for repeated queries.
 
-```typescript
+\`\`\`typescript
 // lib/cache-middleware.ts
 import { LanguageModelMiddleware, LanguageModelV1 } from 'ai';
 import { kv } from '@vercel/kv';
@@ -3762,13 +3762,13 @@ function createCacheKey(params: any): string {
   // Create a hash of the parameters
   return `ai-cache:${JSON.stringify(normalizedParams)}`;
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/chat` that will use our caching middleware:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -3788,7 +3788,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation provides several benefits:
 
@@ -3809,9 +3809,9 @@ The caching middleware can be customized further to suit your specific needs:
 
 Remember to install the required dependencies:
 
-```bash
+\`\`\`bash
 npm install @vercel/kv
-```
+\`\`\`
 
 And configure your Vercel KV storage in your project settings if you're deploying to Vercel. For local development, you can use environment variables to configure the KV connection.
 \n## Node.js Recipes\n
@@ -3819,7 +3819,7 @@ And configure your Vercel KV storage in your project settings if you're deployin
 
 The most basic LLM use case is generating text based on a prompt. For example, you may want to generate a response to a question or summarize a body of text. The `generateText` function can be used to generate text based on the input prompt.
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -3829,7 +3829,7 @@ const result = await generateText({
 });
 
 console.log(result);
-```
+\`\`\`
 
 This simple example demonstrates how to use the `generateText` function to generate a response to a question. The function takes an object with the following properties:
 
@@ -3840,7 +3840,7 @@ The function returns a promise that resolves to an object containing the generat
 
 You can also provide additional parameters to control the generation process:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -3853,7 +3853,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, we're using additional parameters:
 
@@ -3877,7 +3877,7 @@ Previously, we were able to generate text and objects using either a single mess
 
 A chat completion allows you to generate text based on a series of messages. This series of messages can be any series of interactions between any number of systems, but the most popular and relatable use case has been a series of messages that represent a conversation between a user and a model.
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -3902,7 +3902,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, we're using the `messages` parameter to provide a conversation history to the model. The conversation consists of three messages:
 
@@ -3919,7 +3919,7 @@ The `messages` parameter is an array of objects, where each object represents a 
 
 You can also include a `system` message to provide instructions or context to the model:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -3935,7 +3935,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, the `system` message provides context about the assistant's expertise, which helps guide the model's response to the user's question.
 
@@ -3954,7 +3954,7 @@ Some language models that support vision capabilities accept images as part of t
 
 ## URL
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -3981,7 +3981,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, we're using a URL to include an image in the prompt. The `content` property of the message is an array of objects, where each object represents a part of the message. The first object is a text part, and the second object is an image part.
 
@@ -3993,7 +3993,7 @@ The image part has two properties:
 
 You can also include images as file buffers:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import fs from 'fs/promises';
@@ -4027,13 +4027,13 @@ async function generateTextWithImageBuffer() {
 }
 
 generateTextWithImageBuffer();
-```
+\`\`\`
 
 In this example, we're reading an image file as a buffer and including it in the prompt. This is useful when you have local image files that you want to include in your prompts.
 
 You can also include multiple images in a single prompt:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -4062,7 +4062,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 This capability is particularly useful for applications that involve:
 
@@ -4080,7 +4080,7 @@ Text generation can sometimes take a long time to complete, especially when you'
 
 ## Without reader
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -4105,7 +4105,7 @@ console.log(result); // ReadableStream
 //     response.end();
 //   }
 // }));
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to generate text and stream it in real-time. The function returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -4113,7 +4113,7 @@ In this example, we're using the `streamText` function to generate text and stre
 
 If you want to process the streamed text in your application, you can use a reader to read from the stream:
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -4152,7 +4152,7 @@ async function generateAndStreamText() {
 }
 
 generateAndStreamText().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using a reader to read from the stream and process each chunk of text as it arrives. This approach is useful when you want to:
 
@@ -4173,7 +4173,7 @@ This approach is particularly useful for applications like chatbots, content gen
 
 Text generation can sometimes take a long time to finish, especially when the response is big. In such cases, it is useful to stream the chat completion to the client in real-time. This allows the client to display the new message as it is being generated by the model, rather than have users wait for it to finish.
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -4224,7 +4224,7 @@ try {
 } finally {
   reader.releaseLock();
 }
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to generate text based on a conversation history and stream it in real-time. The function takes the same parameters as `generateText`, but returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -4232,7 +4232,7 @@ The conversation is represented as an array of messages, where each message has 
 
 You can also include a `system` message to provide instructions or context to the model:
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -4248,7 +4248,7 @@ const result = streamText({
 });
 
 // Process the stream...
-```
+\`\`\`
 
 Streaming chat completions is particularly useful for applications like:
 
@@ -4262,7 +4262,7 @@ By streaming the response, you can provide a more responsive and engaging user e
 
 Vision-language models can analyze images alongside text prompts to generate responses about visual content. This multimodal approach allows for rich interactions where you can ask questions about images, request descriptions, or analyze visual details. The combination of image and text inputs enables more sophisticated AI applications like visual question answering and image analysis.
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import 'dotenv/config';
@@ -4288,7 +4288,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to generate a description of an image and stream the response in real-time. The function takes the same parameters as `generateText`, but returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -4298,7 +4298,7 @@ The content of the message is an array of objects, where each object represents 
 
 You can also use URLs for images:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 
@@ -4327,11 +4327,11 @@ async function streamImageAnalysis() {
 }
 
 streamImageAnalysis().catch(console.error);
-```
+\`\`\`
 
 You can also include multiple images in a single prompt:
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import fs from 'node:fs';
@@ -4361,7 +4361,7 @@ async function compareImages() {
 }
 
 compareImages().catch(console.error);
-```
+\`\`\`
 
 Streaming text with image prompts is particularly useful for applications that require real-time analysis of visual content, such as:
 
@@ -4376,7 +4376,7 @@ By streaming the response, you provide a more responsive user experience, especi
 
 Working with files in AI applications often requires analyzing documents, processing structured data, or extracting information from various file formats. File prompts allow you to send file content directly to the model, enabling tasks like document analysis, data extraction, or generating responses based on file contents.
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import 'dotenv/config';
@@ -4409,7 +4409,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to analyze a PDF document and stream the response in real-time. The function takes the same parameters as `generateText`, but returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -4424,7 +4424,7 @@ The file part has three properties:
 
 You can work with various file types, including:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import fs from 'node:fs';
@@ -4460,11 +4460,11 @@ async function analyzeCSVData() {
 }
 
 analyzeCSVData().catch(console.error);
-```
+\`\`\`
 
 You can also include multiple files in a single prompt:
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import fs from 'node:fs';
@@ -4501,7 +4501,7 @@ async function compareDocuments() {
 }
 
 compareDocuments().catch(console.error);
-```
+\`\`\`
 
 Streaming text with file prompts is particularly useful for applications that require real-time analysis of document content, such as:
 
@@ -4518,7 +4518,7 @@ Reasoning models, like [DeepSeek's](https://deepseek.ai/) R1, are gaining popula
 
 One solution is to pass the output from a reasoning model through a smaller model that can output structured data (like gpt-4o-mini). These lightweight models can efficiently extract the structured data while adding very little overhead in terms of speed and cost.
 
-```javascript
+\`\`\`javascript
 import { deepseek } from '@ai-sdk/deepseek';
 import { openai } from '@ai-sdk/openai';
 import { generateObject, generateText } from 'ai';
@@ -4549,7 +4549,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using a two-step process:
 
@@ -4565,7 +4565,7 @@ The function returns a promise that resolves to an object containing the extract
 
 You can also use this approach with other reasoning models:
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
 import { generateObject, generateText } from 'ai';
@@ -4599,7 +4599,7 @@ async function analyzeCompanies() {
 
   return object;
 }
-```
+\`\`\`
 
 This approach offers several benefits:
 
@@ -4621,7 +4621,7 @@ Earlier functions like `generateText` and `streamText` gave us the ability to ge
 
 The function requires you to provide a schema using [zod](https://github.com/colinhacks/zod), a library for defining schemas for JavaScript objects. By using zod, you can also use it to validate the generated object and ensure that it conforms to the specified structure.
 
-```javascript
+\`\`\`javascript
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -4644,7 +4644,7 @@ const result = await generateObject({
 });
 
 console.log(JSON.stringify(result.object, null, 2));
-```
+\`\`\`
 
 In this example, we're using the `generateObject` function to generate a structured recipe object. The function takes three parameters:
 
@@ -4656,7 +4656,7 @@ The function returns a promise that resolves to an object containing the generat
 
 You can also use the `messages` parameter instead of `prompt` to provide a conversation history:
 
-```javascript
+\`\`\`javascript
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -4680,11 +4680,11 @@ const result = await generateObject({
 });
 
 console.log(JSON.stringify(result.object, null, 2));
-```
+\`\`\`
 
 You can create complex nested schemas to match your specific needs:
 
-```javascript
+\`\`\`javascript
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -4715,7 +4715,7 @@ const result = await generateObject({
 });
 
 console.log(JSON.stringify(result.object, null, 2));
-```
+\`\`\`
 
 The `generateObject` function is particularly useful for applications that require structured data, such as:
 
@@ -4732,7 +4732,7 @@ Object generation can sometimes take a long time to complete, especially when yo
 
 In Generative UI use cases, it is useful to stream the object to the client in real-time to render UIs as the object is being generated. You can use the `streamObject` function to generate partial object streams.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -4753,7 +4753,7 @@ for await (const partialObject of partialObjectStream) {
   console.clear();
   console.log(partialObject);
 }
-```
+\`\`\`
 
 In this example, we're using the `streamObject` function to generate a structured recipe object and stream it in real-time. The function takes the same parameters as `generateObject`, but returns a `ReadableStream` that you can use to read the generated object as it becomes available.
 
@@ -4761,7 +4761,7 @@ The `streamObject` function returns an object with a `partialObjectStream` prope
 
 You can also use the `messages` parameter instead of `prompt` to provide a conversation history:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -4808,7 +4808,7 @@ async function streamMovieAnalysis() {
 }
 
 streamMovieAnalysis().catch(console.error);
-```
+\`\`\`
 
 This approach is particularly useful for applications that need to display complex structured data as it's being generated, such as:
 
@@ -4825,7 +4825,7 @@ Some language models that support vision capabilities accept images as part of t
 
 ## URL
 
-```javascript
+\`\`\`javascript
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import dotenv from 'dotenv';
@@ -4876,7 +4876,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using the `streamObject` function to analyze an image of stamps and stream structured data about each stamp in real-time. The function takes the same parameters as `generateObject`, but returns a `ReadableStream` that you can use to read the generated object as it becomes available.
 
@@ -4888,7 +4888,7 @@ The content of the message is an array of objects, where each object represents 
 
 You can also include images as file buffers:
 
-```javascript
+\`\`\`javascript
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import fs from 'fs/promises';
@@ -4945,7 +4945,7 @@ async function analyzeImageWithStructuredOutput() {
 }
 
 analyzeImageWithStructuredOutput().catch(console.error);
-```
+\`\`\`
 
 This approach is particularly useful for applications that need to analyze images and provide structured data in real-time, such as:
 
@@ -4965,7 +4965,7 @@ When you're streaming structured data with `streamObject`, you may want to recor
 
 You can use the `onFinish` callback to record token usage. It is called when the stream is finished.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -4990,7 +4990,7 @@ for await (const partialObject of result.partialObjectStream) {
   console.clear();
   console.log(JSON.stringify(partialObject, null, 2));
 }
-```
+\`\`\`
 
 In this example, we're using the `onFinish` callback to log the token usage after the stream is finished. The callback receives an object with a `usage` property that contains information about the token usage.
 
@@ -5003,7 +5003,7 @@ The `usage` object typically includes:
 
 You can also access the token usage through the `usage` promise returned by the `streamObject` function:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -5074,7 +5074,7 @@ async function storeUsageInDatabase(usageRecord) {
 }
 
 generateAndTrackUsage().catch(console.error);
-```
+\`\`\`
 
 This approach is particularly useful for applications that need to track token usage for billing or quota purposes, such as:
 
@@ -5239,7 +5239,7 @@ Let's create a simple chat interface that uses `LanguageModelMiddleware` to cach
 
 Let's create a simple chat interface that allows users to send messages to the assistant and receive responses. You will integrate the `useChat` hook from `@ai-sdk/react` to stream responses.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -5274,13 +5274,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Middleware
 
 To implement caching, we'll create a middleware that uses a KV store to cache responses. This will help reduce API costs and improve response times for repeated queries.
 
-```typescript
+\`\`\`typescript
 // lib/cache-middleware.ts
 import { LanguageModelMiddleware, LanguageModelV1 } from 'ai';
 import { kv } from '@vercel/kv';
@@ -5340,13 +5340,13 @@ function createCacheKey(params: any): string {
   // Create a hash of the parameters
   return `ai-cache:${JSON.stringify(normalizedParams)}`;
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/chat` that will use our caching middleware:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -5366,7 +5366,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation provides several benefits:
 
@@ -5387,9 +5387,9 @@ The caching middleware can be customized further to suit your specific needs:
 
 Remember to install the required dependencies:
 
-```bash
+\`\`\`bash
 npm install @vercel/kv
-```
+\`\`\`
 
 And configure your Vercel KV storage in your project settings if you're deploying to Vercel. For local development, you can use environment variables to configure the KV connection.
 # Call Tools
@@ -5400,7 +5400,7 @@ Some models allow developers to provide a list of tools that can be called at an
 
 Let's create a React component that imports the `useChat` hook from the `@ai-sdk/react` module. The `useChat` hook will call the `/api/chat` endpoint when the user sends a message. The endpoint will generate the assistant's response based on the conversation history and stream it to the client. If the assistant responds with a tool call, the hook will automatically display them as well.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -5459,13 +5459,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client. We'll define two tools: one for getting the weather and another for searching the web.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -5527,7 +5527,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows the AI to call tools when needed to provide more accurate and up-to-date information to the user. The tools are defined on the server side and can execute any logic or API calls needed to fulfill the user's request.
 # Call Tools in Multiple Steps
@@ -5540,7 +5540,7 @@ Let's create a React component that imports the `useChat` hook from the `@ai-sdk
 
 To call tools in multiple steps, you can use the `maxSteps` option to specify the maximum number of steps that can be made before the model or the user responds with a text message. In this example, you will set it to `5` to allow for multiple tool calls.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -5601,13 +5601,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client. We'll define multiple tools that can be called in sequence to solve a complex task.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -5727,7 +5727,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows the AI to call tools in a sequence to complete a complex task, such as searching for flights, getting details about a specific flight, booking the flight, and sending a confirmation email. The `maxSteps` parameter ensures that the model can make multiple tool calls in sequence before generating a final text response to the user.
 # Call Tools in Parallel
@@ -5738,7 +5738,7 @@ Some language models support calling tools in parallel. This is particularly use
 
 Let's create a React component that imports the `useChat` hook from the `@ai-sdk/react` module. The `useChat` hook will call the `/api/chat` endpoint when the user sends a message. The endpoint will generate the assistant's response based on the conversation history and stream it to the client. If the assistant responds with tool calls, the hook will automatically display them as well.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -5799,13 +5799,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client. We'll define multiple tools that can be called in parallel.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -5888,7 +5888,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 You will use the `maxSteps` to specify the maximum number of steps that the model can take when generating a response. This allows the model to make multiple tool calls in parallel during a single step, which can significantly improve response time when dealing with independent operations.
 
@@ -5905,7 +5905,7 @@ This example requires a provider that supports PDFs, such as Anthropic's Claude 
 
 Create a route handler that will use Anthropic's Claude model to process messages and PDFs:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
@@ -5949,13 +5949,13 @@ export async function POST(req: Request) {
 
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will allow the user to upload a PDF and chat with the AI about its contents:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -6044,7 +6044,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows users to upload PDF documents and ask questions about their contents, with the AI model processing and responding to queries based on the PDF's information.
 # Generate Image with Chat Prompt
@@ -6055,7 +6055,7 @@ When building a chatbot, you may want to allow the user to generate an image. Th
 
 Let's create an endpoint at `/api/chat` that generates the assistant's response based on the conversation history. You will also define a tool called `generateImage` that will generate an image based on the assistant's response.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { openai } from '@ai-sdk/openai';
 import { experimental_generateImage, Message, streamText, tool } from 'ai';
@@ -6107,13 +6107,13 @@ export async function POST(request: Request) {
 
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will display a chat interface and allow the user to generate images.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -6162,7 +6162,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 With this implementation, users can ask the AI to generate images, and the AI will use the `generateImage` tool to create and display the requested images in the chat interface.
 # Generate Object
@@ -6175,7 +6175,7 @@ The function requires you to provide a schema using [zod](https://zod.dev/), a l
 
 Let's create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will return the generated object based on the input prompt and we'll display it.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -6234,13 +6234,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/completion` that will generate an object based on the input prompt. The route will call the `generateObject` function from the `ai` module, which will then generate an object based on the input prompt and return it.
 
-```typescript
+\`\`\`typescript
 // app/api/completion/route.ts
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -6272,7 +6272,7 @@ export async function POST(req: Request) {
   
   return Response.json(notification);
 }
-```
+\`\`\`
 
 This implementation allows you to generate structured data objects that conform to a specified schema, making it easier to work with AI-generated content in a type-safe manner.
 # Generate Object with File Prompt through Form Submission
@@ -6285,7 +6285,7 @@ With select models, you can send PDFs (files) as part of your prompt. Let's crea
 
 On the frontend, create a form that allows the user to upload a PDF. When the form is submitted, send the PDF to the `/api/analyze` route.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useState } from 'react';
@@ -6387,13 +6387,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Create a route handler that processes the uploaded PDF and uses the `generateObject` function to analyze it:
 
-```typescript
+\`\`\`typescript
 // app/api/analyze/route.ts
 import { generateObject } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
@@ -6452,7 +6452,7 @@ export async function POST(req: Request) {
     );
   }
 }
-```
+\`\`\`
 
 This implementation allows users to upload PDF files and receive structured analysis results based on their specific queries about the document content.
 # Generate Text
@@ -6463,7 +6463,7 @@ A situation may arise when you need to generate text based on a prompt. For exam
 
 Let's create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt.
 
-```jsx
+\`\`\`jsx
 import { useState } from 'react';
 
 export default function Page() {
@@ -6494,7 +6494,7 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
@@ -6502,7 +6502,7 @@ Let's create a route handler for `/api/completion` that will generate text based
 
 app/api/completion/route.ts
 
-```typescript
+\`\`\`typescript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -6517,7 +6517,7 @@ export async function POST(req: Request) {
   
   return Response.json({ text });
 }
-```
+\`\`\`
 # Generate Text with Chat Prompt
 
 Previously, you were able to generate text and objects using either a single message prompt, a system prompt, or a combination of both of them. However, there may be times when you want to generate text based on a series of messages.
@@ -6528,7 +6528,7 @@ A chat completion allows you to generate text based on a series of messages. Thi
 
 Let's create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt.
 
-```jsx
+\`\`\`jsx
 import { useState } from 'react';
 
 export default function Page() {
@@ -6559,7 +6559,7 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
@@ -6567,7 +6567,7 @@ Let's create a route handler for `/api/completion` that will generate text based
 
 app/api/completion/route.ts
 
-```typescript
+\`\`\`typescript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -6582,7 +6582,7 @@ export async function POST(req: Request) {
   
   return Response.json({ text });
 }
-```
+\`\`\`
 # Human-in-the-Loop with Next.js
 
 When building agentic systems, it's important to add human-in-the-loop (HITL) functionality to ensure that users can approve actions before the system executes them. This recipe will describe how to build a low-level solution and then provide an example abstraction you could implement and customize based on your needs.
@@ -6593,7 +6593,7 @@ To understand how to implement this functionality, let's look at how tool callin
 
 On the frontend, use the `useChat` hook to manage the message state and user interaction (including input and form submission handlers).
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -6622,11 +6622,11 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 On the backend, use the `streamText` function with tools to enable the model to call functions:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -6666,7 +6666,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Adding a Confirmation Step
 
@@ -6676,7 +6676,7 @@ To add human-in-the-loop functionality, we need to modify this flow to require u
 
 First, we need to modify the route handler to forward tool calls to the client instead of executing them immediately:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -6714,13 +6714,13 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Intercept Tool Call
 
 Next, we need to modify the client to intercept tool calls that need confirmation:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -6793,13 +6793,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Handle Confirmation Response
 
 Finally, we need to handle the user's confirmation response:
 
-```jsx
+\`\`\`jsx
 // Add this function to the Chat component
 const handleConfirmation = async (approved) => {
   if (!pendingToolCall) return;
@@ -6853,11 +6853,11 @@ const handleConfirmation = async (approved) => {
   // Clear the pending tool call
   setPendingToolCall(null);
 }
-```
+\`\`\`
 
 And create a new API route to execute the tool:
 
-```typescript
+\`\`\`typescript
 // app/api/execute-tool/route.ts
 import { z } from 'zod';
 
@@ -6884,7 +6884,7 @@ export async function POST(req: Request) {
     error: 'Unknown tool',
   }, { status: 400 });
 }
-```
+\`\`\`
 
 ## Building your own abstraction
 
@@ -6894,7 +6894,7 @@ The above implementation is quite low-level. Let's create a more reusable abstra
 
 First, let's create some utility functions:
 
-```typescript
+\`\`\`typescript
 // lib/hitl.ts
 import { z } from 'zod';
 import { Tool } from 'ai';
@@ -6948,13 +6948,13 @@ export async function executeConfirmedTool<T extends z.ZodType>(
   // Execute the tool with the original arguments
   return tool.execute(__originalArgs || cleanArgs);
 }
-```
+\`\`\`
 
 ## Update Route Handler
 
 Now, let's update our route handlers:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -7037,13 +7037,13 @@ export async function POST(req: Request) {
     error: 'Unknown tool',
   }, { status: 400 });
 }
-```
+\`\`\`
 
 ## Update Frontend
 
 Finally, let's create a reusable component for handling confirmations:
 
-```jsx
+\`\`\`jsx
 // components/ConfirmationDialog.jsx
 export default function ConfirmationDialog({ toolCall, onConfirm, onReject }) {
   if (!toolCall) return null;
@@ -7187,7 +7187,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Full Example
 
@@ -7212,7 +7212,7 @@ This recipe uses memoization - a performance optimization technique where the re
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -7228,13 +7228,13 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Memoized Markdown Component
 
 Create a memoized Markdown component that efficiently renders Markdown content:
 
-```tsx
+\`\`\`tsx
 // components/MemoizedMarkdown.tsx
 'use client';
 
@@ -7279,13 +7279,13 @@ const MemoizedMarkdown = memo(
 MemoizedMarkdown.displayName = 'MemoizedMarkdown';
 
 export default MemoizedMarkdown;
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a chat interface that uses the memoized Markdown component:
 
-```tsx
+\`\`\`tsx
 // app/page.tsx
 'use client';
 
@@ -7346,7 +7346,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation significantly improves performance when rendering Markdown in streaming chat responses, especially for longer conversations, by avoiding redundant parsing and rendering operations.
 # Model Context Protocol (MCP) Tools
@@ -7359,11 +7359,11 @@ Let's create a route handler for `/api/completion` that will generate text based
 
 To use the `StreamableHTTPClientTransport`, you will need to install the official Typescript SDK for Model Context Protocol:
 
-```bash
+\`\`\`bash
 $ pnpm install @modelcontextprotocol/sdk
-```
+\`\`\`
 
-```typescript
+\`\`\`typescript
 // app/api/completion/route.ts
 import { experimental_createMCPClient, streamText } from 'ai';
 import { Experimental_StdioMCPTransport } from 'ai/mcp-stdio';
@@ -7401,11 +7401,11 @@ export async function POST(req: Request) {
     await client.close();
   }
 }
-```
+\`\`\`
 
 You'll also need to create a Python script that implements the MCP server:
 
-```python
+\`\`\`python
 # mcp_server.py
 import json
 import sys
@@ -7509,13 +7509,13 @@ while True:
         })
     elif message["type"] == "close":
         break
-```
+\`\`\`
 
 ## Client
 
 On the client side, you can create a simple React component that will make a POST request to the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt and any tool calls that the model makes.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useState } from 'react';
@@ -7603,7 +7603,7 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows you to use tools defined in a separate MCP server with your AI models, providing a flexible way to extend the capabilities of your AI applications.
 # Render Visual Interface in Chat
@@ -7614,7 +7614,7 @@ An interesting consequence of language models that can call tools is that this a
 
 Let's build an assistant that gets the weather for any city by calling the `getWeatherInformation` tool. Instead of returning text during the tool call, you will render a React component that displays the weather information on the client.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -7697,13 +7697,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/chat` that will handle the weather tool:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -7745,7 +7745,7 @@ After displaying the weather data, provide a brief natural language summary of t
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows you to render rich, interactive UI components in response to user queries, creating a more engaging and informative chat experience. The weather card is just one example - you could create various specialized components for different types of information:
 
@@ -7772,7 +7772,7 @@ The `experimental_prepareRequestBody` option allows you to customize the body co
 
 Let's create a chat interface that allows users to select a language for translation:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -7832,13 +7832,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 On the server side, we can access the custom body structure:
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -7864,7 +7864,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows you to send additional data along with the chat messages, which can be useful for customizing the behavior of your AI application based on user preferences or other contextual information.
 # Stream Assistant Response
@@ -7873,7 +7873,7 @@ This implementation allows you to send additional data along with the chat messa
 
 Let's create a simple chat interface that allows users to send messages to the assistant and receive responses. You will integrate the `useAssistant` hook from `@ai-sdk/react` to stream the messages and status.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -7913,13 +7913,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/assistant` that will process the messages and generate responses using the OpenAI Assistant API:
 
-```typescript
+\`\`\`typescript
 // app/api/assistant/route.ts
 import { StreamingTextResponse, AssistantResponse } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -7952,7 +7952,7 @@ export async function POST(req: Request) {
   // Create a response with the thread ID
   return AssistantResponse({ threadId: thread.id, runId: run.id }, { headers: { 'Content-Type': 'text/plain' } });
 }
-```
+\`\`\`
 
 This implementation allows you to create a chat interface that uses the OpenAI Assistant API to generate responses. The `useAssistant` hook handles the streaming of messages and status updates, providing a seamless user experience.
 
@@ -7970,7 +7970,7 @@ Let's create a simple chat interface that allows users to send messages to the a
 
 You will need to provide the list of tools on the OpenAI [Assistant Dashboard](https://platform.openai.com/assistants). You can use the following schema to create a tool to convert celsius to fahrenheit.
 
-```json
+\`\`\`json
 {
   "name": "celsiusToFahrenheit",
   "description": "convert celsius to fahrenheit.",
@@ -7985,13 +7985,13 @@ You will need to provide the list of tools on the OpenAI [Assistant Dashboard](h
     "required": ["value"]
   }
 }
-```
+\`\`\`
 
 ## Client
 
 Let's create a chat interface that allows users to interact with an assistant that can convert temperatures:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -8060,13 +8060,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/assistant` that will process the messages and generate responses using the OpenAI Assistant API with tool support:
 
-```typescript
+\`\`\`typescript
 // app/api/assistant/route.ts
 import { StreamingTextResponse, AssistantResponse } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -8118,11 +8118,11 @@ export async function POST(req: Request) {
 
   return new Response('Tool output submitted', { status: 200 });
 }
-```
+\`\`\`
 
 For this example to work, you need to implement the actual tool functionality. Here's how you could implement the temperature conversion tool:
 
-```typescript
+\`\`\`typescript
 // lib/tools.ts
 export function celsiusToFahrenheit(celsius: number): number {
   return (celsius * 9/5) + 32;
@@ -8147,7 +8147,7 @@ export async function POST(req: Request) {
   
   return Response.json({ error: 'Unknown tool' }, { status: 400 });
 }
-```
+\`\`\`
 
 This implementation allows you to create a chat interface that uses the OpenAI Assistant API with tools to generate responses. The `useAssistant` hook handles the streaming of messages and status updates, providing a seamless user experience.
 
@@ -8171,7 +8171,7 @@ The `streamObject` function allows you to specify different output strategies us
 
 It is helpful to set up the schema in a separate file that is imported on both the client and server.
 
-```typescript
+\`\`\`typescript
 // lib/schema.ts
 import { z } from 'zod';
 
@@ -8189,13 +8189,13 @@ export const notificationSchema = z.object({
 });
 
 export type Notification = z.infer<typeof notificationSchema>;
-```
+\`\`\`
 
 ## Client
 
 Let's create a React component that will display the notification as it's being generated:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -8282,13 +8282,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Now, let's create a route handler for `/api/stream-object` that will stream the object generation process:
 
-```typescript
+\`\`\`typescript
 // app/api/stream-object/route.ts
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -8306,7 +8306,7 @@ export async function POST(req: Request) {
   
   return new Response(objectStream);
 }
-```
+\`\`\`
 
 ## Loading State and Stopping the Stream
 
@@ -8318,7 +8318,7 @@ The `streamObject` function also supports an `array` output mode, which is usefu
 
 ## Schema
 
-```typescript
+\`\`\`typescript
 // lib/schema.ts
 import { z } from 'zod';
 
@@ -8332,11 +8332,11 @@ export const todoItemSchema = z.object({
 export type TodoItem = z.infer<typeof todoItemSchema>;
 
 export const todoListSchema = z.array(todoItemSchema);
-```
+\`\`\`
 
 ## Client
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -8424,11 +8424,11 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/stream-array/route.ts
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -8447,7 +8447,7 @@ export async function POST(req: Request) {
   
   return new Response(objectStream);
 }
-```
+\`\`\`
 
 ## No Schema Mode
 
@@ -8455,7 +8455,7 @@ You can also use `streamObject` without a schema, which will stream the raw JSON
 
 ## Client
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -8520,11 +8520,11 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/stream-raw/route.ts
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -8540,7 +8540,7 @@ export async function POST(req: Request) {
   
   return new Response(objectStream);
 }
-```
+\`\`\`
 # Stream Text
 
 Text generation can sometimes take a long time to complete, especially when you're generating a couple of paragraphs. In such cases, it is useful to stream the text generation process to the client in real-time. This allows the client to display the generated text as it is being generated, rather than have users wait for it to complete before displaying the result.
@@ -8549,7 +8549,7 @@ Text generation can sometimes take a long time to complete, especially when you'
 
 Let's create a simple React component that imports the `useCompletion` hook from the `@ai-sdk/react` module. The `useCompletion` hook will call the `/api/completion` endpoint when a button is clicked. The endpoint will generate text based on the input prompt and stream it to the client.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useCompletion } from 'ai/react';
@@ -8580,13 +8580,13 @@ export default function Page() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/completion` that will generate text based on the input prompt and stream it to the client.
 
-```typescript
+\`\`\`typescript
 // app/api/completion/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -8604,7 +8604,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows for real-time text streaming, providing a more responsive user experience compared to waiting for the entire generation to complete before displaying anything.
 # Stream Text Multi-Step
@@ -8615,7 +8615,7 @@ With `createDataStreamResponse` and `sendFinish` / `sendStart` options when merg
 
 ## Server
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { openai } from '@ai-sdk/openai';
 import { createDataStreamResponse, streamText, tool } from 'ai';
@@ -8664,13 +8664,13 @@ export async function POST(req: Request) {
     },
   });
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will display the chat interface:
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -8703,7 +8703,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows for multi-step processing in a single assistant response, enabling more complex interactions while maintaining a seamless user experience.
 # Stream Text with Chat Prompt
@@ -8714,7 +8714,7 @@ Chat completion can sometimes take a long time to finish, especially when the re
 
 Let's create a React component that imports the `useChat` hook from the `@ai-sdk/react` module. The `useChat` hook will call the `/api/chat` endpoint when the user sends a message. The endpoint will generate the assistant's response based on the conversation history and stream it to the client.
 
-```jsx
+\`\`\`jsx
 'use client';
 
 import { useChat } from 'ai/react';
@@ -8746,13 +8746,13 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 ## Server
 
 Let's create a route handler for `/api/chat` that will generate the assistant's response based on the conversation history and stream it to the client.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
@@ -8769,7 +8769,7 @@ export async function POST(req: Request) {
   
   return new Response(textStream);
 }
-```
+\`\`\`
 
 This implementation allows for real-time streaming of chat responses, providing a more responsive user experience compared to waiting for the entire response to complete before displaying anything.
 # Stream Text with Image Prompt
@@ -8782,7 +8782,7 @@ Vision models such as GPT-4 can process both text and images. In this example, w
 
 We split the user's message into two parts: the text and the image URL. We then send both parts to the model. The last message is the user's message, and we add the image URL to it.
 
-```typescript
+\`\`\`typescript
 // app/api/chat/route.ts
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
@@ -8828,13 +8828,13 @@ export async function POST(req: Request) {
 
   return new Response(textStream);
 }
-```
+\`\`\`
 
 ## Client
 
 Now, let's create a React component that will allow the user to enter a message and an image URL, and then send both to the server.
 
-```jsx
+\`\`\`jsx
 // app/page.tsx
 'use client';
 
@@ -8894,7 +8894,7 @@ export default function Chat() {
     </div>
   );
 }
-```
+\`\`\`
 
 This implementation allows users to provide both text and image inputs, enabling the AI to analyze and respond to visual content alongside textual queries.
 \n\n## Node.js Recipes\n\n
@@ -8904,7 +8904,7 @@ Models call tools to gather information or perform actions that are not directly
 
 You can enable multi-step tool calls in `generateText` by setting the `maxSteps` option to a number greater than 1. This option specifies the maximum number of steps (i.e., LLM calls) that can be made to prevent infinite loops.
 
-```javascript
+\`\`\`javascript
 import { generateText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -8928,7 +8928,7 @@ const { text } = await generateText({
 });
 
 console.log(text);
-```
+\`\`\`
 
 In this example, the model can call the `weather` tool to get the current temperature in San Francisco. The `maxSteps` option is set to 5, which means the model can make up to 5 LLM calls to complete the task.
 
@@ -8938,7 +8938,7 @@ The model might decide to call the `weather` tool multiple times for different l
 
 You can also use multi-step tool calls with conversation history:
 
-```javascript
+\`\`\`javascript
 import { generateText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -8980,7 +8980,7 @@ const { text } = await generateText({
 });
 
 console.log(text);
-```
+\`\`\`
 
 In this example, the model might first call the `search` tool to get information about Paris, and then call the `weather` tool to get the current weather in Paris, before generating a final response that incorporates both pieces of information.
 
@@ -8988,7 +8988,7 @@ In this example, the model might first call the `search` tool to get information
 
 For more complex workflows, you can use multiple tools and higher `maxSteps` values:
 
-```javascript
+\`\`\`javascript
 import { generateText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -9052,7 +9052,7 @@ const { text } = await generateText({
 });
 
 console.log(text);
-```
+\`\`\`
 
 In this example, the model might make multiple tool calls in sequence:
 1. First, call the `search` tool to get general information about Tokyo
@@ -9072,7 +9072,7 @@ Text embeddings are numerical representations of text that capture semantic mean
 
 This example demonstrates how to convert text into embeddings using a text embedding model. The resulting embedding is a high-dimensional vector that represents the semantic meaning of the input text. For a more practical application of embeddings, check out our RAG example which shows how embeddings can be used for document retrieval.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 import 'dotenv/config';
@@ -9088,7 +9088,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 ## Understanding Text Embeddings
 
@@ -9113,7 +9113,7 @@ The AI SDK supports various embedding models from different providers. Here's ho
 
 ### OpenAI Embeddings
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 
@@ -9121,11 +9121,11 @@ const { embedding } = await embed({
   model: openai.embedding('text-embedding-3-small'),
   value: 'The quick brown fox jumps over the lazy dog',
 });
-```
+\`\`\`
 
 ### Cohere Embeddings
 
-```javascript
+\`\`\`javascript
 import { cohere } from '@ai-sdk/cohere';
 import { embed } from 'ai';
 
@@ -9133,11 +9133,11 @@ const { embedding } = await embed({
   model: cohere.embedding('embed-english-v3.0'),
   value: 'The quick brown fox jumps over the lazy dog',
 });
-```
+\`\`\`
 
 ### Mistral Embeddings
 
-```javascript
+\`\`\`javascript
 import { mistral } from '@ai-sdk/mistral';
 import { embed } from 'ai';
 
@@ -9145,7 +9145,7 @@ const { embedding } = await embed({
   model: mistral.embedding('mistral-embed'),
   value: 'The quick brown fox jumps over the lazy dog',
 });
-```
+\`\`\`
 
 ## Embedding Multiple Texts
 
@@ -9155,14 +9155,14 @@ For embedding a single text, use the `embed` function. If you need to embed mult
 
 The `embed` function returns both the embedding and usage information:
 
-```javascript
+\`\`\`javascript
 const { embedding, usage } = await embed({
   model: openai.embedding('text-embedding-3-small'),
   value: 'This is a sample text to embed',
 });
 
 console.log('Token usage:', usage);
-```
+\`\`\`
 
 The `usage` object typically includes:
 - `promptTokens`: The number of tokens in the input text
@@ -9172,7 +9172,7 @@ The `usage` object typically includes:
 
 Once you have generated embeddings, you can store them in a vector database for efficient similarity search:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 import { ChromaClient } from 'chromadb';
@@ -9199,13 +9199,13 @@ async function storeEmbeddings() {
     documents: [text],
   });
 }
-```
+\`\`\`
 
 ## Comparing Text Similarity
 
 You can use embeddings to compare the similarity between texts:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 
@@ -9241,7 +9241,7 @@ compareSimilarity(
 ).then(similarity => {
   console.log(`Similarity score: ${similarity}`);
 });
-```
+\`\`\`
 
 Text embeddings are a powerful tool for working with language data in a mathematical way, enabling a wide range of applications in natural language processing and AI.
 # Embed Text in Batch
@@ -9250,7 +9250,7 @@ When working with large datasets or multiple pieces of text, processing embeddin
 
 This example shows how to embed multiple text inputs in a single operation using the AI SDK. For single text embedding, see our Embed Text example, or for a practical application, check out our RAG example which demonstrates how batch embeddings can be used in a document retrieval system.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import 'dotenv/config';
@@ -9270,7 +9270,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 ## Benefits of Batch Embedding
 
@@ -9287,7 +9287,7 @@ The AI SDK supports batch embedding with various providers:
 
 ### OpenAI Batch Embeddings
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 
@@ -9299,11 +9299,11 @@ const { embeddings } = await embedMany({
     'Actions speak louder than words',
   ],
 });
-```
+\`\`\`
 
 ### Cohere Batch Embeddings
 
-```javascript
+\`\`\`javascript
 import { cohere } from '@ai-sdk/cohere';
 import { embedMany } from 'ai';
 
@@ -9315,11 +9315,11 @@ const { embeddings } = await embedMany({
     'Actions speak louder than words',
   ],
 });
-```
+\`\`\`
 
 ### Mistral Batch Embeddings
 
-```javascript
+\`\`\`javascript
 import { mistral } from '@ai-sdk/mistral';
 import { embedMany } from 'ai';
 
@@ -9331,13 +9331,13 @@ const { embeddings } = await embedMany({
     'Actions speak louder than words',
   ],
 });
-```
+\`\`\`
 
 ## Tracking Token Usage
 
 The `embedMany` function returns both the embeddings and usage information:
 
-```javascript
+\`\`\`javascript
 const { embeddings, usage } = await embedMany({
   model: openai.embedding('text-embedding-3-small'),
   values: [
@@ -9348,7 +9348,7 @@ const { embeddings, usage } = await embedMany({
 });
 
 console.log('Token usage:', usage);
-```
+\`\`\`
 
 The `usage` object typically includes:
 - `promptTokens`: The total number of tokens in all input texts
@@ -9358,7 +9358,7 @@ The `usage` object typically includes:
 
 You can efficiently store batch embeddings in a vector database for similarity search:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import { ChromaClient } from 'chromadb';
@@ -9400,13 +9400,13 @@ async function storeBatchEmbeddings() {
     documents: documents,
   });
 }
-```
+\`\`\`
 
 ## Processing Large Datasets
 
 When working with very large datasets, you might need to process embeddings in chunks to avoid hitting API limits:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 import fs from 'fs';
@@ -9436,13 +9436,13 @@ async function processLargeDataset(filePath, chunkSize = 100) {
   
   return allEmbeddings;
 }
-```
+\`\`\`
 
 ## Comparing Multiple Texts for Similarity
 
 You can use batch embeddings to efficiently compare multiple texts for similarity:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
 
@@ -9495,7 +9495,7 @@ findSimilarTexts(query, candidates).then(results => {
     console.log(`${i+1}. ${result.text} (Score: ${result.similarity.toFixed(4)})`);
   });
 });
-```
+\`\`\`
 
 Batch embedding is a powerful technique for efficiently processing multiple texts, making it an essential tool for building applications that work with large text datasets.
 # Generate Object
@@ -9504,7 +9504,7 @@ Earlier functions like `generateText` and `streamText` gave us the ability to ge
 
 The function requires you to provide a schema using [zod](https://github.com/colinhacks/zod), a library for defining schemas for JavaScript objects. By using zod, you can also use it to validate the generated object and ensure that it conforms to the specified structure.
 
-```javascript
+\`\`\`javascript
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -9527,7 +9527,7 @@ const result = await generateObject({
 });
 
 console.log(JSON.stringify(result.object, null, 2));
-```
+\`\`\`
 
 In this example, we're using the `generateObject` function to generate a structured recipe object. The function takes three parameters:
 
@@ -9539,7 +9539,7 @@ The function returns a promise that resolves to an object containing the generat
 
 You can also use the `messages` parameter instead of `prompt` to provide a conversation history:
 
-```javascript
+\`\`\`javascript
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -9563,11 +9563,11 @@ const result = await generateObject({
 });
 
 console.log(JSON.stringify(result.object, null, 2));
-```
+\`\`\`
 
 You can create complex nested schemas to match your specific needs:
 
-```javascript
+\`\`\`javascript
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -9598,7 +9598,7 @@ const result = await generateObject({
 });
 
 console.log(JSON.stringify(result.object, null, 2));
-```
+\`\`\`
 
 The `generateObject` function is particularly useful for applications that require structured data, such as:
 
@@ -9615,7 +9615,7 @@ Reasoning models, like [DeepSeek's](https://deepseek.ai/) R1, are gaining popula
 
 One solution is to pass the output from a reasoning model through a smaller model that can output structured data (like gpt-4o-mini). These lightweight models can efficiently extract the structured data while adding very little overhead in terms of speed and cost.
 
-```javascript
+\`\`\`javascript
 import { deepseek } from '@ai-sdk/deepseek';
 import { openai } from '@ai-sdk/openai';
 import { generateObject, generateText } from 'ai';
@@ -9646,7 +9646,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using a two-step process:
 
@@ -9662,7 +9662,7 @@ The function returns a promise that resolves to an object containing the extract
 
 You can also use this approach with other reasoning models:
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
 import { generateObject, generateText } from 'ai';
@@ -9696,7 +9696,7 @@ async function analyzeCompanies() {
 
   return object;
 }
-```
+\`\`\`
 
 This approach offers several benefits:
 
@@ -9716,7 +9716,7 @@ This pattern is particularly useful for applications that require both complex r
 
 The most basic LLM use case is generating text based on a prompt. For example, you may want to generate a response to a question or summarize a body of text. The `generateText` function can be used to generate text based on the input prompt.
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -9726,7 +9726,7 @@ const result = await generateText({
 });
 
 console.log(result);
-```
+\`\`\`
 
 This simple example demonstrates how to use the `generateText` function to generate a response to a question. The function takes an object with the following properties:
 
@@ -9737,7 +9737,7 @@ The function returns a promise that resolves to an object containing the generat
 
 You can also provide additional parameters to control the generation process:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -9750,7 +9750,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, we're using additional parameters:
 
@@ -9774,7 +9774,7 @@ Previously, we were able to generate text and objects using either a single mess
 
 A chat completion allows you to generate text based on a series of messages. This series of messages can be any series of interactions between any number of systems, but the most popular and relatable use case has been a series of messages that represent a conversation between a user and a model.
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -9799,7 +9799,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, we're using the `messages` parameter to provide a conversation history to the model. The conversation consists of three messages:
 
@@ -9816,7 +9816,7 @@ The `messages` parameter is an array of objects, where each object represents a 
 
 You can also include a `system` message to provide instructions or context to the model:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -9832,7 +9832,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, the `system` message provides context about the assistant's expertise, which helps guide the model's response to the user's question.
 
@@ -9851,7 +9851,7 @@ Some language models that support vision capabilities accept images as part of t
 
 ## URL
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -9878,7 +9878,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 In this example, we're using a URL to include an image in the prompt. The `content` property of the message is an array of objects, where each object represents a part of the message. The first object is a text part, and the second object is an image part.
 
@@ -9890,7 +9890,7 @@ The image part has two properties:
 
 You can also include images as file buffers:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import fs from 'fs/promises';
@@ -9924,13 +9924,13 @@ async function generateTextWithImageBuffer() {
 }
 
 generateTextWithImageBuffer();
-```
+\`\`\`
 
 In this example, we're reading an image file as a buffer and including it in the prompt. This is useful when you have local image files that you want to include in your prompts.
 
 You can also include multiple images in a single prompt:
 
-```javascript
+\`\`\`javascript
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -9959,7 +9959,7 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 This capability is particularly useful for applications that involve:
 
@@ -9999,7 +9999,7 @@ The middleware handles all transformations needed to make cached responses indis
 
 ### Middleware
 
-```typescript
+\`\`\`typescript
 import fs from 'fs';
 import path from 'path';
 import {
@@ -10147,13 +10147,13 @@ const cacheMiddleware: LanguageModelV1Middleware = async (
     return result;
   }
 };
-```
+\`\`\`
 
 ## Using the Middleware
 
 To use the caching middleware, wrap your model with the `cached` function:
 
-```typescript
+\`\`\`typescript
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 import { cached } from './cache-middleware';
@@ -10168,11 +10168,11 @@ const result = await generateText({
 });
 
 console.log(result.text);
-```
+\`\`\`
 
 For streaming:
 
-```typescript
+\`\`\`typescript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { cached } from './cache-middleware';
@@ -10189,7 +10189,7 @@ const result = await streamText({
 for await (const chunk of result.textStream) {
   process.stdout.write(chunk);
 }
-```
+\`\`\`
 
 ## Considerations
 
@@ -10214,7 +10214,7 @@ By implementing this caching middleware, you can significantly speed up your dev
 
 The AI SDK supports Model Context Protocol (MCP) tools by offering a lightweight client that exposes a `tools` method for retrieving tools from a MCP server. After use, the client should always be closed to release resources.
 
-```javascript
+\`\`\`javascript
 import { experimental_createMCPClient, generateText } from 'ai';
 import { Experimental_StdioMCPTransport } from 'ai/mcp-stdio';
 import { openai } from '@ai-sdk/openai';
@@ -10270,7 +10270,7 @@ try {
   // Always close the clients to release resources:
   await Promise.all([clientOne.close(), clientTwo.close(), clientThree.close()]);
 }
-```
+\`\`\`
 
 ## What is Model Context Protocol (MCP)?
 
@@ -10287,7 +10287,7 @@ MCP tools can be particularly useful when:
 
 Here's an example of creating a simple MCP server using the AI SDK's stdio transport:
 
-```javascript
+\`\`\`javascript
 // server.js
 import { createMCPServer } from 'ai/mcp-stdio';
 import { z } from 'zod';
@@ -10336,13 +10336,13 @@ const server = createMCPServer({
 
 // Start the server
 server.listen();
-```
+\`\`\`
 
 ## Creating an MCP Server with Express
 
 You can also create an MCP server using Express for HTTP/SSE transport:
 
-```javascript
+\`\`\`javascript
 // express-server.js
 import express from 'express';
 import { createMCPServer } from 'ai/mcp-http';
@@ -10376,13 +10376,13 @@ app.use('/sse', server.createExpressMiddleware());
 app.listen(port, () => {
   console.log(`MCP server listening at http://localhost:${port}`);
 });
-```
+\`\`\`
 
 ## Using MCP Tools with Other AI SDK Features
 
 MCP tools can be combined with other AI SDK features, such as streaming and tool calling:
 
-```javascript
+\`\`\`javascript
 import { experimental_createMCPClient, streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -10415,7 +10415,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 MCP tools provide a flexible way to extend your AI applications with custom functionality while maintaining a clean separation of concerns.
 # Record Token Usage After Streaming Object
@@ -10426,7 +10426,7 @@ When you're streaming structured data with `streamObject`, you may want to recor
 
 You can use the `onFinish` callback to record token usage. It is called when the stream is finished.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -10451,7 +10451,7 @@ for await (const partialObject of result.partialObjectStream) {
   console.clear();
   console.log(JSON.stringify(partialObject, null, 2));
 }
-```
+\`\`\`
 
 In this example, we're using the `onFinish` callback to log the token usage after the stream is finished. The callback receives an object with a `usage` property that contains information about the token usage.
 
@@ -10464,7 +10464,7 @@ The `usage` object typically includes:
 
 You can also access the token usage through the `usage` promise returned by the `streamObject` function:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -10535,7 +10535,7 @@ async function storeUsageInDatabase(usageRecord) {
 }
 
 generateAndTrackUsage().catch(console.error);
-```
+\`\`\`
 
 This approach is particularly useful for applications that need to track token usage for billing or quota purposes, such as:
 
@@ -10551,7 +10551,7 @@ Retrieval Augmented Generation (RAG) is a technique that enhances the capabiliti
 
 This example uses a simple in-memory vector database to store and retrieve relevant information. For a more in-depth guide, check out the RAG Chatbot Guide which will show you how to build a RAG chatbot with Next.js, Drizzle ORM and Postgres.
 
-```javascript
+\`\`\`javascript
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -10624,7 +10624,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 ## Understanding RAG
 
@@ -10648,7 +10648,7 @@ A production-ready RAG system typically includes these components:
 
 ### 1. Document Processing
 
-```javascript
+\`\`\`javascript
 import fs from 'fs';
 import path from 'path';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
@@ -10680,11 +10680,11 @@ async function processDocuments(directory) {
   const chunks = await textSplitter.splitDocuments(documents);
   return chunks;
 }
-```
+\`\`\`
 
 ### 2. Vector Database Integration
 
-```javascript
+\`\`\`javascript
 import { ChromaClient } from 'chromadb';
 import { openai } from '@ai-sdk/openai';
 import { embedMany } from 'ai';
@@ -10719,11 +10719,11 @@ async function createVectorStore(chunks) {
 
   return collection;
 }
-```
+\`\`\`
 
 ### 3. Query Processing
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embed, generateText } from 'ai';
 
@@ -10749,11 +10749,11 @@ async function queryDocuments(collection, query, topK = 5) {
     sources: relevantSources,
   };
 }
-```
+\`\`\`
 
 ### 4. Response Generation
 
-```javascript
+\`\`\`javascript
 async function generateResponse(query, relevantDocs) {
   const context = relevantDocs.join('\n\n');
 
@@ -10771,11 +10771,11 @@ async function generateResponse(query, relevantDocs) {
 
   return text;
 }
-```
+\`\`\`
 
 ### 5. Putting It All Together
 
-```javascript
+\`\`\`javascript
 import dotenv from 'dotenv';
 
 async function main() {
@@ -10796,7 +10796,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 ## Advanced RAG Techniques
 
@@ -10804,7 +10804,7 @@ main().catch(console.error);
 
 Combine semantic search (embeddings) with keyword search for better results:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { embed } from 'ai';
 
@@ -10833,13 +10833,13 @@ async function hybridSearch(collection, query, topK = 5) {
 
   return uniqueDocs.slice(0, topK);
 }
-```
+\`\`\`
 
 ### Query Decomposition
 
 Break complex queries into simpler sub-queries:
 
-```javascript
+\`\`\`javascript
 async function decomposeQuery(query) {
   const { text } = await generateText({
     model: openai('gpt-4o'),
@@ -10858,13 +10858,13 @@ async function decomposeQuery(query) {
 
   return subQueries;
 }
-```
+\`\`\`
 
 ### Re-ranking
 
 Improve retrieval quality by re-ranking results:
 
-```javascript
+\`\`\`javascript
 async function reRankResults(query, documents, topK = 3) {
   const { text } = await generateText({
     model: openai('gpt-4o'),
@@ -10887,13 +10887,13 @@ async function reRankResults(query, documents, topK = 3) {
 
   return rankedDocs;
 }
-```
+\`\`\`
 
 ## Streaming RAG Responses
 
 For a better user experience, you can stream the generated responses:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 
@@ -10917,7 +10917,7 @@ async function streamRagResponse(query, relevantDocs) {
     process.stdout.write(chunk);
   }
 }
-```
+\`\`\`
 
 ## Considerations for Production RAG Systems
 
@@ -10938,7 +10938,7 @@ Object generation can sometimes take a long time to complete, especially when yo
 
 In Generative UI use cases, it is useful to stream the object to the client in real-time to render UIs as the object is being generated. You can use the `streamObject` function to generate partial object streams.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -10959,7 +10959,7 @@ for await (const partialObject of partialObjectStream) {
   console.clear();
   console.log(partialObject);
 }
-```
+\`\`\`
 
 In this example, we're using the `streamObject` function to generate a structured recipe object and stream it in real-time. The function takes the same parameters as `generateObject`, but returns a `ReadableStream` that you can use to read the generated object as it becomes available.
 
@@ -10967,7 +10967,7 @@ The `streamObject` function returns an object with a `partialObjectStream` prope
 
 You can also use the `messages` parameter instead of `prompt` to provide a conversation history:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamObject } from 'ai';
 import { z } from 'zod';
@@ -11014,7 +11014,7 @@ async function streamMovieAnalysis() {
 }
 
 streamMovieAnalysis().catch(console.error);
-```
+\`\`\`
 
 This approach is particularly useful for applications that need to display complex structured data as it's being generated, such as:
 
@@ -11031,7 +11031,7 @@ Some language models that support vision capabilities accept images as part of t
 
 ## URL
 
-```javascript
+\`\`\`javascript
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import dotenv from 'dotenv';
@@ -11082,7 +11082,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using the `streamObject` function to analyze an image of stamps and stream structured data about each stamp in real-time. The function takes the same parameters as `generateObject`, but returns a `ReadableStream` that you can use to read the generated object as it becomes available.
 
@@ -11094,7 +11094,7 @@ The content of the message is an array of objects, where each object represents 
 
 You can also include images as file buffers:
 
-```javascript
+\`\`\`javascript
 import { streamObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import fs from 'fs/promises';
@@ -11151,7 +11151,7 @@ async function analyzeImageWithStructuredOutput() {
 }
 
 analyzeImageWithStructuredOutput().catch(console.error);
-```
+\`\`\`
 
 This approach is particularly useful for applications that need to analyze images and provide structured data in real-time, such as:
 
@@ -11169,7 +11169,7 @@ Text generation can sometimes take a long time to complete, especially when you'
 
 ## Without reader
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -11194,7 +11194,7 @@ console.log(result); // ReadableStream
 //     response.end();
 //   }
 // }));
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to generate text and stream it in real-time. The function returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -11202,7 +11202,7 @@ In this example, we're using the `streamText` function to generate text and stre
 
 If you want to process the streamed text in your application, you can use a reader to read from the stream:
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -11241,7 +11241,7 @@ async function generateAndStreamText() {
 }
 
 generateAndStreamText().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using a reader to read from the stream and process each chunk of text as it arrives. This approach is useful when you want to:
 
@@ -11262,7 +11262,7 @@ This approach is particularly useful for applications like chatbots, content gen
 
 Text generation can sometimes take a long time to finish, especially when the response is big. In such cases, it is useful to stream the chat completion to the client in real-time. This allows the client to display the new message as it is being generated by the model, rather than have users wait for it to finish.
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -11313,7 +11313,7 @@ try {
 } finally {
   reader.releaseLock();
 }
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to generate text based on a conversation history and stream it in real-time. The function takes the same parameters as `generateText`, but returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -11321,7 +11321,7 @@ The conversation is represented as an array of messages, where each message has 
 
 You can also include a `system` message to provide instructions or context to the model:
 
-```javascript
+\`\`\`javascript
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -11337,7 +11337,7 @@ const result = streamText({
 });
 
 // Process the stream...
-```
+\`\`\`
 
 Streaming chat completions is particularly useful for applications like:
 
@@ -11351,7 +11351,7 @@ By streaming the response, you can provide a more responsive and engaging user e
 
 Working with files in AI applications often requires analyzing documents, processing structured data, or extracting information from various file formats. File prompts allow you to send file content directly to the model, enabling tasks like document analysis, data extraction, or generating responses based on file contents.
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import 'dotenv/config';
@@ -11384,7 +11384,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to analyze a PDF document and stream the response in real-time. The function takes the same parameters as `generateText`, but returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -11399,7 +11399,7 @@ The file part has three properties:
 
 You can work with various file types, including:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import fs from 'node:fs';
@@ -11435,11 +11435,11 @@ async function analyzeCSVData() {
 }
 
 analyzeCSVData().catch(console.error);
-```
+\`\`\`
 
 You can also include multiple files in a single prompt:
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import fs from 'node:fs';
@@ -11476,7 +11476,7 @@ async function compareDocuments() {
 }
 
 compareDocuments().catch(console.error);
-```
+\`\`\`
 
 Streaming text with file prompts is particularly useful for applications that require real-time analysis of document content, such as:
 
@@ -11491,7 +11491,7 @@ By streaming the response, you provide a more responsive user experience, especi
 
 Vision-language models can analyze images alongside text prompts to generate responses about visual content. This multimodal approach allows for rich interactions where you can ask questions about images, request descriptions, or analyze visual details. The combination of image and text inputs enables more sophisticated AI applications like visual question answering and image analysis.
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import 'dotenv/config';
@@ -11517,7 +11517,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+\`\`\`
 
 In this example, we're using the `streamText` function to generate a description of an image and stream the response in real-time. The function takes the same parameters as `generateText`, but returns a `ReadableStream` that you can use to read the generated text as it becomes available.
 
@@ -11527,7 +11527,7 @@ The content of the message is an array of objects, where each object represents 
 
 You can also use URLs for images:
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 
@@ -11556,11 +11556,11 @@ async function streamImageAnalysis() {
 }
 
 streamImageAnalysis().catch(console.error);
-```
+\`\`\`
 
 You can also include multiple images in a single prompt:
 
-```javascript
+\`\`\`javascript
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import fs from 'node:fs';
@@ -11590,7 +11590,7 @@ async function compareImages() {
 }
 
 compareImages().catch(console.error);
-```
+\`\`\`
 
 Streaming text with image prompts is particularly useful for applications that require real-time analysis of visual content, such as:
 
@@ -11620,7 +11620,7 @@ There are several models that offer native web-searching capabilities (Perplexit
 
 OpenAI's Responses API has a built-in web search tool that can be used to search the web and return search results. This tool is called `web_search_preview` and is accessed via the `openai` provider.
 
-```javascript
+\`\`\`javascript
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 
@@ -11632,13 +11632,13 @@ const { text, sources } = await generateText({
 
 console.log(text);
 console.log(sources);
-```
+\`\`\`
 
 ### Perplexity
 
 Perplexity's Sonar models combines real-time web search with natural language processing. Each response is grounded in current web data and includes detailed citations.
 
-```javascript
+\`\`\`javascript
 import { perplexity } from '@ai-sdk/perplexity';
 import { generateText } from 'ai';
 
@@ -11649,13 +11649,13 @@ const { text, sources } = await generateText({
 
 console.log(text);
 console.log(sources);
-```
+\`\`\`
 
 ### Gemini
 
 With compatible Gemini models, you can enable search grounding to give the model access to the latest information using Google search.
 
-```javascript
+\`\`\`javascript
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
 
@@ -11674,7 +11674,7 @@ console.log(sources);
 const metadata = providerMetadata?.google;
 const groundingMetadata = metadata?.groundingMetadata;
 const safetyRatings = metadata?.safetyRatings;
-```
+\`\`\`
 
 ## Building a web search tool
 
@@ -11688,7 +11688,7 @@ By using `maxSteps`, you can automatically send tool results back to the languag
 
 Exa is a search API designed for AI. Let's look at how you could implement a search tool using Exa:
 
-```javascript
+\`\`\`javascript
 import { generateText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -11727,13 +11727,13 @@ const { text } = await generateText({
 });
 
 console.log(text);
-```
+\`\`\`
 
 ### Firecrawl
 
 Firecrawl is another search API that can be used to build a web search tool:
 
-```javascript
+\`\`\`javascript
 import { generateText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -11776,13 +11776,13 @@ const { text } = await generateText({
 });
 
 console.log(text);
-```
+\`\`\`
 
 ## Building a comprehensive web search agent
 
 For a more comprehensive web search agent, you might want to combine multiple search tools and add additional functionality:
 
-```javascript
+\`\`\`javascript
 import { generateText, tool } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
@@ -11882,7 +11882,7 @@ const { text } = await generateText({
 });
 
 console.log(text);
-```
+\`\`\`
 
 This comprehensive example demonstrates how you can build a sophisticated web search agent that can:
 
