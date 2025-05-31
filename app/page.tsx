@@ -1,7 +1,7 @@
 "use client"
 
-import RootLayout from "../src/app/layout"
+import { Header } from "../src/components/header"
 
 export default function SyntheticV0PageForDeployment() {
-  return <RootLayout />
+  return <Header />
 }

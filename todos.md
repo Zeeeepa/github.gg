@@ -6,20 +6,20 @@
 - [x] Generate and apply Drizzle migrations for NextAuth.js adapter tables.
 - [x] Implement Header component with Sign In/Sign Out functionality.
 - [x] Implement basic landing page structure based on screenshot (`src/app/page.tsx`).
-- [ ] Setup Zustand for global state management (`src/store/store.ts`).
-- [ ] Implement Repository Search/Input functionality.
-- [ ] Implement Repository Ingestion Service.
-  - [ ] Securely clone repository.
-  - [ ] Aggregate file structure and content into monolithic JSON.
-  - [ ] Analyze commit history.
-  - [ ] Store processed data in Vercel Blob.
-  - [ ] Trigger AI Knowledge Base Generation.
-- [ ] Implement AI-Generated Knowledge Base (DeepWiki Style).
-  - [ ] Define detailed prompt for Gemini 2.5 Pro.
-  - [ ] Service to call Gemini API and store structured output.
-  - [ ] UI to display DeepWiki.
-- [ ] Implement Conversational AI Interface.
-  - [ ] Persistent chat panel component.
-  - [ ] Context-aware (current repository, page).
-  - [ ] Backend API route to stream responses from Gemini.
-- [ ] Create mock data for rapid component development (`src/lib/mock-data.ts`).
+- [x] Setup Zustand for global state management (`src/store/store.ts`).
+- [x] Implement Repository Search/Input functionality.
+- [x] Implement Repository Ingestion Service.
+  - [x] Securely clone repository.
+  - [x] Aggregate file structure and content into monolithic JSON.
+  - [x] Analyze commit history.
+  - [x] Store processed data in Vercel Blob.
+  - [x] Trigger AI Knowledge Base Generation.
+- [x] Implement AI-Generated Knowledge Base (DeepWiki Style).
+  - [x] Define detailed prompt for Gemini 2.5 Pro.
+  - [x] Service to call Gemini API and store structured output.
+  - [x] UI to display DeepWiki.
+- [x] Implement Conversational AI Interface.
+  - [x] Persistent chat panel component.
+  - [x] Context-aware (current repository, page).
+  - [x] Backend API route to stream responses from Gemini.
+- [x] Create mock data for rapid component development (`src/lib/mock-data.ts`).

@@ -72,6 +72,7 @@
     "embla-carousel-react": "8.5.1",
     "expo-sqlite": "latest",
     "gel": "latest",
+    "immer": "latest",
     "input-otp": "1.4.1",
     "knex": "latest",
     "kysely": "latest",
@@ -96,8 +97,10 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "url": "latest",
+    "use-sync-external-store": "latest",
     "vaul": "^0.9.6",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zustand": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
