@@ -1,16 +1,16 @@
 # ContextWeaver Development TODOs
 
 ## I. Project Setup & Core Infrastructure
-- [ ] Initialize Next.js project with Bun (Assumed mostly complete from github.gg base)
-- [ ] Setup PostgreSQL database (User confirmed done)
-- [ ] Integrate Drizzle ORM
-    - [ ] Define `users` table schema
-    - [ ] Define `repositories` table schema
-    - [ ] Define `processed_repository_data` table schema
-    - [ ] Define `deep_wikis` table schema
-    - [ ] Define `repository_branches` table schema (NEW - for branch-specific analysis)
-    - [ ] Define `repository_commits` table schema (NEW - for detailed commit tracking)
-    - [ ] Define `ai_analysis_jobs` table schema (NEW - to track status of AI tasks)
+- [x] Initialize Next.js project with Bun (Assumed mostly complete from github.gg base)
+- [x] Setup PostgreSQL database (User confirmed done)
+- [x] Integrate Drizzle ORM
+    - [x] Define `users` table schema
+    - [x] Define `repositories` table schema
+    - [x] Define `processed_repository_data` table schema
+    - [x] Define `deep_wikis` table schema
+    - [x] Define `repository_branches` table schema
+    - [x] Define `repository_commits` table schema
+    - [x] Define `ai_analysis_jobs` table schema
 - [ ] Setup GitHub OAuth for user authentication
 - [ ] Basic UI layout (collapsible sidebar, main content area, persistent chat panel)
 - [ ] Setup Zustand for global state management (`store.ts`)
