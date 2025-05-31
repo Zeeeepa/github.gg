@@ -1,11 +1,21 @@
+// No changes needed here, the import should now resolve.
+// import { Providers } from "./providers"; // This line was correct.
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Geist as Geist_Sans, Geist_Mono } from "next/font/google" // Corrected import
 import "./globals.css"
-// import { ThemeProvider } from "@/components/theme-provider"; // Moved to Providers
-import { Providers } from "./providers" // Import the new Providers component
+import { Providers } from "./providers"
 
-const inter = Inter({ subsets: ["latin"] })
+const geistSans = Geist_Sans({
+  // Corrected variable name
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+})
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+})
 
 export const metadata: Metadata = {
   title: "ContextWeaver",
@@ -19,12 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <Providers>
-          {" "}
-          {/* Wrap with Providers */}
-          {children}
-        </Providers>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`} // Corrected font variable names
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
