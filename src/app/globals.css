@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background-start-rgb: 230, 240, 255; /* Light blueish white */
+  --background-end-rgb: 255, 255, 255; /* White */
+  --foreground-rgb: 25, 35, 45; /* Dark gray for text */
+
+  --primary-blue: 59, 130, 246; /* Tailwind blue-500 as an example */
+  --muted-foreground-rgb: 107, 114, 128; /* Tailwind gray-500 */
+
+  --card-background-rgb: 255, 255, 255;
+  --card-border-rgb: 229, 231, 235; /* Tailwind gray-200 */
+}
+
+/* No dark mode specific overrides for now, assuming always light like 21st.dev */
+/* If dark mode is still desired, these would need to be adjusted */
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom right,
+      rgba(var(--background-start-rgb), 0.9),
+      rgba(var(--background-end-rgb), 0.9)
+    )
+    no-repeat center center fixed;
+  background-size: cover;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--background-end-rgb); /* Simplification for theme provider */
+  --color-foreground: var(--foreground-rgb);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Custom utility for the blurred background effect if needed as a separate element */
+.abstract-blur-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* You might need a more complex setup for the exact 21st.dev visual,
+     possibly involving pseudo-elements or multiple blurred shapes.
+     This is a basic placeholder for a general blur. */
+  /* background: url('/placeholder.svg?width=1920&height=1080&text=Abstract+Blue+White+Blur') no-repeat center center fixed; */
+  /* filter: blur(100px); */
+  /* opacity: 0.6; */
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Ensure links have a consistent style */
+a {
+  color: rgb(var(--primary-blue));
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
