@@ -18,12 +18,14 @@
 - [x] Implement basic landing page structure based on screenshot (`src/app/page.tsx`).
 - [x] Implement Zustand store for `currentRepositoryUrl`.
 - [x] Connect Search Input to Zustand store.
+- [ ] **[Current Task]** Update Zustand store for repository details (loading, data, error).
+- [ ] **[Current Task]** Call repository details API from frontend and display data/loading/error states.
 
 ### Core Functionality
-- [ ] **[Current Task]** Create API Route to Fetch Basic Repository Details from GitHub
-  - [ ] Use authenticated user's GitHub token
-  - [ ] Fetch from `api.github.com/repos/{owner}/{repo}`
-  - [ ] Return name, description, stars, forks, default branch, etc.
+- [x] Create API Route to Fetch Basic Repository Details from GitHub
+  - [x] Use authenticated user's GitHub token
+  - [x] Fetch from `api.github.com/repos/{owner}/{repo}`
+  - [x] Return name, description, stars, forks, default branch, etc.
 - [x] Implement Repository Search/Input functionality.
 - [x] Implement Repository Ingestion Service.
   - [x] Securely clone repository.
