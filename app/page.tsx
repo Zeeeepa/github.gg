@@ -1,7 +1,7 @@
 "use client"
 
-import  from "../src/lib/db/index"
+import { Header } from "../src/components/header"
 
 export default function SyntheticV0PageForDeployment() {
-  return < />
+  return <Header />
 }

@@ -1,65 +1,25 @@
-# ContextWeaver Development TODOs
-
-## I. Project Setup & Core Infrastructure
-- [x] Initialize Next.js project with Bun (Assumed mostly complete from github.gg base)
-- [x] Setup PostgreSQL database (User confirmed done)
-- [x] Integrate Drizzle ORM
-    - [x] Define `users` table schema
-    - [x] Define `repositories` table schema
-    - [x] Define `processed_repository_data` table schema
-    - [x] Define `deep_wikis` table schema
-    - [x] Define `repository_branches` table schema
-    - [x] Define `repository_commits` table schema
-    - [x] Define `ai_analysis_jobs` table schema
-- [ ] Setup GitHub OAuth for user authentication
-- [ ] Basic UI layout (collapsible sidebar, main content area, persistent chat panel)
-- [ ] Setup Zustand for global state management (`store.ts`)
-
-## II. Repository Ingestion & Processing
-- [ ] Backend API endpoint for initiating repository analysis (`/api/git/initiate-analysis`)
-- [ ] Repository Processing Service
-    - [ ] Secure cloning of repositories
-    - [ ] File and content aggregation into monolithic JSON
-    - [ ] Commit history and author analysis (initial pass)
-    - [ ] Store processed data (monolith, commit history) in Vercel Blob
-    - [ ] Update database with processing status and data pointers
-- [ ] Trigger AI Knowledge Base Generation
-
-## III. AI-Generated Knowledge Base (DeepWiki Style)
-- [ ] AI Orchestration Layer for Gemini 2.5 Pro
-    - [ ] Prompt engineering for DeepWiki generation
-- [ ] Store AI-generated wiki content in database
-- [ ] Frontend display for DeepWiki
-    - [ ] Sidebar navigation for wiki sections
-    - [ ] Render Markdown content
-    - [ ] Render Mermaid diagrams
-
-## IV. Conversational AI Interface ("Live" Chat)
-- [ ] Persistent chat panel UI
-- [ ] Backend API for chat (`/api/chat` using Vercel AI SDK `useChat`)
-- [ ] Context-aware prompting (current repo, current file/wiki section)
-- [ ] Implement chat capabilities:
-    - [ ] Q&A
-    - [ ] Summarization
-    - [ ] Explanation
-    - [ ] Code Generation (simple cases)
-    - [ ] Navigation Assistance
-    - [ ] Diagram Generation (on-the-fly Mermaid)
-    - [ ] Triggering Actions (e.g., "run security audit")
-
-## V. Advanced Features & Integrations
-- [ ] Enhanced Code Browsing (Syntax highlighting, go-to-definition stubs)
-- [ ] Author Intelligence & Contribution Analysis
-- [ ] Security Audits (Socket.dev integration)
-- [ ] AI Code Suggestions & PR Generation (Agentic capabilities)
-- [ ] Stripe Integration for Subscriptions
-- [ ] User Preferences & Settings
-
-## VI. Refinement & Deployment
-- [ ] Comprehensive testing
-- [ ] UI/UX polishing
-- [ ] Documentation
-- [ ] Deployment to Vercel
-
----
-*Self-correction: Added `repository_branches`, `repository_commits`, and `ai_analysis_jobs` to the Drizzle schemas for more granular control and tracking, which will be beneficial for features like branch-specific analysis and detailed commit history features.*
+- [x] Define Drizzle ORM schemas for core entities (`users`, `repositories`, `processed_repository_data`, `deep_wikis`, `repository_branches`, `repository_commits`, `ai_analysis_jobs`).
+- [x] Generate and apply initial Drizzle migrations.
+- [x] Set up GitHub OAuth with NextAuth.js (`src/app/api/auth/[...nextauth]/route.ts`, `src/lib/db/schema/auth-adapter-schema.ts`, `src/types/next-auth.d.ts`).
+- [x] Create `src/app/providers.tsx` for `SessionProvider` and `ThemeProvider`.
+- [x] Update `src/app/layout.tsx` to use `Providers`.
+- [x] Generate and apply Drizzle migrations for NextAuth.js adapter tables.
+- [ ] Implement Header component with Sign In/Sign Out functionality.
+- [ ] Implement basic landing page structure based on screenshot (`src/app/page.tsx`).
+- [ ] Implement Repository Search/Input functionality.
+- [ ] Implement Repository Ingestion Service.
+  - [ ] Securely clone repository.
+  - [ ] Aggregate file structure and content into monolithic JSON.
+  - [ ] Analyze commit history.
+  - [ ] Store processed data in Vercel Blob.
+  - [ ] Trigger AI Knowledge Base Generation.
+- [ ] Implement AI-Generated Knowledge Base (DeepWiki Style).
+  - [ ] Define detailed prompt for Gemini 2.5 Pro.
+  - [ ] Service to call Gemini API and store structured output.
+  - [ ] UI to display DeepWiki.
+- [ ] Implement Conversational AI Interface.
+  - [ ] Persistent chat panel component.
+  - [ ] Context-aware (current repository, page).
+  - [ ] Backend API route to stream responses from Gemini.
+- [ ] Implement Zustand store for global state management (`src/store/store.ts`).
+- [ ] Create mock data for rapid component development (`src/lib/mock-data.ts`).

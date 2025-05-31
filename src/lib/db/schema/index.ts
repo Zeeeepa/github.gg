@@ -7,6 +7,7 @@ export * from "./deep_wikis"
 export * from "./repository_branches"
 export * from "./repository_commits"
 export * from "./ai_analysis_jobs"
+export * from "./auth-adapter-schema" // Add this line
 
 // You might also want to define relations here if you're using Drizzle's relational queries extensively
 // import { relations } from 'drizzle-orm';
