@@ -335,6 +335,7 @@ export const githubRouter = createTRPCRouter({
           branch: input.branch,
           event: input.event,
           actor: input.actor,
+          accessToken,
         });
       } catch (error) {
         if (error instanceof GitHubServiceError) {
@@ -368,6 +369,7 @@ export const githubRouter = createTRPCRouter({
           perPage: input.perPage,
           sort: input.sort,
           direction: input.direction,
+          accessToken,
         });
       } catch (error) {
         if (error instanceof GitHubServiceError) {
@@ -395,6 +397,7 @@ export const githubRouter = createTRPCRouter({
         return await getRepoEvents(input.owner, input.repo, {
           page: input.page,
           perPage: input.perPage,
+          accessToken,
         });
       } catch (error) {
         if (error instanceof GitHubServiceError) {

@@ -1028,9 +1028,10 @@ export async function getRepoWorkflowRuns(
     branch?: string;
     event?: string;
     actor?: string;
+    accessToken?: string;
   } = {}
 ): Promise<{ total_count: number; workflow_runs: WorkflowRun[] }> {
-  const octokit = createOctokit();
+  const octokit = createOctokit(options.accessToken);
   
   try {
     const params: any = {
@@ -1076,6 +1077,7 @@ export async function getRepoPullRequests(
     perPage?: number;
     sort?: 'created' | 'updated' | 'popularity' | 'long-running';
     direction?: 'asc' | 'desc';
+    accessToken?: string;
   } = {}
 ): Promise<PullRequest[]> {
   const {
@@ -1083,10 +1085,11 @@ export async function getRepoPullRequests(
     state = 'open',
     perPage = 30,
     sort = 'created',
-    direction = 'desc'
+    direction = 'desc',
+    accessToken
   } = options;
 
-  const octokit = createOctokit();
+  const octokit = createOctokit(accessToken);
 
   try {
     const { data } = await octokit.rest.pulls.list({
@@ -1121,14 +1124,16 @@ export async function getRepoEvents(
   options: {
     page?: number;
     perPage?: number;
+    accessToken?: string;
   } = {}
 ): Promise<RepositoryEvent[]> {
   const {
     page = 1,
-    perPage = 30
+    perPage = 30,
+    accessToken
   } = options;
 
-  const octokit = createOctokit();
+  const octokit = createOctokit(accessToken);
 
   try {
     const { data } = await octokit.rest.activity.listRepoEvents({

@@ -1,6 +1,8 @@
 import { type inferAsyncReturnType } from '@trpc/server';
 import type { Session } from 'next-auth';
 import type { NextRequest } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { isAuthenticated } from '../../lib/auth/utils';
 import type { AuthenticatedUser, AuthenticatedSession } from '../../lib/auth/types';
 
@@ -80,8 +82,8 @@ export const createTRPCContext = async (opts: {
 }) => {
   const { req, resHeaders } = opts;
   
-  // Get the session if using NextAuth.js
-  const session = null; // Replace with your session logic if using NextAuth
+  // Get the session using NextAuth.js
+  const session = await getServerSession(authOptions);
 
   return createContextInner({
     session,
