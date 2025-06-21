@@ -80,45 +80,92 @@ const featuredTopics = [
 
 export default function ExplorePage() {
   return (
-    <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-6">Explore GitHub</h1>
+    <div className="min-h-screen bg-background">
+      <div className="container py-8">
+        <Tabs defaultValue="trending" className="mb-8">
+          <TabsList className="mb-6 bg-muted/50">
+            <TabsTrigger value="trending" className="data-[state=active]:bg-background">Trending</TabsTrigger>
+            <TabsTrigger value="topics" className="data-[state=active]:bg-background">Topics</TabsTrigger>
+            <TabsTrigger value="collections" className="data-[state=active]:bg-background">Collections</TabsTrigger>
+          </TabsList>
 
-      <Tabs defaultValue="trending" className="mb-8">
-        <TabsList className="mb-4">
-          <TabsTrigger value="trending">Trending</TabsTrigger>
-          <TabsTrigger value="topics">Topics</TabsTrigger>
-          <TabsTrigger value="collections">Collections</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="trending">
-          <div className="grid gap-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Trending Repositories</h2>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  Today
-                </Button>
-                <Button variant="outline" size="sm">
-                  This week
-                </Button>
-                <Button variant="outline" size="sm">
-                  This month
-                </Button>
+          <TabsContent value="trending">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Trending Repositories</h2>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="border-border hover:bg-muted">
+                    Today
+                  </Button>
+                  <Button variant="outline" size="sm" className="border-border hover:bg-muted">
+                    This week
+                  </Button>
+                  <Button variant="outline" size="sm" className="border-border hover:bg-muted">
+                    This month
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            <div className="grid gap-4">
-              {trendingRepos.map((repo) => (
-                <Card key={repo.id}>
-                  <CardHeader className="pb-2">
+              <div className="space-y-4">
+                {trendingRepos.map((repo) => (
+                  <div key={repo.id} className="border border-border rounded-lg p-6 bg-card hover:bg-muted/50 transition-colors">
                     <div className="flex items-start justify-between">
-                      <div>
-                        <Link href={`/${repo.name}`} className="text-lg font-medium hover:underline">
-                          {repo.name}
-                        </Link>
-                        <CardDescription className="mt-1">{repo.description}</CardDescription>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Link 
+                            href={`/${repo.name}`} 
+                            className="text-xl font-semibold text-primary hover:underline"
+                          >
+                            {repo.name}
+                          </Link>
+                        </div>
+                        <p className="text-muted-foreground mb-4 leading-relaxed">
+                          {repo.description}
+                        </p>
+                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <span
+                              className="inline-block w-3 h-3 rounded-full"
+                              style={{ backgroundColor: repo.languageColor }}
+                            ></span>
+                            <span>{repo.language}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+                            </svg>
+                            <span>{repo.stars.toLocaleString()}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3" />
+                              <line x1="8" y1="12" x2="16" y2="12" />
+                            </svg>
+                            <span>{repo.forks.toLocaleString()}</span>
+                          </div>
+                        </div>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="ml-4 border-border hover:bg-muted">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -131,150 +178,92 @@ export default function ExplorePage() {
                           strokeLinejoin="round"
                           className="mr-1"
                         >
-                          <path d="M12 4V20M12 4L8 8M12 4L16 8" />
+                          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
                         </svg>
                         Star
                       </Button>
                     </div>
-                  </CardHeader>
-                  <CardFooter className="pt-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center">
-                        <span
-                          className="inline-block w-3 h-3 rounded-full mr-1"
-                          style={{ backgroundColor: repo.languageColor }}
-                        ></span>
-                        {repo.language}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="topics">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Featured Topics</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {featuredTopics.map((topic) => (
+                  <div key={topic.id} className="border border-border rounded-lg p-6 bg-card hover:bg-muted/50 transition-colors h-full">
+                    <div className="space-y-3">
+                      <div>
+                        <Link href={`/topics/${topic.name}`} className="text-lg font-semibold text-primary hover:underline">
+                          #{topic.name}
+                        </Link>
+                        <p className="text-sm text-muted-foreground mt-1">{topic.repos.toLocaleString()} repositories</p>
                       </div>
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mr-1"
-                        >
-                          <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
-                        </svg>
-                        {repo.stars.toLocaleString()}
-                      </div>
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mr-1"
-                        >
-                          <path d="M7 7c.3 -3.1 3.5 -5 6.5 -5c.5 0 .5 2 0 2c-2.5 0 -4.5 1.5 -4.5 4c0 2 1.4 3 3 4l2 1" />
-                          <path d="M17 17c-.3 3.1 -3.5 5 -6.5 5c-.5 0 -.5 -2 0 -2c2.5 0 4.5 -1.5 4.5 -4c0 -2 -1.4 -3 -3 -4l-2 -1" />
-                        </svg>
-                        {repo.forks.toLocaleString()}
-                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{topic.description}</p>
                     </div>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="topics">
-          <div className="grid gap-6">
-            <h2 className="text-xl font-semibold">Featured Topics</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {featuredTopics.map((topic) => (
-                <Card key={topic.id} className="h-full">
-                  <CardHeader>
-                    <CardTitle>
-                      <Link href={`/topics/${topic.name}`} className="text-blue-500 hover:underline">
-                        #{topic.name}
-                      </Link>
-                    </CardTitle>
-                    <CardDescription>{topic.repos.toLocaleString()} repositories</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm">{topic.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="collections">
-          <div className="grid gap-6">
-            <h2 className="text-xl font-semibold">Collections</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="overflow-hidden">
-                <div className="relative h-48">
-                  <Image
-                    src="/social-network-connections.png"
-                    alt="Machine Learning Collection"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle>Machine Learning Tools</CardTitle>
-                  <CardDescription>Essential libraries and frameworks for ML</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">tensorflow</Badge>
-                    <Badge variant="secondary">pytorch</Badge>
-                    <Badge variant="secondary">scikit-learn</Badge>
-                    <Badge variant="secondary">huggingface</Badge>
                   </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    View Collection
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card className="overflow-hidden">
-                <div className="relative h-48">
-                  <Image
-                    src="/modern-web-deployment.png"
-                    alt="Web Development Collection"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle>Modern Web Development</CardTitle>
-                  <CardDescription>Top frameworks for building web applications</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">react</Badge>
-                    <Badge variant="secondary">next.js</Badge>
-                    <Badge variant="secondary">vue</Badge>
-                    <Badge variant="secondary">svelte</Badge>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    View Collection
-                  </Button>
-                </CardFooter>
-              </Card>
+                ))}
+              </div>
             </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+          </TabsContent>
+
+          <TabsContent value="collections">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Collections</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="border border-border rounded-lg overflow-hidden bg-card hover:bg-muted/50 transition-colors">
+                  <div className="relative h-48 bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-4xl">🤖</div>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    <div>
+                      <h3 className="text-lg font-semibold">Machine Learning Tools</h3>
+                      <p className="text-sm text-muted-foreground">Essential libraries and frameworks for ML</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">tensorflow</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">pytorch</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">scikit-learn</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">huggingface</Badge>
+                    </div>
+                    <Button variant="outline" className="w-full border-border hover:bg-muted">
+                      View Collection
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="border border-border rounded-lg overflow-hidden bg-card hover:bg-muted/50 transition-colors">
+                  <div className="relative h-48 bg-gradient-to-br from-green-500/20 to-blue-500/20">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-4xl">🌐</div>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    <div>
+                      <h3 className="text-lg font-semibold">Modern Web Development</h3>
+                      <p className="text-sm text-muted-foreground">Top frameworks for building web applications</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">react</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">next.js</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">vue</Badge>
+                      <Badge variant="secondary" className="bg-muted text-muted-foreground">svelte</Badge>
+                    </div>
+                    <Button variant="outline" className="w-full border-border hover:bg-muted">
+                      View Collection
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   )
 }
