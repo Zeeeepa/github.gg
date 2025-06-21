@@ -36,16 +36,18 @@ bun dev
 If you prefer using Node.js:
 
 ```bash
-# Install dependencies
-npm install
-# or
-yarn
+# Install dependencies (React 19 compatibility)
+npm run install:legacy
+# or use the legacy flag directly
+npm install --legacy-peer-deps
 
 # Start development server
 npm run dev
 # or
 yarn dev
 ```
+
+> **Note**: This project uses React 19, which requires `--legacy-peer-deps` for some dependencies that haven't updated their peer dependency ranges yet. This is safe and the dependencies work correctly with React 19.
 
 ### Environment Setup
 
@@ -117,6 +119,31 @@ All API routes are protected and require authentication. Include the session tok
 
 - Unauthenticated: 10 requests per hour
 - Authenticated: 100 requests per hour
+
+## React 19 Compatibility
+
+This project uses React 19 and has been updated to ensure compatibility:
+
+### Updated Dependencies
+- **react-day-picker**: Updated to v9.4.2 (React 19 support, date-fns now included)
+- **react-spring**: Updated to v10.0.1 (React 19 compatibility)
+- **tar-stream**: Added proper TypeScript types with @types/tar-stream
+
+### Known Compatibility Notes
+- **framer-motion**: Currently requires `--legacy-peer-deps` as it hasn't officially added React 19 to peer dependencies yet, but works correctly
+- **vaul**: Requires `--legacy-peer-deps` for React 19 compatibility
+
+### Installation Commands
+```bash
+# For new installations
+npm run install:legacy
+
+# For resetting dependencies
+npm run reset
+
+# Manual installation with legacy flag
+npm install --legacy-peer-deps
+```
 
 ## Contributing
 

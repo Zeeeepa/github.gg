@@ -11,7 +11,8 @@
     "test": "npm test",
     "test:auth": "npx tsx scripts/test-auth.ts",
     "clean": "rm -rf .next node_modules",
-    "reset": "npm run clean && npm install",
+    "reset": "npm run clean && npm install --legacy-peer-deps",
+    "install:legacy": "npm install --legacy-peer-deps",
     "format": "npx prettier --write .",
     "check-types": "npx tsc --noEmit"
   },
