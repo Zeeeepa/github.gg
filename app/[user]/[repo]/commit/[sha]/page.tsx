@@ -6,19 +6,21 @@ import { getRepoData, getCommitData } from "@/lib/github"
 export async function generateMetadata({
   params,
 }: {
-  params: { user: string; repo: string; sha: string }
+  params: Promise<{ user: string; repo: string; sha: string }>
 }): Promise<Metadata> {
+  const { user, repo, sha } = await params
+  
   try {
-    const commitData = await getCommitData(params.user, params.repo, params.sha)
+    const commitData = await getCommitData(user, repo, sha)
 
     return {
-      title: `${commitData.message.split("\n")[0]} · ${params.sha.substring(0, 7)} · ${params.user}/${params.repo} - GitHub.GG`,
-      description: `AI-powered analysis of commit ${params.sha.substring(0, 7)} in ${params.user}/${params.repo}`,
+      title: `${commitData.message.split("\n")[0]} · ${sha.substring(0, 7)} · ${user}/${repo} - GitHub.GG`,
+      description: `AI-powered analysis of commit ${sha.substring(0, 7)} in ${user}/${repo}`,
     }
   } catch (error) {
     return {
-      title: `Commit ${params.sha.substring(0, 7)} · ${params.user}/${params.repo} - GitHub.GG`,
-      description: `AI-powered analysis of commit ${params.sha.substring(0, 7)} in ${params.user}/${params.repo}`,
+      title: `Commit ${sha.substring(0, 7)} · ${user}/${repo} - GitHub.GG`,
+      description: `AI-powered analysis of commit ${sha.substring(0, 7)} in ${user}/${repo}`,
     }
   }
 }
@@ -26,18 +28,20 @@ export async function generateMetadata({
 export default async function RepoCommitPage({
   params,
 }: {
-  params: { user: string; repo: string; sha: string }
+  params: Promise<{ user: string; repo: string; sha: string }>
 }) {
+  const { user, repo, sha } = await params
+  
   try {
-    const repoData = await getRepoData(params.user, params.repo)
-    const commitData = await getCommitData(params.user, params.repo, params.sha)
+    const repoData = await getRepoData(user, repo)
+    const commitData = await getCommitData(user, repo, sha)
 
     return (
       <div className="container py-4">
         <RepoCommitDetail
-          username={params.user}
-          reponame={params.repo}
-          sha={params.sha}
+          username={user}
+          reponame={repo}
+          sha={sha}
           repoData={repoData}
           commitData={commitData}
         />

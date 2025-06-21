@@ -3,10 +3,11 @@ import { getRepoData } from "@/lib/github"
 import RepoInsightsClientPage from "./client-page"
 import type { RepoInsightsData } from "@/lib/types/insights"
 
-export async function generateMetadata({ params }: { params: { user: string; repo: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ user: string; repo: string }> }): Promise<Metadata> {
+  const { user, repo } = await params
   return {
-    title: `Insights · ${params.user}/${params.repo} - GitHub.GG`,
-    description: `Analytics and insights for ${params.user}/${params.repo}`,
+    title: `Insights · ${user}/${repo} - GitHub.GG`,
+    description: `Analytics and insights for ${user}/${repo}`,
   }
 }
 
@@ -59,17 +60,19 @@ async function fetchInsightsData(user: string, repo: string): Promise<RepoInsigh
   };
 }
 
-export default async function RepoInsightsPage({ params }: { params: { user: string; repo: string } }) {
+export default async function RepoInsightsPage({ params }: { params: Promise<{ user: string; repo: string }> }) {
+  const { user, repo } = await params
+  
   // Fetch repository data and insights in parallel
   const [repoData, insightsData] = await Promise.all([
-    getRepoData(params.user, params.repo),
-    fetchInsightsData(params.user, params.repo),
+    getRepoData(user, repo),
+    fetchInsightsData(user, repo),
   ]);
 
   // Pass the data to the client component
   return (
     <RepoInsightsClientPage
-      params={params}
+      params={{ user, repo }}
       contributorsData={insightsData.contributorsData}
       commitsData={insightsData.commitsData}
       topContributors={insightsData.topContributors}

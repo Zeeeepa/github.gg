@@ -6,18 +6,20 @@ import { ShieldIcon, AlertTriangleIcon, LockIcon, ShieldCheckIcon, ExternalLinkI
 import { getRepoData } from "@/lib/github"
 import { analyzeRepositoryWithSocket } from "@/lib/socket-api-service"
 
-export async function generateMetadata({ params }: { params: { user: string; repo: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ user: string; repo: string }> }): Promise<Metadata> {
+  const { user, repo } = await params
   return {
-    title: `Security · ${params.user}/${params.repo} - GitHub.GG`,
-    description: `Security overview and vulnerabilities for ${params.user}/${params.repo}`,
+    title: `Security · ${user}/${repo} - GitHub.GG`,
+    description: `Security overview and vulnerabilities for ${user}/${repo}`,
   }
 }
 
-export default async function RepoSecurityPage({ params }: { params: { user: string; repo: string } }) {
-  const repoData = await getRepoData(params.user, params.repo)
+export default async function RepoSecurityPage({ params }: { params: Promise<{ user: string; repo: string }> }) {
+  const { user, repo } = await params
+  const repoData = await getRepoData(user, repo)
 
   // Use Socket API to analyze repository security
-  const securityData = await analyzeRepositoryWithSocket(params.user, params.repo)
+  const securityData = await analyzeRepositoryWithSocket(user, repo)
 
   return (
     <div className="container py-4">

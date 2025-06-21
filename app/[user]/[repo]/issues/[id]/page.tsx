@@ -1,24 +1,26 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import RepoIssueDetail from "@/components/repo/repo-issue-detail"
-import { getRepoData, fetchRepoData } from "@/lib/github"
+import { getRepoData, getIssueData } from "@/lib/github"
 
 export async function generateMetadata({
   params,
 }: {
-  params: { user: string; repo: string; id: string }
+  params: Promise<{ user: string; repo: string; id: string }>
 }): Promise<Metadata> {
+  const { user, repo, id } = await params
+  
   try {
-    const issueData = await getIssueData(params.user, params.repo, params.id)
+    const issueData = await getIssueData(user, repo, id)
 
     return {
-      title: `${issueData.title} · Issue #${params.id} · ${params.user}/${params.repo} - GitHub.GG`,
-      description: `AI-powered analysis of issue #${params.id} in ${params.user}/${params.repo}`,
+      title: `${issueData.title} · Issue #${id} · ${user}/${repo} - GitHub.GG`,
+      description: `AI-powered analysis of issue #${id} in ${user}/${repo}`,
     }
   } catch (error) {
     return {
-      title: `Issue #${params.id} · ${params.user}/${params.repo} - GitHub.GG`,
-      description: `AI-powered analysis of issue #${params.id} in ${params.user}/${params.repo}`,
+      title: `Issue #${id} · ${user}/${repo} - GitHub.GG`,
+      description: `AI-powered analysis of issue #${id} in ${user}/${repo}`,
     }
   }
 }
@@ -26,18 +28,20 @@ export async function generateMetadata({
 export default async function RepoIssuePage({
   params,
 }: {
-  params: { user: string; repo: string; id: string }
+  params: Promise<{ user: string; repo: string; id: string }>
 }) {
+  const { user, repo, id } = await params
+  
   try {
-    const repoData = await getRepoData(params.user, params.repo)
-    const issueData = await getIssueData(params.user, params.repo, params.id)
+    const repoData = await getRepoData(user, repo)
+    const issueData = await getIssueData(user, repo, id)
 
     return (
       <div className="container py-4">
         <RepoIssueDetail
-          username={params.user}
-          reponame={params.repo}
-          issueId={params.id}
+          username={user}
+          reponame={repo}
+          issueId={id}
           repoData={repoData}
           issueData={issueData}
         />
