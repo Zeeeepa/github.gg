@@ -80,6 +80,7 @@
     "superjson": "^2.2.2",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "tar-stream": "^3.1.7",
     "vaul": "^0.9.6",
     "zod": "^3.24.1"
   },
@@ -90,6 +91,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/supertest": "^6.0.3",
+    "@types/tar-stream": "^3.1.4",
     "postcss": "^8",
     "supertest": "^7.1.1",
     "tailwindcss": "^3.4.17",
