@@ -13,7 +13,7 @@ export default function HeroSection() {
       <div className="container max-w-6xl mx-auto text-center">
         <FadeIn>
           <div className="flex items-center justify-center mb-6">
-            <div className="flex items-center gap-2 px-6 py-3 rounded-full border border-border/50 bg-background/10 backdrop-blur-sm">
+            <div className="flex items-center gap-2 px-8 py-4 rounded-full border border-border/50 bg-background/10 backdrop-blur-sm">
               <Sparkles className="h-4 w-4 text-primary" />
               <span className="text-sm text-muted-foreground">AI-Powered GitHub Analysis</span>
             </div>
@@ -63,7 +63,7 @@ export default function HeroSection() {
         <ScaleIn delay={0.7}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <motion.div 
-              className="text-center p-8 rounded-2xl border border-border/50 bg-background/5 backdrop-blur-sm"
+              className="text-center p-10 rounded-4xl border border-border/50 bg-background/5 backdrop-blur-sm"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -71,7 +71,7 @@ export default function HeroSection() {
               <div className="text-muted-foreground">Repositories Analyzed</div>
             </motion.div>
             <motion.div 
-              className="text-center p-8 rounded-2xl border border-border/50 bg-background/5 backdrop-blur-sm"
+              className="text-center p-10 rounded-4xl border border-border/50 bg-background/5 backdrop-blur-sm"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -79,7 +79,7 @@ export default function HeroSection() {
               <div className="text-muted-foreground">Active Users</div>
             </motion.div>
             <motion.div 
-              className="text-center p-8 rounded-2xl border border-border/50 bg-background/5 backdrop-blur-sm"
+              className="text-center p-10 rounded-4xl border border-border/50 bg-background/5 backdrop-blur-sm"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >

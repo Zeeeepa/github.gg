@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --radius: 20px;
+  }
+  
   * {
     @apply border-border;
   }

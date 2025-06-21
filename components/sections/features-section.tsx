@@ -69,7 +69,7 @@ export default function FeaturesSection() {
                 </StaggerContainer>
               </div>
               <ScaleIn delay={0.3}>
-                <div className="relative rounded-2xl overflow-hidden border border-border">
+                <div className="relative rounded-4xl overflow-hidden border border-border">
                   <Image
                     src="/placeholder.svg?height=400&width=500"
                     alt="GitHub.GG Interface"
@@ -127,7 +127,7 @@ export default function FeaturesSection() {
                 </StaggerContainer>
               </div>
               <ScaleIn delay={0.3}>
-                <div className="relative rounded-2xl overflow-hidden border border-border">
+                <div className="relative rounded-4xl overflow-hidden border border-border">
                   <Image
                     src="/placeholder.svg?height=400&width=500"
                     alt="Code Exploration Feature"
@@ -185,7 +185,7 @@ export default function FeaturesSection() {
                 </StaggerContainer>
               </div>
               <ScaleIn delay={0.3}>
-                <div className="relative rounded-2xl overflow-hidden border border-border">
+                <div className="relative rounded-4xl overflow-hidden border border-border">
                   <Image
                     src="/placeholder.svg?height=400&width=500"
                     alt="GitHub Integration Feature"
