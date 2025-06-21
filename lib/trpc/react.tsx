@@ -29,10 +29,7 @@ export function TRPCReactProvider({ children }: { children: ReactNode }) {
         }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
-          transformer: {
-            serialize: (data) => superjson.serialize(data),
-            deserialize: (data) => superjson.deserialize(data),
-          },
+          transformer: superjson,
           headers: async () => ({
             // Add any headers you need here
           }),

@@ -1,8 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { GitHubServiceError } from "@/lib/github";
 import type { Context } from "./context";
-import { githubRouter } from "./routers/github-router";
+import { githubRouterMinimal } from "./routers/github-router-minimal";
 
 /**
  * 1. CONTEXT
@@ -18,10 +17,7 @@ import { githubRouter } from "./routers/github-router";
 import superjson from 'superjson';
 
 const t = initTRPC.context<Context>().create({
-  transformer: {
-    serialize: (data) => superjson.serialize(data),
-    deserialize: (data) => superjson.deserialize(data),
-  },
+  transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
       ...shape,
@@ -86,8 +82,17 @@ const fileProcessingOptionsSchema = z.object({
 
 // Create the main app router
 export const appRouter = createTRPCRouter({
-  github: githubRouter,
-  // Add other routers here
+  // Simple test procedure
+  test: publicProcedure
+    .input(z.object({
+      message: z.string(),
+    }))
+    .query(async ({ input }) => {
+      return {
+        success: true,
+        message: `Hello ${input.message}`,
+      };
+    }),
 });
 
 // Export type router type signature,
