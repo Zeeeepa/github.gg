@@ -7,15 +7,17 @@ import { CheckCircleIcon, XCircleIcon, ClockIcon } from "lucide-react"
 import { getRepoData } from "@/lib/github"
 import { ActionsClientWrapper } from "./client-wrapper"
 
-export async function generateMetadata({ params }: { params: { user: string; repo: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ user: string; repo: string }> }): Promise<Metadata> {
+  const { user, repo } = await params
   return {
-    title: `Actions · ${params.user}/${params.repo} - GitHub.GG`,
-    description: `CI/CD workflows and actions for ${params.user}/${params.repo}`,
+    title: `Actions · ${user}/${repo} - GitHub.GG`,
+    description: `CI/CD workflows and actions for ${user}/${repo}`,
   }
 }
 
-export default async function RepoActionsPage({ params }: { params: { user: string; repo: string } }) {
-  const repoData = await getRepoData(params.user, params.repo)
+export default async function RepoActionsPage({ params }: { params: Promise<{ user: string; repo: string }> }) {
+  const { user, repo } = await params
+  const repoData = await getRepoData(user, repo)
 
   return (
     <div className="container py-4">

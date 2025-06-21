@@ -5,9 +5,11 @@ import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
-export async function generateMetadata({ params }: { params: { user: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ user: string }> }): Promise<Metadata> {
+  const { user } = await params
+  
   // Don't try to generate metadata for reserved paths
-  if (params.user === "search") {
+  if (user === "search") {
     return {
       title: "Search - GitHub.GG",
       description: "Search for repositories, users, and issues on GitHub.GG",
@@ -15,10 +17,10 @@ export async function generateMetadata({ params }: { params: { user: string } })
   }
 
   try {
-    const userData = await getUserData(params.user)
+    const userData = await getUserData(user)
     return {
-      title: `${userData?.name || params.user} - GitHub.GG`,
-      description: `AI-powered analysis of ${params.user}'s GitHub profile and repositories`,
+      title: `${userData?.name || user} - GitHub.GG`,
+      description: `AI-powered analysis of ${user}'s GitHub profile and repositories`,
     }
   } catch (error) {
     return {
@@ -28,10 +30,12 @@ export async function generateMetadata({ params }: { params: { user: string } })
   }
 }
 
-export default async function UserPage({ params }: { params: { user: string } }) {
+export default async function UserPage({ params }: { params: Promise<{ user: string }> }) {
+  const { user } = await params
+  
   // Handle reserved paths - only return notFound for "search" now
   // We're removing "docs" from this check to allow the docs route to work
-  if (params.user === "search") {
+  if (user === "search") {
     notFound()
     return null
   }
@@ -42,7 +46,7 @@ export default async function UserPage({ params }: { params: { user: string } })
 
   try {
     // Fetch user data with the token if available
-    const userData = await getUserData(params.user, token)
+    const userData = await getUserData(user, token)
 
     if (!userData) {
       notFound()
@@ -51,7 +55,7 @@ export default async function UserPage({ params }: { params: { user: string } })
 
     return (
       <div className="container py-8">
-        <UserProfile username={params.user} userData={userData} />
+        <UserProfile username={user} userData={userData} />
       </div>
     )
   } catch (error) {
