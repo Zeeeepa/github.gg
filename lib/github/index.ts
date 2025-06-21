@@ -10,7 +10,7 @@ import type {
   RepoDirectory,
   RepoSymlink,
   RepoSubmodule,
-  FileProcessingOptions as FileProcessingOptionsType,
+  FileProcessingOptions,
   Issue,
   CommitData,
   FileContentResult,
@@ -20,7 +20,7 @@ import type {
 
 // Re-export types for backward compatibility
 export type { 
-  FileProcessingOptionsType as FileProcessingOptions,
+  FileProcessingOptions,
   RepoFile,
   RepoItem,
   RepoDirectory,
@@ -31,9 +31,6 @@ export type {
 const PUBLIC_GITHUB_TOKEN = process.env.PUBLIC_GITHUB_TOKEN || "";
 
 // Default file processing options
-// File processing options type is now imported from types/github
-// This is just a local type for backward compatibility
-type FileProcessingOptions = FileProcessingOptionsType;
 
 /**
  * Options for searching repositories
