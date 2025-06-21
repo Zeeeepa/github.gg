@@ -56,22 +56,23 @@ yarn dev
    cp .env.local.example .env.local
    ```
 
-2. Configure the environment variables (see [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) for details):
+2. Configure the environment variables:
    ```env
-   # NextAuth
-   NEXTAUTH_SECRET=your-secret-here
+   # NextAuth Configuration
    NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_SECRET=your-secret-key-here
    
-   # GitHub OAuth
+   # GitHub OAuth (create at: https://github.com/settings/applications/new)
    GITHUB_CLIENT_ID=your-github-client-id
    GITHUB_CLIENT_SECRET=your-github-client-secret
+   
+   # Optional: GitHub Personal Access Token for higher API rate limits
+   GITHUB_TOKEN=your-github-personal-access-token
    ```
 
-3. Install dependencies:
+3. Install dependencies (React 19 compatibility):
    ```bash
-   npm install
-   # or
-   yarn
+   npm run install:legacy
    ```
 
 ### Development
