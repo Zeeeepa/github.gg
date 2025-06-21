@@ -118,17 +118,11 @@ export default function SigmaCodeView({ files: initialFiles = [], repoData, owne
     setLoadingFiles((prev) => ({ ...prev, [file.path]: true }))
 
     try {
-      const response = await fetch("/api/git/file-content-git", {
-        method: "POST",
+      const response = await fetch(`/api/repos/${owner}/${repo}/content?path=${encodeURIComponent(file.path)}&ref=${encodeURIComponent(branchName)}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          owner,
-          repo,
-          branch: branchName,
-          path: file.path,
-        }),
         cache: "no-store",
       })
 
