@@ -164,7 +164,7 @@ function isValidGitHubUsername(username: string): boolean {
   return validUsernameRegex.test(username)
 }
 
-async function getPublicRepos(user: string, accessToken?: string) {
+export async function getPublicRepos(user: string, accessToken?: string) {
   try {
     const octokit = createOctokit(accessToken)
     const { data } = await octokit.rest.repos.listForUser({
@@ -416,6 +416,93 @@ export async function getCommitData(
       );
     }
     throw new GitHubServiceError('An unknown error occurred while fetching commits', 500);
+  }
+}
+
+export async function getSingleCommit(
+  owner: string,
+  repo: string,
+  sha: string
+): Promise<CommitData> {
+  const octokit = createOctokit();
+  
+  try {
+    const { data } = await octokit.rest.repos.getCommit({
+      owner,
+      repo,
+      ref: sha,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    });
+
+    // Transform the single commit data to match our CommitData interface
+    const commit = data;
+    const commitData = commit.commit;
+    const author = commitData.author || {};
+    const committer = commitData.committer || {};
+    
+    const tree = commitData.tree ? {
+      sha: commitData.tree.sha || '',
+      url: commitData.tree.url || ''
+    } : { sha: '', url: '' };
+
+    return {
+      sha: commit.sha || '',
+      node_id: commit.node_id || '',
+      url: commit.url || '',
+      html_url: commit.html_url || '',
+      comments_url: commit.comments_url || '',
+      commit: {
+        ...commitData,
+        author: {
+          name: author.name || 'unknown',
+          email: author.email || 'unknown',
+          date: author.date || new Date().toISOString()
+        },
+        committer: {
+          name: committer.name || 'unknown',
+          email: committer.email || 'unknown',
+          date: committer.date || new Date().toISOString()
+        },
+        tree,
+        url: commitData.url || '',
+        message: commitData.message || '',
+        comment_count: commitData.comment_count || 0,
+        verification: commitData.verification || {
+          verified: false,
+          reason: 'unsigned',
+          signature: null,
+          payload: null
+        }
+      },
+      author: commit.author ? {
+        login: commit.author.login || '',
+        id: commit.author.id || 0,
+        avatar_url: commit.author.avatar_url || '',
+        html_url: commit.author.html_url || ''
+      } : null,
+      committer: commit.committer ? {
+        login: commit.committer.login || '',
+        id: commit.committer.id || 0,
+        avatar_url: commit.committer.avatar_url || '',
+        html_url: commit.committer.html_url || ''
+      } : null,
+      parents: (commit.parents || []).map(parent => ({
+        sha: parent.sha || '',
+        url: parent.url || '',
+        html_url: parent.html_url || ''
+      })),
+      stats: {
+        total: commit.stats?.total || 0,
+        additions: commit.stats?.additions || 0,
+        deletions: commit.stats?.deletions || 0
+      },
+      files: commit.files || []
+    };
+  } catch (error) {
+    console.error("Error fetching single commit:", error);
+    throw error;
   }
 }
 

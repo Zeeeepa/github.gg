@@ -1,6 +1,3 @@
-// Fix for missing type declaration for 'tar-stream'
-declare module 'tar-stream';
-// @ts-ignore
 import { Octokit } from '@octokit/rest';
 import tar from 'tar-stream';
 import { createGunzip } from 'zlib';
@@ -141,4 +138,4 @@ export async function extractRepoTarballToMemory({
   });
 
   return { files, branch: branchName };
-} 
+}

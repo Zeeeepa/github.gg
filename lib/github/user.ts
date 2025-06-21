@@ -1,5 +1,5 @@
 import { createOctokit } from "./client";
-import { getPublicRepos } from "./repository";
+import { getPublicRepos } from "./index";
 
 // Helper function to validate GitHub username format
 function isValidGitHubUsername(username: string): boolean {
