@@ -12,13 +12,13 @@ export default function FeaturesSection() {
       <div className="container px-4 md:px-6">
         <Tabs defaultValue="summaries" className="w-full max-w-[1000px] mx-auto">
           <TabsList className="grid grid-cols-1 sm:grid-cols-3 w-full mb-8 h-auto">
-            <TabsTrigger value="summaries" className="py-3">
+            <TabsTrigger value="summaries">
               AI Summaries
             </TabsTrigger>
-            <TabsTrigger value="exploration" className="py-3">
+            <TabsTrigger value="exploration">
               Code Exploration
             </TabsTrigger>
-            <TabsTrigger value="integration" className="py-3">
+            <TabsTrigger value="integration">
               GitHub Integration
             </TabsTrigger>
           </TabsList>
@@ -69,7 +69,7 @@ export default function FeaturesSection() {
                 </StaggerContainer>
               </div>
               <ScaleIn delay={0.3}>
-                <div className="relative rounded-xl overflow-hidden border border-border">
+                <div className="relative rounded-2xl overflow-hidden border border-border">
                   <Image
                     src="/placeholder.svg?height=400&width=500"
                     alt="GitHub.GG Interface"
@@ -127,7 +127,7 @@ export default function FeaturesSection() {
                 </StaggerContainer>
               </div>
               <ScaleIn delay={0.3}>
-                <div className="relative rounded-xl overflow-hidden border border-border">
+                <div className="relative rounded-2xl overflow-hidden border border-border">
                   <Image
                     src="/placeholder.svg?height=400&width=500"
                     alt="Code Exploration Feature"
@@ -185,7 +185,7 @@ export default function FeaturesSection() {
                 </StaggerContainer>
               </div>
               <ScaleIn delay={0.3}>
-                <div className="relative rounded-xl overflow-hidden border border-border">
+                <div className="relative rounded-2xl overflow-hidden border border-border">
                   <Image
                     src="/placeholder.svg?height=400&width=500"
                     alt="GitHub Integration Feature"
