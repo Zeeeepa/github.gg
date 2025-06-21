@@ -16,7 +16,7 @@ export default async function RepoTreePage({
       notFound()
     }
 
-    let treeData = []
+    let treeData: any[] = []
     try {
       treeData = await getFileTreeData(params.user, params.repo, params.branch, "")
     } catch (error) {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import RepoCommitDetail from "@/components/repo/repo-commit-detail"
-import { getRepoData, getCommitData } from "@/lib/github"
+import { getRepoData, getSingleCommit } from "@/lib/github"
 
 export async function generateMetadata({
   params,
@@ -9,10 +9,10 @@ export async function generateMetadata({
   params: { user: string; repo: string; sha: string }
 }): Promise<Metadata> {
   try {
-    const commitData = await getCommitData(params.user, params.repo, params.sha)
+    const commitData = await getSingleCommit(params.user, params.repo, params.sha)
 
     return {
-      title: `${commitData.message.split("\n")[0]} · ${params.sha.substring(0, 7)} · ${params.user}/${params.repo} - GitHub.GG`,
+      title: `${commitData.commit.message.split("\n")[0]} · ${params.sha.substring(0, 7)} · ${params.user}/${params.repo} - GitHub.GG`,
       description: `AI-powered analysis of commit ${params.sha.substring(0, 7)} in ${params.user}/${params.repo}`,
     }
   } catch (error) {
@@ -30,7 +30,7 @@ export default async function RepoCommitPage({
 }) {
   try {
     const repoData = await getRepoData(params.user, params.repo)
-    const commitData = await getCommitData(params.user, params.repo, params.sha)
+    const commitData = await getSingleCommit(params.user, params.repo, params.sha)
 
     return (
       <div className="container py-4">

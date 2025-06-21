@@ -17,7 +17,7 @@ import {
   getRepoPullRequests,
   getRepoEvents
 } from "@/lib/github";
-import { publicProcedure, protectedProcedure, createTRPCRouter } from "../router";
+import { publicProcedure, protectedProcedure, createTRPCRouter } from "../init";
 
 // File processing options schema
 const fileProcessingOptionsSchema = z.object({
@@ -407,4 +407,4 @@ export const githubRouter = createTRPCRouter({
         throw error;
       }
     }),
-}); 
+});
