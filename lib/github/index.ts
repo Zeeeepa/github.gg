@@ -20,7 +20,7 @@ import type {
 
 // Re-export types for backward compatibility
 export type { 
-  FileProcessingOptions,
+  FileProcessingOptionsType as FileProcessingOptions,
   RepoFile,
   RepoItem,
   RepoDirectory,
@@ -1065,4 +1065,4 @@ export async function getRepoEvents(
       error.status || 500
     );
   }
-} 
+}
