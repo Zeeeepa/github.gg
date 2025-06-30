@@ -1,0 +1,44 @@
+import { protectedProcedure } from '@/lib/trpc/trpc';
+import { githubRouter } from '@/lib/trpc/routes/github';
+import { scorecardRouter } from '@/lib/trpc/routes/scorecard';
+import { diagramRouter } from '@/lib/trpc/routes/diagram';
+import { z } from 'zod';
+import { router } from '@/lib/trpc/trpc';
+
+export const appRouter = router({
+  // Protected user routes
+  me: protectedProcedure
+    .query(({ ctx }) => {
+      return {
+        user: ctx.user,
+        message: 'You are authenticated!',
+      };
+    }),
+
+  updateProfile: protectedProcedure
+    .input(z.object({
+      name: z.string().optional(),
+      bio: z.string().optional(),
+    }))
+    .mutation(async ({ ctx }) => {
+      // TODO: Update user profile in database
+      console.log('Updating profile for user:', ctx.user);
+      
+      return {
+        success: true,
+        message: 'Profile updated',
+        user: ctx.user,
+      };
+    }),
+
+  // GitHub routes
+  github: githubRouter,
+  
+  // Scorecard routes
+  scorecard: scorecardRouter,
+  
+  // Diagram routes
+  diagram: diagramRouter,
+});
+
+export type AppRouter = typeof appRouter; 
