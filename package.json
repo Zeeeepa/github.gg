@@ -15,7 +15,9 @@
     "db:studio": "bun --env-file=.env.local drizzle-kit studio",
     "db:start": "docker-compose up -d postgres",
     "db:stop": "docker-compose down",
-    "db:reset": "docker-compose down -v && docker-compose up -d postgres && sleep 5 && bun --env-file=.env.local drizzle-kit push"
+    "db:reset": "docker-compose down -v && docker-compose up -d postgres && sleep 5 && bun --env-file=.env.local drizzle-kit push",
+    "type-check": "tsc --noEmit",
+    "ci:db-setup": "node scripts/ci-db-setup.js"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.19",
