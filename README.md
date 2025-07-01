@@ -6,42 +6,60 @@ GitHub.gg provides AI-powered repository analysis and management with seamless G
 
 ### 1. Installation
 ```bash
-# Clone and setup
+# Clone and setup (handles everything automatically)
 ./inst.sh
-
-# Install dependencies
-npm install
 ```
 
 ### 2. Environment Configuration
 ```bash
-# Edit .env.local with your GitHub App credentials
+# Copy and edit environment file
 cp .env.local.example .env.local
-# Add your GitHub App private key and other credentials
+# Edit with your GitHub App credentials and private key
 ```
 
 ### 3. Database Setup
 ```bash
-# Setup PostgreSQL database and run migrations
-npm run setup
+# Run comprehensive database setup
+./scripts/setup-db.sh
 ```
 
-### 4. Development
+### 4. Deploy Cloudflare Worker
+```bash
+# Deploy webhook gateway to Cloudflare
+./scripts/deploy-worker.sh
+```
+
+### 5. Install GitHub App
+1. Visit: https://github.com/settings/apps
+2. Install your "zeeeepa" app on your account
+3. Select repositories to analyze
+
+### 6. Start Development
 ```bash
 # Start development server on port 3001
-npm run dev
+bun run dev
 ```
+
+Visit: http://localhost:3001
+
+## 📚 Documentation
+
+- **[Complete Setup Guide](./docs/setup-guide.md)** - Detailed setup instructions
+- **[Troubleshooting Guide](./docs/troubleshooting.md)** - Common issues and solutions
+- **[TODOs and Roadmap](./todos.md)** - Development roadmap and planned features
 
 ## 📋 Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `npm install` | Install dependencies |
-| `npm run setup` | Setup database and run migrations |
-| `npm run dev` | Start development server (port 3001) |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run stop` | Stop all Docker containers |
+| `bun install` | Install dependencies |
+| `./scripts/setup-db.sh` | Setup database and run migrations |
+| `./scripts/deploy-worker.sh` | Deploy Cloudflare webhook worker |
+| `bun run dev` | Start development server (port 3001) |
+| `bun run build` | Build for production |
+| `bun run start` | Start production server |
+| `bun run db:studio` | Open database management UI |
+| `bun run db:reset` | Reset database completely |
 
 ## 🔧 GitHub App Configuration
 
@@ -163,4 +181,3 @@ cat .env.local
 ---
 
 **Ready to analyze repositories with AI! 🤖**
-

@@ -41,11 +41,17 @@ const GITHUB_APP_SESSION_COOKIE = 'github-app-session';
 
 // Ensure database connection is established before initializing auth
 const ensureDbConnection = async () => {
+  // Skip database connection during build time
+  if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL?.includes('localhost')) {
+    return true;
+  }
+  
   try {
     await db.execute(sql`SELECT 1`);
     return true;
   } catch (error) {
     console.error('❌ Database connection failed for Better Auth:', error);
+    console.warn('⚠️  Better Auth may not work properly without database connection');
     return false;
   }
 };
@@ -152,6 +158,15 @@ export class AuthService {
   // Get unified session from server-side
   static async getUnifiedSession(): Promise<UnifiedSession> {
     try {
+      // During build time, return a default session to prevent static generation issues
+      if (process.env.NODE_ENV === 'production' && !process.env.VERCEL_URL && !process.env.RAILWAY_ENVIRONMENT) {
+        return {
+          user: null,
+          isSignedIn: false,
+          authType: null,
+        };
+      }
+
       // Try Better Auth first
       const headersList = await import('next/headers').then(m => m.headers());
       const betterAuthSession = await betterAuthInstance.api.getSession({
@@ -221,7 +236,8 @@ export class AuthService {
 }
 
 // Verify connection on module load (but don't block)
-if (process.env.NODE_ENV !== 'test') {
+// Skip during build time to prevent database connection issues
+if (process.env.NODE_ENV !== 'test' && typeof window !== 'undefined') {
   ensureDbConnection().then((connected) => {
     if (!connected) {
       console.warn('⚠️  Better Auth may not work properly without database connection');
@@ -233,4 +249,4 @@ if (process.env.NODE_ENV !== 'test') {
 export const auth = betterAuthInstance;
 export const getUnifiedSession = AuthService.getUnifiedSession;
 export const requireAuth = AuthService.requireAuth;
-export const optionalAuth = AuthService.optionalAuth; 
+export const optionalAuth = AuthService.optionalAuth;

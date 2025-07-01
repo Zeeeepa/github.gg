@@ -1,283 +1,212 @@
 /**
- * Cloudflare Worker for GitHub Webhook Gateway
- * 
- * This worker receives GitHub webhooks and forwards them to the Next.js application.
- * It handles CORS, request validation, and provides a reliable webhook gateway.
- * 
- * Features:
- * - Webhook forwarding to local/production Next.js app
- * - CORS handling for cross-origin requests
- * - Request validation and error handling
- * - Signature preservation for security
- * - Logging and monitoring
+ * GitHub Webhook Gateway for github.gg
+ * Routes GitHub webhooks to local development or production environment
  */
 
-// Configuration
+// Configuration - these will be set as environment variables in Cloudflare
 const CONFIG = {
-  // Target URL for webhook forwarding (set via environment variable)
-  TARGET_URL: typeof TARGET_URL !== 'undefined' ? TARGET_URL : 'http://localhost:3001',
-  
-  // Webhook endpoint path
-  WEBHOOK_PATH: '/api/webhooks/github',
-  
-  // Timeout for forwarding requests (in milliseconds)
-  TIMEOUT: 30000,
-  
-  // Maximum request body size (in bytes)
-  MAX_BODY_SIZE: 1024 * 1024, // 1MB
-  
-  // CORS configuration
-  CORS: {
-    ALLOW_ORIGIN: '*',
-    ALLOW_METHODS: 'GET, POST, OPTIONS',
-    ALLOW_HEADERS: 'Content-Type, X-GitHub-Event, X-GitHub-Delivery, X-GitHub-Signature-256, User-Agent',
-    MAX_AGE: 86400, // 24 hours
-  },
+  // Local development URL (when developing locally)
+  LOCAL_URL: 'http://localhost:3001',
+  // Production URL (when deployed)
+  PRODUCTION_URL: 'https://github.gg',
+  // Webhook secret for signature verification
+  WEBHOOK_SECRET: 'GITHUB_WEBHOOK_SECRET', // This will be replaced with actual secret
 };
+
+/**
+ * Verify GitHub webhook signature
+ */
+async function verifySignature(request, body, secret) {
+  const signature = request.headers.get('x-hub-signature-256');
+  if (!signature) {
+    return false;
+  }
+
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const expectedSignature = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
+  const expectedHex = 'sha256=' + Array.from(new Uint8Array(expectedSignature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  return signature === expectedHex;
+}
+
+/**
+ * Forward webhook to target URL
+ */
+async function forwardWebhook(request, targetUrl, body) {
+  const url = new URL('/api/webhooks/github', targetUrl);
+  
+  // Copy relevant headers
+  const headers = new Headers();
+  const relevantHeaders = [
+    'content-type',
+    'x-github-delivery',
+    'x-github-event',
+    'x-github-hook-id',
+    'x-github-hook-installation-target-id',
+    'x-github-hook-installation-target-type',
+    'x-hub-signature-256',
+    'user-agent'
+  ];
+
+  relevantHeaders.forEach(header => {
+    const value = request.headers.get(header);
+    if (value) {
+      headers.set(header, value);
+    }
+  });
+
+  try {
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: headers,
+      body: body,
+      // Add timeout for local development (may be slow)
+      signal: AbortSignal.timeout(30000) // 30 second timeout
+    });
+
+    return {
+      success: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      url: url.toString()
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message,
+      url: url.toString()
+    };
+  }
+}
 
 /**
  * Main request handler
  */
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
-
-/**
- * Handle incoming requests
- */
-async function handleRequest(request) {
-  try {
-    const url = new URL(request.url);
-    const method = request.method;
-    
-    // Log incoming request
-    console.log(`[${new Date().toISOString()}] ${method} ${url.pathname}`);
-    
-    // Handle CORS preflight requests
-    if (method === 'OPTIONS') {
-      return handleCORS();
-    }
-    
-    // Only handle webhook path
-    if (url.pathname !== CONFIG.WEBHOOK_PATH) {
-      return new Response('Not Found', { 
-        status: 404,
-        headers: getCORSHeaders(),
-      });
-    }
-    
-    // Only allow POST requests for webhooks
-    if (method !== 'POST') {
-      return new Response('Method Not Allowed', { 
-        status: 405,
-        headers: {
-          ...getCORSHeaders(),
-          'Allow': 'POST, OPTIONS',
-        },
-      });
-    }
-    
-    // Forward webhook to target application
-    return await forwardWebhook(request);
-    
-  } catch (error) {
-    console.error('Error handling request:', error);
-    
-    return new Response('Internal Server Error', {
-      status: 500,
-      headers: getCORSHeaders(),
-    });
+async function handleRequest(request, env) {
+  // Only handle POST requests to webhook endpoint
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 });
   }
-}
 
-/**
- * Forward webhook to the target Next.js application
- */
-async function forwardWebhook(request) {
+  // Check if this is a GitHub webhook
+  const githubEvent = request.headers.get('x-github-event');
+  if (!githubEvent) {
+    return new Response('Not a GitHub webhook', { status: 400 });
+  }
+
   try {
-    // Validate request
-    const validation = await validateWebhookRequest(request);
-    if (!validation.valid) {
-      return new Response(validation.error, {
-        status: validation.status,
-        headers: getCORSHeaders(),
-      });
+    // Read the request body
+    const body = await request.text();
+    
+    // Verify webhook signature if secret is configured
+    const webhookSecret = env.GITHUB_WEBHOOK_SECRET || CONFIG.WEBHOOK_SECRET;
+    if (webhookSecret && webhookSecret !== 'GITHUB_WEBHOOK_SECRET') {
+      const isValid = await verifySignature(request, body, webhookSecret);
+      if (!isValid) {
+        console.log('Invalid webhook signature');
+        return new Response('Invalid signature', { status: 401 });
+      }
     }
+
+    // Determine target URL based on environment
+    // For development, try local first, then fallback to production
+    const isDevelopment = env.ENVIRONMENT === 'development' || !env.PRODUCTION_URL;
+    const targets = isDevelopment 
+      ? [env.LOCAL_URL || CONFIG.LOCAL_URL, env.PRODUCTION_URL || CONFIG.PRODUCTION_URL]
+      : [env.PRODUCTION_URL || CONFIG.PRODUCTION_URL];
+
+    let lastResult = null;
     
-    // Clone request for forwarding
-    const targetUrl = `${CONFIG.TARGET_URL}${CONFIG.WEBHOOK_PATH}`;
-    
-    // Create forwarding request with all original headers
-    const forwardRequest = new Request(targetUrl, {
-      method: request.method,
-      headers: request.headers,
-      body: request.body,
-    });
-    
-    // Add forwarding headers
-    forwardRequest.headers.set('X-Forwarded-For', request.headers.get('CF-Connecting-IP') || 'unknown');
-    forwardRequest.headers.set('X-Forwarded-Proto', 'https');
-    forwardRequest.headers.set('X-Forwarded-Host', new URL(request.url).host);
-    forwardRequest.headers.set('X-Original-URL', request.url);
-    
-    console.log(`Forwarding webhook to: ${targetUrl}`);
-    
-    // Forward request with timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
-    
-    const response = await fetch(forwardRequest, {
-      signal: controller.signal,
-    });
-    
-    clearTimeout(timeoutId);
-    
-    // Log response
-    console.log(`Response from target: ${response.status} ${response.statusText}`);
-    
-    // Create response with CORS headers
-    const responseBody = await response.text();
-    
-    return new Response(responseBody, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: {
-        ...getCORSHeaders(),
-        'Content-Type': response.headers.get('Content-Type') || 'text/plain',
-      },
-    });
-    
-  } catch (error) {
-    console.error('Error forwarding webhook:', error);
-    
-    if (error.name === 'AbortError') {
-      return new Response('Gateway Timeout', {
-        status: 504,
-        headers: getCORSHeaders(),
-      });
+    // Try each target URL
+    for (const targetUrl of targets) {
+      if (!targetUrl) continue;
+      
+      console.log(`Forwarding ${githubEvent} webhook to ${targetUrl}`);
+      const result = await forwardWebhook(request, targetUrl, body);
+      lastResult = result;
+      
+      if (result.success) {
+        console.log(`Successfully forwarded to ${result.url}`);
+        return new Response(JSON.stringify({
+          success: true,
+          event: githubEvent,
+          target: result.url,
+          status: result.status
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } else {
+        console.log(`Failed to forward to ${result.url}: ${result.error || result.statusText}`);
+      }
     }
-    
-    return new Response('Bad Gateway', {
+
+    // If all targets failed
+    console.error('All webhook targets failed');
+    return new Response(JSON.stringify({
+      success: false,
+      event: githubEvent,
+      error: 'All targets failed',
+      lastResult: lastResult
+    }), {
       status: 502,
-      headers: getCORSHeaders(),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    console.error('Webhook processing error:', error);
+    return new Response(JSON.stringify({
+      success: false,
+      error: error.message
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }
 
 /**
- * Validate incoming webhook request
- */
-async function validateWebhookRequest(request) {
-  // Check Content-Type
-  const contentType = request.headers.get('Content-Type');
-  if (!contentType || !contentType.includes('application/json')) {
-    return {
-      valid: false,
-      status: 400,
-      error: 'Invalid Content-Type. Expected application/json',
-    };
-  }
-  
-  // Check required GitHub headers
-  const requiredHeaders = ['X-GitHub-Event', 'X-GitHub-Delivery'];
-  for (const header of requiredHeaders) {
-    if (!request.headers.get(header)) {
-      return {
-        valid: false,
-        status: 400,
-        error: `Missing required header: ${header}`,
-      };
-    }
-  }
-  
-  // Check User-Agent
-  const userAgent = request.headers.get('User-Agent');
-  if (!userAgent || !userAgent.includes('GitHub-Hookshot')) {
-    console.warn('Suspicious User-Agent:', userAgent);
-    // Don't reject, but log for monitoring
-  }
-  
-  // Check request body size
-  const contentLength = request.headers.get('Content-Length');
-  if (contentLength && parseInt(contentLength) > CONFIG.MAX_BODY_SIZE) {
-    return {
-      valid: false,
-      status: 413,
-      error: 'Request body too large',
-    };
-  }
-  
-  return { valid: true };
-}
-
-/**
- * Handle CORS preflight requests
- */
-function handleCORS() {
-  return new Response(null, {
-    status: 204,
-    headers: getCORSHeaders(),
-  });
-}
-
-/**
- * Get CORS headers
- */
-function getCORSHeaders() {
-  return {
-    'Access-Control-Allow-Origin': CONFIG.CORS.ALLOW_ORIGIN,
-    'Access-Control-Allow-Methods': CONFIG.CORS.ALLOW_METHODS,
-    'Access-Control-Allow-Headers': CONFIG.CORS.ALLOW_HEADERS,
-    'Access-Control-Max-Age': CONFIG.CORS.MAX_AGE.toString(),
-    'Vary': 'Origin',
-  };
-}
-
-/**
- * Health check endpoint (for monitoring)
+ * Health check endpoint
  */
 async function handleHealthCheck() {
-  const health = {
+  return new Response(JSON.stringify({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    version: '1.0.0',
-    target: CONFIG.TARGET_URL,
-    uptime: Date.now(),
-  };
-  
-  return new Response(JSON.stringify(health), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      ...getCORSHeaders(),
-    },
+    service: 'github-webhook-gateway'
+  }), {
+    headers: { 'Content-Type': 'application/json' }
   });
 }
 
 /**
- * Enhanced request handler with health check
+ * Cloudflare Worker fetch event handler
  */
-addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  
-  // Health check endpoint
-  if (url.pathname === '/health') {
-    event.respondWith(handleHealthCheck());
-    return;
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    
+    // Health check endpoint
+    if (url.pathname === '/health') {
+      return handleHealthCheck();
+    }
+    
+    // Main webhook handler
+    if (url.pathname === '/api/webhooks/github' || url.pathname === '/') {
+      return handleRequest(request, env);
+    }
+    
+    // 404 for other paths
+    return new Response('Not found', { status: 404 });
   }
-  
-  // Main webhook handler
-  event.respondWith(handleRequest(event.request));
-});
-
-// Export for testing (if in a module environment)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    handleRequest,
-    forwardWebhook,
-    validateWebhookRequest,
-    handleCORS,
-    getCORSHeaders,
-  };
-}
+};
 
