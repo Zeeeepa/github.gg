@@ -99,11 +99,32 @@ Then add it as `GITHUB_PRIVATE_KEY` secret.
 After adding all secrets, the GitHub Actions workflow will:
 
 1. **✅ Validate Environment** - Check all required secrets are present
-2. **✅ Build Application** - Compile Next.js with your configuration
+2. **✅ Build Application** - Compile Next.js with your configuration using Bun
 3. **✅ Test Database** - Verify PostgreSQL connection
 4. **✅ Test GitHub App** - Validate GitHub App configuration
 5. **✅ Security Check** - Audit dependencies and check for secrets in code
 6. **✅ Deployment Ready** - Confirm everything is ready for production
+
+## 🔧 CI/CD Workflow Features
+
+### 🏗️ Bun Integration
+- Uses **Bun** as the primary package manager (not npm)
+- Faster dependency installation with `bun install --frozen-lockfile`
+- Native TypeScript support with `bun -e` for testing
+- Optimized build process with `bun run build`
+
+### 🗄️ PostgreSQL 15 Integration
+- Automated PostgreSQL service setup in CI
+- Database migration testing
+- Connection verification
+- Version compatibility checks
+
+### 🧪 Comprehensive Testing
+- Environment variable validation
+- Build verification
+- Database connectivity
+- GitHub App configuration
+- Security auditing
 
 ## 🔒 Security Notes
 
@@ -132,6 +153,12 @@ If database tests fail:
 2. Ensure the database server is accessible
 3. Check username/password credentials
 
+### Bun Installation Issues
+If Bun setup fails:
+1. The workflow uses `oven-sh/setup-bun@v1` action
+2. Bun version is set to 'latest'
+3. Dependencies are installed with `--frozen-lockfile` flag
+
 ## 📞 Support
 
 If you encounter issues:
@@ -139,3 +166,21 @@ If you encounter issues:
 2. Verify all secrets are added correctly
 3. Test locally with the same environment variables
 4. Review the workflow file for any configuration issues
+
+## 🎯 Expected Workflow Results
+
+When all secrets are properly configured, you should see:
+
+```
+🔍 Validate Environment: ✅ PASSED
+🏗️ Build & Test: ✅ PASSED  
+🧪 Integration Tests: ✅ PASSED
+🔒 Security & Quality: ✅ PASSED
+🚀 Deployment Readiness: ✅ PASSED
+```
+
+The workflow will verify your actual GitHub App configuration:
+- GitHub App ID: 1484403 (zeeeepa)
+- Client ID: Iv23li9PqHMExi84gaq1
+- Cloudflare Account: 2b2a1d3effa7f7fe4fe2a8c4e48681e3
+- Worker URL: webhook-gateway.pixeliumperfecto.workers.dev

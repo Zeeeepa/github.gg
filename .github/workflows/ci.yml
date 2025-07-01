@@ -8,7 +8,7 @@ on:
 
 env:
   NODE_VERSION: '20'
-  POSTGRES_VERSION: '15'
+  BUN_VERSION: 'latest'
 
 jobs:
   # Environment validation job
@@ -19,14 +19,13 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 🔧 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: ✅ Validate environment configuration
         env:
@@ -46,7 +45,7 @@ jobs:
           CLOUDFLARE_WORKER_URL: ${{ secrets.CLOUDFLARE_WORKER_URL }}
         run: |
           echo "🔍 Validating environment variables..."
-          node -e "
+          bun -e "
             const requiredVars = [
               'DATABASE_URL',
               'BETTER_AUTH_SECRET', 
@@ -104,27 +103,26 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 🔧 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: 🗄️ Setup test database
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/github_gg_test
         run: |
           echo "🔧 Setting up test database..."
-          npm run db:push || echo "Database setup completed"
+          bun run db:push || echo "Database setup completed"
 
       - name: 🔍 Lint code
-        run: npm run lint || echo "Linting completed with warnings"
+        run: bun run lint || echo "Linting completed with warnings"
 
       - name: 🧪 Run type checking
-        run: npm run type-check || npx tsc --noEmit || echo "Type checking completed"
+        run: bun run type-check || bunx tsc --noEmit || echo "Type checking completed"
 
       - name: 🏗️ Build application
         env:
@@ -143,8 +141,8 @@ jobs:
           CLOUDFLARE_WORKER_NAME: ${{ secrets.CLOUDFLARE_WORKER_NAME }}
           CLOUDFLARE_WORKER_URL: ${{ secrets.CLOUDFLARE_WORKER_URL }}
         run: |
-          echo "🏗️ Building Next.js application..."
-          npm run build
+          echo "🏗️ Building Next.js application with Bun..."
+          bun run build
 
       - name: 📊 Build analysis
         run: |
@@ -179,20 +177,19 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 🔧 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: 🗄️ Setup database
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/github_gg_test
         run: |
-          npm run db:push || echo "Database setup completed"
+          bun run db:push || echo "Database setup completed"
 
       - name: 🧪 Test environment loading
         env:
@@ -212,7 +209,7 @@ jobs:
           CLOUDFLARE_WORKER_URL: ${{ secrets.CLOUDFLARE_WORKER_URL }}
         run: |
           echo "🧪 Testing environment configuration..."
-          node -e "
+          bun -e "
             (async () => {
               try {
                 const env = await import('./src/lib/env.ts');
@@ -234,7 +231,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/github_gg_test
         run: |
           echo "🗄️ Testing database connection..."
-          node -e "
+          bun -e "
             (async () => {
               try {
                 const { drizzle } = await import('drizzle-orm/postgres-js');
@@ -262,7 +259,7 @@ jobs:
           GITHUB_PRIVATE_KEY: ${{ secrets.GITHUB_PRIVATE_KEY }}
         run: |
           echo "🌐 Testing GitHub App configuration..."
-          node -e "
+          bun -e "
             try {
               const appId = process.env.GITHUB_APP_ID;
               const appName = process.env.GITHUB_APP_NAME;
@@ -296,19 +293,18 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 🔧 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: 🔍 Security audit
         run: |
           echo "🔍 Running security audit..."
-          npm audit --audit-level=moderate || echo "Security audit completed with warnings"
+          bun audit || echo "Security audit completed with warnings"
 
       - name: 🔒 Check for secrets in code
         run: |
@@ -321,9 +317,24 @@ jobs:
           fi
 
       - name: 📊 Bundle analysis
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5432/github_gg_test
+          BETTER_AUTH_SECRET: test-secret-for-build-only
+          GITHUB_CLIENT_ID: test-client-id
+          GITHUB_CLIENT_SECRET: test-client-secret
+          GITHUB_APP_ID: 123456
+          GITHUB_APP_NAME: test-app
+          NEXT_PUBLIC_GITHUB_APP_NAME: test-app
+          NEXT_PUBLIC_GITHUB_APP_ID: 123456
+          GITHUB_PRIVATE_KEY: "-----BEGIN RSA PRIVATE KEY-----\ntest-key\n-----END RSA PRIVATE KEY-----"
+          GITHUB_WEBHOOK_SECRET: test-webhook-secret
+          NEXT_PUBLIC_APP_URL: http://localhost:3001
+          CLOUDFLARE_ACCOUNT_ID: test-account-id
+          CLOUDFLARE_WORKER_NAME: test-worker
+          CLOUDFLARE_WORKER_URL: https://test-worker.example.com
         run: |
           echo "📊 Analyzing bundle size..."
-          npm run build
+          bun run build
           echo "Build completed successfully ✅"
 
   # Deployment readiness check
