@@ -5,7 +5,18 @@ import { NavbarClient } from './NavbarClient';
 
 export async function NavbarServer() {
   // Get session server-side - no hydration issues!
-  const session = await getUnifiedSession();
+  // Handle build-time gracefully by providing a default session
+  let session;
+  try {
+    session = await getUnifiedSession();
+  } catch (error) {
+    // During build time, provide a default empty session
+    session = {
+      user: null,
+      isSignedIn: false,
+      authType: null,
+    };
+  }
 
   return (
     <nav className={`sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 relative`}>
@@ -31,4 +42,4 @@ export async function NavbarServer() {
       </div>
     </nav>
   );
-} 
+}

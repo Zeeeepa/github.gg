@@ -15,20 +15,42 @@ import {
 import { LogOut, Settings, User, Github } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { trpc } from '@/lib/trpc/client';
+import { useState, useEffect } from 'react';
 
 interface NavbarClientProps {
   session: UnifiedSession;
 }
 
 export function NavbarClient({ session }: NavbarClientProps) {
-  // Use tRPC query to check installation status
-  const { data: installationInfo } = trpc.github.checkInstallation.useQuery(
-    undefined,
-    {
-      enabled: session.isSignedIn && session.authType === 'oauth',
-      refetchOnWindowFocus: false,
+  const [installationStatus, setInstallationStatus] = useState<{
+    linked: boolean;
+    installationId: number | null;
+    accountLogin?: string;
+    message: string;
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Check installation status when user is signed in
+  useEffect(() => {
+    if (session.isSignedIn && session.user) {
+      checkInstallationStatus();
     }
-  );
+  }, [session.isSignedIn, session.user]);
+
+  const checkInstallationStatus = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/auth/link-installation');
+      if (response.ok) {
+        const data = await response.json();
+        setInstallationStatus(data);
+      }
+    } catch (error) {
+      console.error('Failed to check installation status:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSignIn = async () => {
     await signIn.social({
@@ -41,7 +63,7 @@ export function NavbarClient({ session }: NavbarClientProps) {
   };
 
   // Show bell notification when user is signed in but hasn't linked an installation
-  const showInstallNotification = session.isSignedIn && session.user && !installationInfo?.hasInstallation;
+  const showInstallNotification = session.isSignedIn && session.user && installationStatus && !installationStatus.linked;
 
   if (session.isSignedIn && session.user) {
     return (
@@ -72,20 +94,31 @@ export function NavbarClient({ session }: NavbarClientProps) {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {/* Installation status and management */}
-          {!installationInfo?.hasInstallation ? (
+          {isLoading ? (
+            <DropdownMenuItem disabled>
+              <Settings className="mr-2 h-4 w-4 animate-spin" />
+              <span>Checking GitHub App...</span>
+            </DropdownMenuItem>
+          ) : !installationStatus?.linked ? (
             <DropdownMenuItem asChild className="bg-green-50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-950/30">
               <a href={`https://github.com/apps/${process.env.NEXT_PUBLIC_GITHUB_APP_NAME}/installations/new`} target="_blank" rel="noopener noreferrer">
                 <Github className="mr-2 h-4 w-4 text-green-600" />
                 <span className="text-green-800 dark:text-green-200 font-medium">Install GitHub App</span>
               </a>
             </DropdownMenuItem>
-          ) : installationInfo?.installationId ? (
-            <DropdownMenuItem asChild>
-              <a href={`https://github.com/settings/installations/${installationInfo.installationId}`} target="_blank" rel="noopener noreferrer">
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Manage GitHub App</span>
-              </a>
-            </DropdownMenuItem>
+          ) : installationStatus?.installationId ? (
+            <>
+              <DropdownMenuItem disabled className="text-xs text-muted-foreground">
+                <Github className="mr-2 h-4 w-4 text-green-600" />
+                <span>Linked to @{installationStatus.accountLogin}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href={`https://github.com/settings/installations/${installationStatus.installationId}`} target="_blank" rel="noopener noreferrer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Manage GitHub App</span>
+                </a>
+              </DropdownMenuItem>
+            </>
           ) : (
             <DropdownMenuItem asChild>
               <a href="https://github.com/settings/installations" target="_blank" rel="noopener noreferrer">
@@ -119,4 +152,4 @@ export function NavbarClient({ session }: NavbarClientProps) {
       <span className="hidden sm:inline">Sign in with GitHub</span>
     </Button>
   );
-} 
+}

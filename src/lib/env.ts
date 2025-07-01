@@ -13,8 +13,8 @@ const envSchema = z.object({
   GITHUB_CLIENT_ID: z.string().min(1),
   GITHUB_CLIENT_SECRET: z.string().min(1),
   
-  // GitHub API
-  GITHUB_PUBLIC_API_KEY: z.string().min(1),
+  // GitHub API (optional for development)
+  GITHUB_PUBLIC_API_KEY: z.string().min(1).optional(),
   
   // GitHub App Configuration
   GITHUB_APP_ID: z.string().min(1),
@@ -24,8 +24,8 @@ const envSchema = z.object({
   GITHUB_WEBHOOK_SECRET: z.string().min(1),
   GITHUB_PRIVATE_KEY: z.string().min(1),
   
-  // AI Analysis
-  GEMINI_API_KEY: z.string().min(1),
+  // AI Analysis (optional for development)
+  GEMINI_API_KEY: z.string().min(1).optional(),
   
   // Auth
   BETTER_AUTH_SECRET: z.string().min(1),
@@ -35,9 +35,14 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   NEXT_PUBLIC_APP_URL: z.string().url(),
 
-  // Analytics
-  NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
-  NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1),
+  // Analytics (optional)
+  NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1).optional(),
+  NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1).optional(),
+  
+  // Cloudflare (optional for development)
+  CLOUDFLARE_ACCOUNT_ID: z.string().min(1).optional(),
+  CLOUDFLARE_WORKER_NAME: z.string().min(1).optional(),
+  CLOUDFLARE_WORKER_URL: z.string().url().optional(),
 });
 
-export const env = envSchema.parse(process.env); 
+export const env = envSchema.parse(process.env);
