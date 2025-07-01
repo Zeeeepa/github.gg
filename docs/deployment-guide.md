@@ -47,7 +47,7 @@ Edit `.env.local` with your actual values:
 
 ```bash
 # GitHub App (your provided values)
-GITHUB_CLIENT_SECRET="d1fbd80a53d530773b3361f23efab3732c436a7b"
+GITHUB_CLIENT_SECRET="[your_github_client_secret]"
 GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n[paste your private key content]\n-----END RSA PRIVATE KEY-----"
 GITHUB_WEBHOOK_SECRET="[generate a secure secret]"
 
@@ -219,4 +219,3 @@ npm run dev
 ---
 
 **Simple, effective, and ready to go! 🚀**
-
