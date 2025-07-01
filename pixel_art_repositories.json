@@ -1,0 +1,137 @@
+{
+  "research_date": "2025-07-01T08:28:00.057882",
+  "total_repositories": 15,
+  "categories": {
+    "editors": "🖼️ Editors & Creation Tools",
+    "game_dev": "🎮 Game Development",
+    "ai_ml": "🤖 AI & Machine Learning",
+    "educational": "📚 Educational Resources",
+    "mobile": "📱 Mobile Development",
+    "cli": "💻 Command Line Tools",
+    "image_processing": "🎨 Image Processing",
+    "game_assets": "🎮 Game Assets",
+    "web": "🌐 Web Applications"
+  },
+  "repositories": [
+    {
+      "name": "Aseprite",
+      "url": "https://github.com/aseprite/aseprite",
+      "stars": "32.4K",
+      "forks": "7.1K",
+      "description": "Animated sprite editor & pixel art tool (Windows, macOS, Linux)",
+      "category": "editors"
+    },
+    {
+      "name": "Piskel",
+      "url": "https://github.com/piskelapp/piskel",
+      "stars": "10.9K",
+      "forks": "763",
+      "description": "Simple web-based tool for Spriting and Pixel art",
+      "category": "editors"
+    },
+    {
+      "name": "Pixelorama",
+      "url": "https://github.com/Orama-Interactive/Pixelorama",
+      "stars": "6.3K",
+      "forks": "346",
+      "description": "Powerful and accessible open-source pixel art multi-platform 2D sprite editor",
+      "category": "editors"
+    },
+    {
+      "name": "LibreSprite",
+      "url": "https://github.com/LibreSprite/LibreSprite",
+      "stars": "4.7K",
+      "forks": "298",
+      "description": "Animated sprite editor & pixel art tool -- Fork of the last GPLv2 commit of Aseprite",
+      "category": "editors"
+    },
+    {
+      "name": "Pixel Art React",
+      "url": "https://github.com/jvalen/pixel-art-react",
+      "stars": "5.6K",
+      "forks": "319",
+      "description": "Pixel art animation and drawing web app powered by React",
+      "category": "editors"
+    },
+    {
+      "name": "Pyxel",
+      "url": "https://github.com/kitao/pyxel",
+      "stars": "16K",
+      "forks": "864",
+      "description": "A retro game engine for Python",
+      "category": "game_dev"
+    },
+    {
+      "name": "Tilengine",
+      "url": "https://github.com/megamarc/Tilengine",
+      "stars": "789",
+      "forks": "93",
+      "description": "Free 2D graphics engine with raster effects for retro/classic style game development",
+      "category": "game_dev"
+    },
+    {
+      "name": "Pixelization (SIGGRAPH)",
+      "url": "https://github.com/WuZongWei6/Pixelization",
+      "stars": "290",
+      "forks": "24",
+      "description": "AIGC and pixelization research from SIGGRAPH ASIA",
+      "category": "ai_ml"
+    },
+    {
+      "name": "Pixel Art HOWTOs",
+      "url": "https://github.com/learnpixelart/pixelart.howto",
+      "stars": "338",
+      "forks": "25",
+      "description": "Comprehensive collection of pixel art tutorials and HOWTOs",
+      "category": "educational"
+    },
+    {
+      "name": "Awesome Pixel Art",
+      "url": "https://github.com/Siilwyn/awesome-pixel-art",
+      "stars": "969",
+      "forks": "43",
+      "description": "Curated list of everything awesome around pixel art",
+      "category": "educational"
+    },
+    {
+      "name": "PixaPencil",
+      "url": "https://github.com/therealbluepandabear/PixaPencil",
+      "stars": "N/A",
+      "forks": "N/A",
+      "description": "Free and open source pixel art editor for Android",
+      "category": "mobile"
+    },
+    {
+      "name": "pxltrm",
+      "url": "https://github.com/dylanaraps/pxltrm",
+      "stars": "646",
+      "forks": "25",
+      "description": "Pixel art editor that runs inside the terminal (Archived)",
+      "category": "cli"
+    },
+    {
+      "name": "MakeItPixel",
+      "url": "https://github.com/MiguelMJ/MakeItPixel",
+      "stars": "48",
+      "forks": "6",
+      "description": "Image processing tool to make regular images look like pixel art",
+      "category": "image_processing"
+    },
+    {
+      "name": "Lospec Pixel Editor",
+      "url": "https://github.com/lospec/pixel-editor",
+      "stars": "899",
+      "forks": "71",
+      "description": "Online canvas-based pixel art creation tool for Lospec.com",
+      "category": "web"
+    },
+    {
+      "name": "Project Cordon Sprites",
+      "url": "https://github.com/doficia/project-cordon-sprites",
+      "stars": "74",
+      "forks": "79",
+      "description": "Community driven CC0-1.0 pixel art repository for indie developers",
+      "category": "game_assets"
+    }
+  ]
+}
