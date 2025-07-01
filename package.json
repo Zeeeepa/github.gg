@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --port 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3001",
+    "setup": "docker-compose up -d postgres && sleep 5 && bun --env-file=.env.local drizzle-kit push",
+    "stop": "docker-compose down",
     "lint": "next lint",
     "test": "bun --env-file=.env.local test",
     "db:generate": "bun --env-file=.env.local drizzle-kit generate",
@@ -13,7 +15,9 @@
     "db:studio": "bun --env-file=.env.local drizzle-kit studio",
     "db:start": "docker-compose up -d postgres",
     "db:stop": "docker-compose down",
-    "db:reset": "docker-compose down -v && docker-compose up -d postgres && sleep 5 && bun --env-file=.env.local drizzle-kit push"
+    "db:reset": "docker-compose down -v && docker-compose up -d postgres && sleep 5 && bun --env-file=.env.local drizzle-kit push",
+    "type-check": "tsc --noEmit",
+    "ci:db-setup": "node scripts/ci-db-setup.js"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.19",
@@ -60,7 +64,8 @@
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
     "tar-stream": "^3.1.7",
-    "zod": "^3.25.67"
+    "zod": "^3.25.67",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

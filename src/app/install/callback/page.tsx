@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
+
+// Force dynamic rendering to prevent build-time database connection issues
+export const dynamic = 'force-dynamic';
 import { useSearchParams, useRouter, redirect } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +11,7 @@ import { CheckCircle, XCircle, Loader2, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/lib/auth/client';
 import { LoadingWave } from '@/components/LoadingWave';
 
-export default function InstallCallbackPage() {
+function InstallCallbackContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { isSignedIn, isLoading: authLoading, signIn } = useAuth();
@@ -157,4 +160,12 @@ export default function InstallCallbackPage() {
       </Card>
     </div>
   );
-} 
+}
+
+export default function InstallCallbackPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><LoadingWave /></div>}>
+      <InstallCallbackContent />
+    </Suspense>
+  );
+}
