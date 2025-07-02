@@ -1,0 +1,18 @@
+name = "webhook-gateway"
+main = "webhook-gateway.js"
+compatibility_date = "2024-01-01"
+
+# Environment variables for the worker
+[env.production.vars]
+ENVIRONMENT = "production"
+PRODUCTION_URL = "https://github.gg"
+
+[env.development.vars]
+ENVIRONMENT = "development"
+LOCAL_URL = "http://localhost:3001"
+PRODUCTION_URL = "https://github.gg"
+
+# Secrets (set these using wrangler secret put)
+# wrangler secret put GITHUB_WEBHOOK_SECRET --env production
+# wrangler secret put GITHUB_WEBHOOK_SECRET --env development
+

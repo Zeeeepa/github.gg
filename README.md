@@ -1,130 +1,183 @@
-# GitHub.gg
+# 🚀 GitHub.gg - Enhanced GitHub Repository Intelligence
 
-A modern GitHub repository analyzer built with Next.js, Better Auth, and Octokit, powered by Bun.
+GitHub.gg provides AI-powered repository analysis and management with seamless GitHub App integration and Cloudflare Worker webhook handling.
 
-## Features
+## ⚡ Quick Start
 
-* 🔒 Secure authentication with GitHub OAuth
-* 📊 Repository analysis and statistics
-* 🚀 Fast and responsive UI
-* ⚡ Optimized for performance with Bun
-* 🏗️ TypeScript first-class support
-* 🧪 Built-in testing with Bun
-* 🗄️ PostgreSQL database with Docker
-
-## Quick Start
-
-### Prerequisites
-
-* Bun (recommended) or Node.js 18+
-* Docker (for local database)
-* GitHub OAuth App credentials
-
-### 1. Clone and Install
-
+### 1. Installation
 ```bash
-git clone https://github.com/lantos1618/github.gg.git
-cd github.gg
-bun install
+# Clone and setup (handles everything automatically)
+./inst.sh
 ```
 
-### 2. Set Up Environment
-
-Copy the example environment file and configure your GitHub OAuth credentials:
-
+### 2. Environment Configuration
 ```bash
+# Copy and edit environment file
 cp .env.local.example .env.local
+# Edit with your GitHub App credentials and private key
 ```
 
-Update the following variables in `.env.local`:
-- `GITHUB_CLIENT_ID`: Your GitHub OAuth App Client ID
-- `GITHUB_CLIENT_SECRET`: Your GitHub OAuth App Client Secret
-- `BETTER_AUTH_SECRET`: A secure random string for session encryption
+### 3. Database Setup
+```bash
+# Run comprehensive database setup
+./scripts/setup-db.sh
+```
 
-### 3. Start Database (Local Development)
+### 4. Deploy Cloudflare Worker
+```bash
+# Deploy webhook gateway to Cloudflare
+./scripts/deploy-worker.sh
+```
+
+### 5. Install GitHub App
+1. Visit: https://github.com/settings/apps
+2. Install your "zeeeepa" app on your account
+3. Select repositories to analyze
+
+### 6. Start Development
+```bash
+# Start development server on port 3001
+bun run dev
+```
+
+Visit: http://localhost:3001
+
+## 📚 Documentation
+
+- **[Complete Setup Guide](./docs/setup-guide.md)** - Detailed setup instructions
+- **[Troubleshooting Guide](./docs/troubleshooting.md)** - Common issues and solutions
+- **[TODOs and Roadmap](./todos.md)** - Development roadmap and planned features
+
+## 📋 Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `bun install` | Install dependencies |
+| `./scripts/setup-db.sh` | Setup database and run migrations |
+| `./scripts/deploy-worker.sh` | Deploy Cloudflare webhook worker |
+| `bun run dev` | Start development server (port 3001) |
+| `bun run build` | Build for production |
+| `bun run start` | Start production server |
+| `bun run db:studio` | Open database management UI |
+| `bun run db:reset` | Reset database completely |
+
+## 🔧 GitHub App Configuration
+
+Your GitHub App is pre-configured with these settings:
+
+- **App Name**: zeeeepa
+- **App ID**: 1484403
+- **Client ID**: Iv23li9PqHMExi84gaq1
+- **Homepage**: http://localhost:3001
+- **Callback URL**: http://localhost:3001/api/auth/callback/github
+- **Webhook URL**: https://webhook-gateway.pixeliumperfecto.workers.dev/api/webhooks/github
+
+### Install GitHub App
+Visit: https://github.com/apps/zeeeepa/installations/new
+
+## ☁️ Cloudflare Worker
+
+The webhook gateway is configured at:
+- **Worker URL**: https://webhook-gateway.pixeliumperfecto.workers.dev
+- **Account ID**: 2b2a1d3effa7f7fe4fe2a8c4e48681e3
+
+### Deploy Worker
+```bash
+cd cloudflare-worker
+wrangler deploy --env production
+```
+
+## 🗄️ Database
+
+Uses PostgreSQL with Docker Compose:
+- **Host**: localhost:5432
+- **Database**: github_gg
+- **User**: github_gg_user
+- **Password**: github_gg_password
+
+## 🔐 Environment Variables
+
+Required in `.env.local`:
 
 ```bash
-# Start PostgreSQL with Docker
-bun run db:start
+# Database
+DATABASE_URL="postgresql://github_gg_user:github_gg_password@localhost:5432/github_gg"
 
-# Run database migrations
-bun run db:push
+# GitHub OAuth
+GITHUB_CLIENT_ID="Iv23li9PqHMExi84gaq1"
+GITHUB_CLIENT_SECRET="your_client_secret"
+
+# GitHub App
+GITHUB_APP_ID="1484403"
+GITHUB_APP_NAME="zeeeepa"
+NEXT_PUBLIC_GITHUB_APP_NAME="zeeeepa"
+NEXT_PUBLIC_GITHUB_APP_ID="1484403"
+GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"
+GITHUB_WEBHOOK_SECRET="your_webhook_secret"
+
+# GitHub API
+GITHUB_PUBLIC_API_KEY="your_personal_access_token"
+
+# AI Analysis
+GEMINI_API_KEY="your_gemini_api_key"
+
+# Authentication
+BETTER_AUTH_SECRET="your_random_secret_key"
+
+# Application
+NEXT_PUBLIC_APP_URL="http://localhost:3001"
 ```
 
-### 4. Start Development Server
+## 🚀 Production Deployment
 
+### Vercel (Recommended)
 ```bash
-bun dev
+vercel deploy
+# Set environment variables in Vercel dashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Database Management
-
-### Local Development
+### Railway
 ```bash
-# Start database
-bun run db:start
-
-# Stop database
-bun run db:stop
-
-# Reset database (⚠️ Destructive - drops all data)
-bun run db:reset
-
-# View database in Drizzle Studio
-bun run db:studio
-
-# Generate new migration
-bun run db:generate
-
-# Apply migrations
-bun run db:push
+railway up
+# Set environment variables in Railway dashboard
 ```
 
-### Production Deployment (Vercel)
+## 🔄 Workflow
 
-For production deployments:
-1. Set `DATABASE_URL` in your Vercel environment variables
-2. Add `bun run db:push` to your build command or as a post-deploy hook
-3. No Docker needed - Vercel handles the database connection
+1. **Development**: `npm run dev` - Start development server
+2. **Database**: `npm run setup` - Setup/reset database
+3. **Production**: `npm run build && npm run start`
+4. **Cleanup**: `npm run stop` - Stop all services
 
-## Environment Variables
+## 🎯 Features
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `BETTER_AUTH_SECRET` | Secret for session encryption | Yes |
-| `GITHUB_CLIENT_ID` | GitHub OAuth App Client ID | Yes |
-| `GITHUB_CLIENT_SECRET` | GitHub OAuth App Client Secret | Yes |
-| `NEXT_PUBLIC_APP_URL` | Your app's public URL | Yes |
-| `GITHUB_PUBLIC_API_KEY` | GitHub API key for unauthenticated requests | No |
-| `GEMINI_API_KEY` | Google Gemini API key for AI analysis | No |
+- **Hybrid Authentication**: OAuth + GitHub App integration
+- **Real-time Webhooks**: Cloudflare Worker → Next.js
+- **AI Analysis**: Gemini-powered code insights
+- **Database**: PostgreSQL with Drizzle ORM
+- **UI**: Modern React with Tailwind CSS
+- **Runtime**: Optimized for Bun
 
-## Development vs Production
+## 🔧 Troubleshooting
 
-### Local Development
-- Uses Docker Compose for PostgreSQL
-- Loads environment from `.env.local`
-- Run `bun run db:push` to apply migrations
+### Port 3001 in use
+```bash
+npm run stop
+# Or kill process: lsof -ti:3001 | xargs kill -9
+```
 
-### Production (Vercel)
-- Uses production PostgreSQL (e.g., Vercel Postgres, Supabase, etc.)
-- Environment variables set in Vercel dashboard
-- Migrations run during build or deployment
+### Database issues
+```bash
+npm run stop
+npm run setup
+```
 
-## Contributing
+### Environment issues
+```bash
+# Check .env.local exists and has correct values
+cat .env.local
+```
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+---
 
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Contact
-
-Project Link: [https://github.com/lantos1618/github.gg](https://github.com/lantos1618/github.gg)
+**Ready to analyze repositories with AI! 🤖**
