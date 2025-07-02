@@ -36,10 +36,53 @@ Copy the example environment file and configure your GitHub OAuth credentials:
 cp .env.local.example .env.local
 ```
 
+#### 2.1 Generate Session Encryption Secret
+
+Generate a secure random string for session encryption and add it to your `.env.local` file:
+
+```bash
+# Generate a secure random string (32 characters)
+openssl rand -base64 32
+
+# Or using Node.js
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+
+# Or using Bun
+bun -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+Copy the generated string and use it as the value for `BETTER_AUTH_SECRET` in your `.env.local` file.
+
+#### 2.2 Validate Database Configuration
+
+Verify that your PostgreSQL database and user exist with the correct credentials:
+
+```bash
+# Test database connection (will prompt for password)
+psql -h localhost -p 5432 -U postgres -d github_gg -c "SELECT version();"
+
+# If database doesn't exist, create it
+psql -h localhost -p 5432 -U postgres -c "CREATE DATABASE github_gg;"
+
+# If user doesn't exist or password is incorrect, create/update user
+psql -h localhost -p 5432 -U postgres -c "CREATE USER postgres WITH PASSWORD 'password';"
+# Or update existing user password
+psql -h localhost -p 5432 -U postgres -c "ALTER USER postgres PASSWORD 'password';"
+
+# Grant necessary privileges to the user
+psql -h localhost -p 5432 -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE github_gg TO postgres;"
+
+# Verify connection with full DATABASE_URL
+psql postgresql://postgres:password@localhost:5432/github_gg -c "SELECT current_database(), current_user;"
+```
+
+**Note**: If you're using Docker (recommended for local development), the database and user will be created automatically when you run `bun run db:start`.
+
 Update the following variables in `.env.local`:
 - `GITHUB_CLIENT_ID`: Your GitHub OAuth App Client ID
 - `GITHUB_CLIENT_SECRET`: Your GitHub OAuth App Client Secret
-- `BETTER_AUTH_SECRET`: A secure random string for session encryption
+- `BETTER_AUTH_SECRET`: A secure random string for session encryption (use the generated string from above)
+- `DATABASE_URL`: PostgreSQL connection string (default: `postgresql://postgres:password@localhost:5432/github_gg`)
 
 ### 3. Start Database (Local Development)
 
