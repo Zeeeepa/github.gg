@@ -36,10 +36,27 @@ Copy the example environment file and configure your GitHub OAuth credentials:
 cp .env.local.example .env.local
 ```
 
+#### 2.1 Generate Session Encryption Secret
+
+Generate a secure random string for session encryption and add it to your `.env.local` file:
+
+```bash
+# Generate a secure random string (32 characters)
+openssl rand -base64 32
+
+# Or using Node.js
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+
+# Or using Bun
+bun -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+Copy the generated string and use it as the value for `BETTER_AUTH_SECRET` in your `.env.local` file.
+
 Update the following variables in `.env.local`:
 - `GITHUB_CLIENT_ID`: Your GitHub OAuth App Client ID
 - `GITHUB_CLIENT_SECRET`: Your GitHub OAuth App Client Secret
-- `BETTER_AUTH_SECRET`: A secure random string for session encryption
+- `BETTER_AUTH_SECRET`: A secure random string for session encryption (use the generated string from above)
 
 ### 3. Start Database (Local Development)
 
