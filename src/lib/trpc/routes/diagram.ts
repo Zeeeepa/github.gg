@@ -5,10 +5,11 @@ import { parseGeminiError } from '@/lib/utils/errorHandling';
 import { getUserPlanAndKey, getApiKeyForUser } from '@/lib/utils/user-plan';
 import { db } from '@/db';
 import { tokenUsage, repositoryDiagrams } from '@/db/schema';
-import { eq, and, desc, sql } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { createGitHubServiceFromSession } from '@/lib/github';
+
 
 export const diagramRouter = router({
   getDiagram: protectedProcedure
@@ -102,7 +103,7 @@ export const diagramRouter = router({
             eq(repositoryDiagrams.diagramType, diagramType)
           )
         )
-        .orderBy(desc(repositoryDiagrams.version))
+        .orderBy(desc(repositoryDiagrams.updatedAt))
         .limit(1);
       
       console.log('🔥 publicGetDiagram:', {
@@ -111,7 +112,6 @@ export const diagramRouter = router({
         ref: ref || 'main',
         diagramType,
         cachedCount: cached.length,
-        cachedVersion: cached[0]?.version,
         cachedUserId: cached[0]?.userId
       });
       
@@ -138,8 +138,9 @@ export const diagramRouter = router({
   getDiagramVersions: publicProcedure
     .input(diagramInputSchema.pick({ user: true, repo: true, ref: true, diagramType: true }))
     .query(async ({ input }) => {
-      const versions = await db
-        .select({ version: repositoryDiagrams.version, updatedAt: repositoryDiagrams.updatedAt })
+      // Since we only store latest per group, return single version
+      const result = await db
+        .select({ updatedAt: repositoryDiagrams.updatedAt })
         .from(repositoryDiagrams)
         .where(
           and(
@@ -149,22 +150,23 @@ export const diagramRouter = router({
             eq(repositoryDiagrams.diagramType, input.diagramType)
           )
         )
-        .orderBy(desc(repositoryDiagrams.version));
+        .limit(1);
       
       console.log('🔥 getDiagramVersions:', {
         user: input.user,
         repo: input.repo,
         ref: input.ref || 'main',
         diagramType: input.diagramType,
-        versions: versions.map(v => v.version)
+        versions: result.length > 0 ? [1] : []
       });
       
-      return versions;
+      return result.length > 0 ? [{ version: 1, updatedAt: result[0].updatedAt }] : [];
     }),
 
   getDiagramByVersion: publicProcedure
     .input(diagramInputSchema.pick({ user: true, repo: true, ref: true, diagramType: true }).extend({ version: z.number() }))
     .query(async ({ input }) => {
+      // Since we only store latest per group, ignore version parameter
       const result = await db
         .select()
         .from(repositoryDiagrams)
@@ -173,8 +175,7 @@ export const diagramRouter = router({
             eq(repositoryDiagrams.repoOwner, input.user),
             eq(repositoryDiagrams.repoName, input.repo),
             eq(repositoryDiagrams.ref, input.ref || 'main'),
-            eq(repositoryDiagrams.diagramType, input.diagramType),
-            eq(repositoryDiagrams.version, input.version)
+            eq(repositoryDiagrams.diagramType, input.diagramType)
           )
         )
         .limit(1);
@@ -217,30 +218,12 @@ export const diagramRouter = router({
           isRetry,
         });
         
-        // 3. Save diagram to database
-        const maxVersionResult = await db
-          .select({ max: sql<number>`MAX(${repositoryDiagrams.version})` })
-          .from(repositoryDiagrams)
-          .where(
-            and(
-              eq(repositoryDiagrams.userId, ctx.user.id),
-              eq(repositoryDiagrams.repoOwner, input.user),
-              eq(repositoryDiagrams.repoName, input.repo),
-              eq(repositoryDiagrams.ref, input.ref || 'main'),
-              eq(repositoryDiagrams.diagramType, diagramType)
-            )
-          );
-        const maxVersion = maxVersionResult[0]?.max ?? 0;
-        const nextVersion = maxVersion + 1;
-        
-        console.log('🔥 Version calculation:', {
+        console.log('🔥 Saving diagram:', {
           userId: ctx.user.id,
           repoOwner: input.user,
           repoName: input.repo,
           ref: input.ref || 'main',
-          diagramType,
-          maxVersion,
-          nextVersion
+          diagramType
         });
         
         await db
@@ -251,7 +234,6 @@ export const diagramRouter = router({
             repoName: input.repo,
             ref: input.ref || 'main',
             diagramType,
-            version: nextVersion,
             diagramCode: result.diagramCode,
             format: 'mermaid',
             options: options || {},
@@ -263,8 +245,7 @@ export const diagramRouter = router({
               repositoryDiagrams.repoOwner,
               repositoryDiagrams.repoName,
               repositoryDiagrams.ref,
-              repositoryDiagrams.diagramType,
-              repositoryDiagrams.version
+              repositoryDiagrams.diagramType
             ],
             set: {
               diagramCode: result.diagramCode,

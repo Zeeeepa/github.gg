@@ -203,7 +203,6 @@ export const repositoryScorecards = pgTable('repository_scorecards', {
   repoOwner: text('repo_owner').notNull(),
   repoName: text('repo_name').notNull(),
   ref: text('ref').default('main'),
-  version: integer('version').notNull(), // Per-group version, set in app logic
   overallScore: integer('overall_score').notNull(), // 0-100 overall score
   metrics: jsonb('metrics').$type<ScorecardMetric[]>().notNull(), // Structured metrics breakdown
   markdown: text('markdown').notNull(), // Full markdown analysis
@@ -211,13 +210,12 @@ export const repositoryScorecards = pgTable('repository_scorecards', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (table) => ({
-  // Ensure unique scorecard per user, repo, ref, and version
+  // Ensure unique scorecard per user, repo, ref (latest wins)
   scorecardUniqueIdx: uniqueIndex('scorecard_unique_idx').on(
     table.userId,
     table.repoOwner,
     table.repoName,
-    table.ref,
-    table.version
+    table.ref
   ),
 }));
 
@@ -229,7 +227,6 @@ export const repositoryDiagrams = pgTable('repository_diagrams', {
   repoName: text('repo_name').notNull(),
   ref: text('ref').default('main'),
   diagramType: text('diagram_type').notNull(), // 'file_tree', 'dependency', 'timeline', 'heatmap'
-  version: integer('version').notNull().default(1),
   diagramCode: text('diagram_code').notNull(), // Mermaid diagram code
   format: text('format').notNull().default('mermaid'), // Diagram format
   options: jsonb('options').$type<DiagramOptions>(), // Diagram generation options
@@ -237,14 +234,13 @@ export const repositoryDiagrams = pgTable('repository_diagrams', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 }, (table) => ({
-  // Ensure unique diagram per user, repo, ref, type, and version
+  // Ensure unique diagram per user, repo, ref, type (latest wins)
   diagramUniqueIdx: uniqueIndex('diagram_unique_idx').on(
     table.userId,
     table.repoOwner,
     table.repoName,
     table.ref,
-    table.diagramType,
-    table.version
+    table.diagramType
   ),
 }));
 

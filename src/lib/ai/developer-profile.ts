@@ -8,7 +8,8 @@ import { google } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { developerProfileSchema } from '@/lib/types/profile';
 import { generateScorecardAnalysis } from './scorecard';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
+
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -170,38 +171,35 @@ export async function generateDeveloperProfile({
           
         console.log(`✅ Scorecard generated for ${repoData.repoName}`);
         
-        // Save the generated scorecard to the database
-        let inserted = null;
-        for (let i = 0; i < 3; i++) { // Retry logic for concurrent versioning
-          const maxVersionResult = await db
-            .select({ max: sql<number>`MAX(version)` })
-            .from(repositoryScorecards)
-            .where(and(
-              eq(repositoryScorecards.userId, userId),
-              eq(repositoryScorecards.repoOwner, username),
-              eq(repositoryScorecards.repoName, repoData.repoName)
-            ));
-          const nextVersion = (maxVersionResult[0]?.max || 0) + 1;
-
-          try {
-            const [result] = await db.insert(repositoryScorecards).values({
-              userId,
-              repoOwner: username,
-              repoName: repoData.repoName,
-              ref: 'main', // Assuming main, could be improved
-              version: nextVersion,
-              ...scorecardResult.scorecard,
-            }).onConflictDoNothing().returning();
-            if (result) {
-              inserted = result;
-              break;
+        // Save the generated scorecard to the database using upsert
+        try {
+          const [inserted] = await db.insert(repositoryScorecards).values({
+            userId,
+            repoOwner: username,
+            repoName: repoData.repoName,
+            ref: 'main',
+            ...scorecardResult.scorecard,
+          }).onConflictDoUpdate({
+            target: [
+              repositoryScorecards.userId,
+              repositoryScorecards.repoOwner,
+              repositoryScorecards.repoName,
+              repositoryScorecards.ref
+            ],
+            set: {
+              overallScore: scorecardResult.scorecard.overallScore,
+              metrics: scorecardResult.scorecard.metrics,
+              markdown: scorecardResult.scorecard.markdown,
+              updatedAt: new Date(),
             }
-          } catch (e) {
-            if (isPgErrorWithCode(e) && e.code === '23505') continue;
-            throw e;
+          }).returning();
+          
+          if (!inserted) {
+            console.warn(`Failed to insert scorecard for ${repoData.repoName}`);
           }
+        } catch (error) {
+          console.warn(`Failed to generate or save scorecard for ${repoData.repoName}:`, error);
         }
-        if (!inserted) console.warn(`Failed to insert scorecard for ${repoData.repoName}`);
         
         return {
           repoName: repoData.repoName,

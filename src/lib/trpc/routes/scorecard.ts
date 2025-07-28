@@ -2,13 +2,14 @@ import { z } from 'zod';
 import { router, protectedProcedure, publicProcedure } from '@/lib/trpc/trpc';
 import { db } from '@/db';
 import { repositoryScorecards, tokenUsage } from '@/db/schema';
-import { eq, and, desc, sql } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 import { generateScorecardAnalysis } from '@/lib/ai/scorecard';
 import { getUserPlanAndKey, getApiKeyForUser } from '@/lib/utils/user-plan';
 import { TRPCError } from '@trpc/server';
 import { scorecardSchema } from '@/lib/types/scorecard';
 import { isPgErrorWithCode } from '@/lib/db/utils';
 import { createGitHubServiceFromSession } from '@/lib/github';
+
 
 export const scorecardRouter = router({
   generateScorecard: protectedProcedure
@@ -53,59 +54,34 @@ export const scorecardRouter = router({
         // The AI result is already in the structured format we want
         const scorecardData = scorecardSchema.parse(result.scorecard);
         
-        // Per-group versioning: get max version for this group, then insert with version = max + 1, retry on conflict
-        let insertedScorecard = null;
-        let attempt = 0;
-        while (!insertedScorecard && attempt < 5) {
-          attempt++;
-          // 1. Get current max version for this group
-          const maxVersionResult = await db
-            .select({ max: sql`MAX(version)` })
-            .from(repositoryScorecards)
-            .where(
-              and(
-                eq(repositoryScorecards.userId, ctx.user.id),
-                eq(repositoryScorecards.repoOwner, input.user),
-                eq(repositoryScorecards.repoName, input.repo),
-                eq(repositoryScorecards.ref, input.ref || 'main')
-              )
-            );
-          const rawMax = maxVersionResult[0]?.max;
-          const maxVersion = typeof rawMax === 'number' ? rawMax : Number(rawMax) || 0;
-          const nextVersion = maxVersion + 1;
-
-          try {
-            // 2. Try insert
-            const [result] = await db
-              .insert(repositoryScorecards)
-              .values({
-                userId: ctx.user.id,
-                repoOwner: input.user,
-                repoName: input.repo,
-                ref: input.ref || 'main',
-                version: nextVersion,
-                overallScore: scorecardData.overallScore,
-                metrics: scorecardData.metrics,
-                markdown: scorecardData.markdown,
-                updatedAt: new Date(),
-              })
-              .onConflictDoNothing()
-              .returning();
-            if (result) {
-              insertedScorecard = result;
+        // Simple upsert - insert or update existing
+        const [insertedScorecard] = await db
+          .insert(repositoryScorecards)
+          .values({
+            userId: ctx.user.id,
+            repoOwner: input.user,
+            repoName: input.repo,
+            ref: input.ref || 'main',
+            overallScore: scorecardData.overallScore,
+            metrics: scorecardData.metrics,
+            markdown: scorecardData.markdown,
+            updatedAt: new Date(),
+          })
+          .onConflictDoUpdate({
+            target: [
+              repositoryScorecards.userId,
+              repositoryScorecards.repoOwner,
+              repositoryScorecards.repoName,
+              repositoryScorecards.ref
+            ],
+            set: {
+              overallScore: scorecardData.overallScore,
+              metrics: scorecardData.metrics,
+              markdown: scorecardData.markdown,
+              updatedAt: new Date(),
             }
-          } catch (e: unknown) {
-            // If unique constraint violation, retry
-            if (isPgErrorWithCode(e) && e.code === '23505') {
-              // Unique constraint violation, retry
-              continue;
-            }
-            throw e;
-          }
-        }
-        if (!insertedScorecard) {
-          throw new Error('Failed to insert scorecard after multiple attempts');
-        }
+          })
+          .returning();
 
         // Log token usage with actual values from AI response
         await db.insert(tokenUsage).values({
@@ -191,9 +167,7 @@ export const scorecardRouter = router({
         eq(repositoryScorecards.repoName, repo),
         eq(repositoryScorecards.ref, ref),
       ];
-      if (version !== undefined) {
-        baseConditions.push(eq(repositoryScorecards.version, version));
-      }
+      // Note: version parameter is ignored - we only store latest per group
       const cached = await db
         .select()
         .from(repositoryScorecards)
@@ -225,8 +199,9 @@ export const scorecardRouter = router({
   getScorecardVersions: publicProcedure
     .input(z.object({ user: z.string(), repo: z.string(), ref: z.string().optional().default('main') }))
     .query(async ({ input }) => {
-      return await db
-        .select({ version: repositoryScorecards.version, updatedAt: repositoryScorecards.updatedAt })
+      // Since we only store latest per group, return single version
+      const result = await db
+        .select({ updatedAt: repositoryScorecards.updatedAt })
         .from(repositoryScorecards)
         .where(
           and(
@@ -235,7 +210,9 @@ export const scorecardRouter = router({
             eq(repositoryScorecards.ref, input.ref)
           )
         )
-        .orderBy(desc(repositoryScorecards.version));
+        .limit(1);
+      
+      return result.length > 0 ? [{ version: 1, updatedAt: result[0].updatedAt }] : [];
     }),
 
 });

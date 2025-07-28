@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { router, protectedProcedure, publicProcedure } from '@/lib/trpc/trpc';
 import { db } from '@/db';
 import { developerProfileCache, tokenUsage, user, developerEmails } from '@/db/schema';
-import { eq, and, gte, desc, sql } from 'drizzle-orm';
+import { eq, and, gte, desc } from 'drizzle-orm';
 import { generateDeveloperProfile } from '@/lib/ai/developer-profile';
 import { getUserPlanAndKey, getApiKeyForUser } from '@/lib/utils/user-plan';
 import { TRPCError } from '@trpc/server';
@@ -10,6 +10,7 @@ import { createGitHubServiceForUserOperations, createPublicGitHubService } from 
 import type { DeveloperProfile } from '@/lib/types/profile';
 import { findAndStoreDeveloperEmail, sendDeveloperProfileEmail } from '@/lib/ai/developer-profile';
 import { Octokit } from '@octokit/rest';
+
 
 export const profileRouter = router({
   getDeveloperEmail: publicProcedure
@@ -313,23 +314,23 @@ export const profileRouter = router({
         
         console.log(`✅ Profile generated successfully for ${username}`);
         
-        // Get next version number
-        const maxVersionResult = await db
-          .select({ max: sql<number>`MAX(version)` })
-          .from(developerProfileCache)
-          .where(eq(developerProfileCache.username, username));
-        const nextVersion = (maxVersionResult[0]?.max || 0) + 1;
+        console.log(`📝 Saving profile for ${username}`);
         
-        console.log(`📝 Saving profile version ${nextVersion} for ${username}`);
-        
-        // Cache the result with proper versioning
+        // Cache the result with upsert
         await db
           .insert(developerProfileCache)
           .values({
             username,
-            version: nextVersion,
+            version: 1, // Always version 1 since we only store latest
             profileData: result.profile,
             updatedAt: new Date(),
+          })
+          .onConflictDoUpdate({
+            target: [developerProfileCache.username, developerProfileCache.version],
+            set: {
+              profileData: result.profile,
+              updatedAt: new Date(),
+            }
           });
         
         // Log token usage

@@ -2,6 +2,7 @@ import { GoogleGenAI } from '@google/genai';
 import { google } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { scorecardSchema, type ScorecardData } from '@/lib/types/scorecard';
+import { getScorecardGroup, retryWithVersioning } from '@/lib/utils/versioning';
 
 export interface ScorecardAnalysisParams {
   files: Array<{ path: string; content: string }>;
