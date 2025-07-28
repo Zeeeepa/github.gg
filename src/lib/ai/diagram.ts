@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { google } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { DiagramType } from '@/lib/types/diagram';
-import { getDiagramGroup, retryWithVersioning } from '@/lib/utils/versioning';
 
 export const diagramSchema = z.object({
   diagramCode: z.string(),
