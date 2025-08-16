@@ -1,4 +1,7 @@
-// File filtering configuration
+import { applySmartFilter, SmartFilterConfig, DEFAULT_SMART_FILTER_CONFIG } from './smart-filter';
+import { DiagramType } from '@/lib/types/diagram';
+
+// Legacy file filtering configuration (still used for initial filtering)
 export const FILE_FILTER_CONFIG = {
   // A more organized and comprehensive allow-list for file extensions and names.
   allowList: {
@@ -103,7 +106,8 @@ export const FILE_FILTER_CONFIG = {
   // Deny-list for paths. Any file within these directories will be skipped.
   deniedPaths: [
     'node_modules/', 'vendor/', 'dist/', 'build/', 'bin/', 'obj/', '.git/', 
-    '.svn/', '.hg/', '.idea/', '.vscode/', '__pycache__/', 'target/', 'out/'
+    '.svn/', '.hg/', '.idea/', '.vscode/', '__pycache__/', 'target/', 'out/',
+    '.next/', 'coverage/', '.nyc_output/', 'logs/', 'tmp/', 'temp/'
   ]
 };
 
@@ -175,4 +179,98 @@ export function shouldProcessFile(filePath: string, path?: string, topLevelDir?:
   }
 
   return false;
-} 
+}
+
+/**
+ * Smart filtering configuration by diagram type
+ */
+export const DIAGRAM_SMART_FILTER_CONFIGS: Record<DiagramType, SmartFilterConfig> = {
+  flowchart: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 25,
+    includeConfig: true,
+    prioritizeCore: true,
+  },
+  sequence: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 20,
+    includeConfig: true,
+    prioritizeCore: true,
+  },
+  class: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 20,
+    includeConfig: false,
+    prioritizeCore: true,
+  },
+  state: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 20,
+    includeConfig: true,
+    prioritizeCore: true,
+  },
+  gitgraph: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 15,
+    includeConfig: true,
+    includeTests: false,
+    prioritizeCore: false,
+  },
+  gantt: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 15,
+    includeConfig: true,
+    includeTests: false,
+    prioritizeCore: false,
+  },
+  pie: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 20,
+    includeConfig: true,
+    prioritizeCore: true,
+  },
+  timeline: {
+    ...DEFAULT_SMART_FILTER_CONFIG,
+    maxFiles: 15,
+    includeConfig: true,
+    includeTests: false,
+    prioritizeCore: false,
+  },
+};
+
+/**
+ * Two-stage filtering: basic filtering first, then smart filtering
+ */
+export function applyTwoStageFiltering(
+  files: Array<{ path: string; content: string; size: number }>,
+  diagramType: DiagramType = 'flowchart',
+  enableSmartFilter: boolean = true
+): Array<{ path: string; content: string; size: number; score?: number; reasons?: string[] }> {
+  // Stage 1: Apply basic filtering (remove binary files, etc.)
+  const basicFiltered = files.filter(file => 
+    shouldProcessFile(file.path, undefined, null)
+  );
+
+  // Stage 2: Apply smart filtering if enabled
+  if (!enableSmartFilter) {
+    return basicFiltered;
+  }
+
+  const config = DIAGRAM_SMART_FILTER_CONFIGS[diagramType] || DEFAULT_SMART_FILTER_CONFIG;
+  const smartFiltered = applySmartFilter(basicFiltered, {
+    ...config,
+    diagramType,
+  });
+
+  return smartFiltered;
+}
+
+/**
+ * Get smart filter configuration for a specific diagram type
+ */
+export function getSmartFilterConfig(diagramType: DiagramType): SmartFilterConfig {
+  return DIAGRAM_SMART_FILTER_CONFIGS[diagramType] || DEFAULT_SMART_FILTER_CONFIG;
+}
+
+// Re-export smart filter functions for convenience
+export { applySmartFilter, type SmartFilterConfig, DEFAULT_SMART_FILTER_CONFIG }; 
