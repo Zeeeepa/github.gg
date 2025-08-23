@@ -6,6 +6,7 @@ import { Check, Zap, Crown } from 'lucide-react';
 import { trpc } from '@/lib/trpc/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/lib/auth/client';
+import { MostPopularBadge } from '@/components/ui/most-popular-badge';
 
 export default function PricingPage() {
   const { isSignedIn, signIn } = useAuth();
@@ -80,15 +81,13 @@ export default function PricingPage() {
               style={isPro ? { zIndex: 2 } : {}}
             >
               <CardHeader className="text-center">
-                {isPro && (
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">Most Popular</span>
-                )}
+                {isPro && <MostPopularBadge />}
                 <Icon className="h-8 w-8 mx-auto mb-4 text-blue-600" />
                 <CardTitle>{plan.name}</CardTitle>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-4xl font-bold">{plan.price}</span>
                   {plan.period && <span className="text-muted-foreground">{plan.period}</span>}
-                </div>
+                </div>n
                 <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
               <CardContent>

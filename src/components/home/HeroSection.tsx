@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { trpc } from '@/lib/trpc/client';
 import { toast } from 'sonner';
-import { Crown, Key } from 'lucide-react';
+import { Crown } from 'lucide-react';
 
 const fadeUpVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -83,27 +83,17 @@ export function HeroSection() {
             variants={fadeUpVariants}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            {/* Free: show both upgrade options */}
+            {/* Free: show Pro upgrade option */}
             {currentPlan?.plan === 'free' && (
-              <>
-                <Button
-                  onClick={() => handleUpgrade('byok')}
-                  disabled={createCheckout.isPending}
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
-                >
-                  <Key className="h-4 w-4" />
-                  {createCheckout.isPending ? 'Loading...' : 'Developer Plan - $6.90/mo'}
-                </Button>
-                <Button
-                  onClick={() => handleUpgrade('pro')}
-                  disabled={createCheckout.isPending}
-                  variant="outline"
-                  className="flex items-center gap-2 border-2 hover:bg-gray-50"
-                >
-                  <Crown className="h-4 w-4" />
-                  {createCheckout.isPending ? 'Loading...' : 'Pro Plan - $20/mo'}
-                </Button>
-              </>
+              <Button
+                onClick={() => handleUpgrade('pro')}
+                disabled={createCheckout.isPending}
+                variant="outline"
+                className="flex items-center gap-2 border-2 hover:bg-gray-50"
+              >
+                <Crown className="h-4 w-4" />
+                {createCheckout.isPending ? 'Loading...' : 'Pro Plan - $20/mo'}
+              </Button>
             )}
             {/* BYOK: only show upgrade to Pro */}
             {currentPlan?.plan === 'byok' && (

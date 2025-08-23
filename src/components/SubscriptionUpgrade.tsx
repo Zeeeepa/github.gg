@@ -5,6 +5,7 @@ import { Crown, Check } from 'lucide-react';
 import { trpc } from '@/lib/trpc/client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { MostPopularBadge } from '@/components/ui/most-popular-badge';
 
 interface SubscriptionUpgradeProps {
   className?: string;
@@ -43,11 +44,7 @@ export function SubscriptionUpgrade({ className = "", onUpgrade }: SubscriptionU
       <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
         {/* Pro Plan */}
         <Card className="relative border-2 border-purple-200 hover:border-purple-300 transition-colors">
-          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-              MOST POPULAR
-            </span>
-          </div>
+          <MostPopularBadge variant="uppercase" />
           <CardHeader className="text-center pb-4">
             <div className="flex justify-center mb-2">
               <Crown className="h-8 w-8 text-purple-600" />
