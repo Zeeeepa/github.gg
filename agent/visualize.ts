@@ -2,6 +2,9 @@
 
 import { createInterface } from 'node:readline';
 
+// Check for scorecard mode
+const isScoreCardMode = process.argv.includes('--scorecard-mode');
+
 const colors = {
   reset: '\x1b[0m',
   bright: '\x1b[1m',
@@ -133,6 +136,16 @@ function _colorizeJson(obj: any, indent = 0, path: string[] = []): string {
   }
 
   return String(obj);
+}
+
+function formatScoreCardFix(message: string): string {
+  if (message.includes('Fixed:')) {
+    const match = message.match(/Fixed: (\w+-\d+)/);
+    if (match) {
+      return `✅ ${colors.green}${colors.bright}Issue Fixed: ${match[1]}${colors.reset}`;
+    }
+  }
+  return message;
 }
 
 function formatTodoList(todos: any[]): string {
@@ -403,7 +416,14 @@ async function processStream() {
         }
         // For all other message types, display normally
         else {
-          process.stdout.write(`${timestamp + formatConcise(json)}\n\n`);
+          let output = formatConcise(json);
+          
+          // Apply scorecard mode formatting if enabled
+          if (isScoreCardMode && typeof output === 'string') {
+            output = formatScoreCardFix(output);
+          }
+          
+          process.stdout.write(`${timestamp + output}\n\n`);
         }
 
         // Track if this might be the last assistant message

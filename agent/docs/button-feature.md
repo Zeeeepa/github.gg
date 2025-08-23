@@ -222,6 +222,90 @@ The system includes comprehensive error handling:
 - For production, implement proper authentication
 - Consider using environment variables for sensitive configs
 
+## ScoreCard Auto-Fix Feature
+
+The Ralph Agent now includes an advanced ScoreCard Auto-Fix feature that automatically analyzes and fixes repository issues.
+
+### Overview
+
+The ScoreCard Fix feature provides:
+- Automatic repository analysis
+- Issue identification and categorization
+- AI-powered autonomous fixing
+- Support for multiple environments (local, freestyle, e2b)
+- Real-time progress tracking
+- Automatic commit and push of fixes
+
+### Components
+
+#### ScoreCard Fix Button Component
+Located at `agent/scorecard-button.tsx`, this React component provides:
+- Repository URL input
+- Real-time scorecard analysis
+- Issue categorization by severity
+- One-click auto-fix functionality
+- Progress tracking and logging
+
+#### ScoreCard Fix Script
+The `agent/ralph-scorecard-fix.sh` script handles:
+- Repository cloning
+- Issue specification parsing
+- Running Claude AI to fix issues
+- Committing and pushing changes
+
+#### Control Server Integration
+The control server (`agent/control-server.ts`) includes:
+- `scorecard-fix` command handler
+- Repository management
+- WebSocket progress updates
+- Environment configuration
+
+### Usage
+
+1. **Access the ScoreCard Fix Page**
+   Navigate to `/scorecard-fix` in your browser
+
+2. **Enter Repository URL**
+   Input the GitHub repository URL you want to analyze
+
+3. **Analyze Repository**
+   Click "Analyze" to run the scorecard analysis
+
+4. **Review Issues**
+   View identified issues categorized by severity:
+   - Critical (Security vulnerabilities)
+   - High (Major bugs)
+   - Medium (Code quality issues)
+   - Low (Linting/formatting)
+
+5. **Auto-Fix Issues**
+   Click "Auto-Fix" to launch the Ralph agent to fix all fixable issues
+
+6. **Monitor Progress**
+   Watch real-time updates as the agent fixes each issue
+
+### Environment Options
+
+- **Local**: Runs fixes on your local machine
+- **Freestyle**: Uses a freestyle environment for isolated execution
+- **E2B**: Executes in an E2B sandbox environment
+
+### API Integration
+
+The scorecard fix can be triggered programmatically:
+
+```typescript
+// Send scorecard-fix command via WebSocket
+ws.send(JSON.stringify({
+  command: 'scorecard-fix',
+  params: {
+    repository: 'https://github.com/user/repo',
+    issues: [...],
+    environment: 'local'
+  }
+}));
+```
+
 ## Future Enhancements
 
 Potential improvements for the button control system:
@@ -248,6 +332,12 @@ Potential improvements for the button control system:
    - Cron-like scheduling
    - Event-based triggers
    - Conditional execution
+
+6. **Enhanced ScoreCard Features**
+   - Custom scorecard rules
+   - Integration with GitHub Actions
+   - Automated PR creation
+   - Before/after comparison
 
 ## Troubleshooting
 
