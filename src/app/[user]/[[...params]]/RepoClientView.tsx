@@ -3,6 +3,7 @@ import RepoPageLayout from '@/components/layouts/RepoPageLayout';
 import { FileList } from '@/components/FileList';
 import RepoSkeleton from '@/components/RepoSkeleton';
 import { RepoStatus } from '@/components/RepoStatus';
+import { RepositoryChat } from '@/components/repository/RepositoryChat';
 import { useRepoData } from '@/lib/hooks/useRepoData';
 
 interface RepoClientViewProps {
@@ -23,6 +24,9 @@ export default function RepoClientView({ user, repo, refName, path }: RepoClient
         </div>
         <RepoStatus error={error ? { message: String(error) } : null} />
       </div>
+      
+      {/* Repository Chat Assistant */}
+      <RepositoryChat owner={user} repo={repo} ref={refName} />
     </RepoPageLayout>
   );
 } 

@@ -6,6 +6,7 @@ import { NavbarServer } from "@/components/NavbarServer";
 import { Toaster } from 'sonner'
 import { PostHogProvider } from './providers'
 import { Analytics } from "@vercel/analytics/next";
+import { AUIProvider } from "@/lib/aui/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +44,8 @@ export default function RootLayout({
       >
         <PostHogProvider>
           <TRPCProvider>
-            <NavbarServer />
+            <AUIProvider>
+              <NavbarServer />
             {process.env.NODE_ENV === 'development' && (
               <div style={{
                 position: 'fixed',
@@ -62,8 +64,9 @@ export default function RootLayout({
                 DEV
               </div>
             )}
-            <main>{children}</main>
-            <Toaster position="top-right" richColors />
+              <main>{children}</main>
+              <Toaster position="top-right" richColors />
+            </AUIProvider>
           </TRPCProvider>
         </PostHogProvider>
         <Analytics />
