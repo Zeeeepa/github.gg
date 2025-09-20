@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Loader2, Send, Bot, User, Code, Search, FileText, Cpu } from 'lucide-react';
-import { useAUI } from '@/lib/aui/provider';
+import { useAUI, useToolRenderer } from '@/lib/aui/provider';
+import { toolNames } from '@/lib/aui/registry';
 
 interface ChatInterfaceProps {
   repositoryContext?: {
@@ -41,6 +42,7 @@ export function ChatInterface({ repositoryContext, className }: ChatInterfacePro
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const aui = useAUI();
+  const toolRenderer = useToolRenderer();
 
   // Initialize page context
   useEffect(() => {
@@ -84,7 +86,7 @@ export function ChatInterface({ repositoryContext, className }: ChatInterfacePro
     const Icon = toolIcons[toolInvocation.toolName] || Code;
     
     return (
-      <div key={toolInvocation.toolCallId} className="my-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+      <div key={toolInvocation.toolCallId} className="my-3 p-3 bg-blue-50 border border-blue-200 rounded-lg" data-testid="tool-result">
         <div className="flex items-center gap-2 mb-2">
           <Icon className="w-4 h-4 text-blue-600" />
           <span className="text-sm font-medium text-blue-800">
@@ -110,7 +112,13 @@ export function ChatInterface({ repositoryContext, className }: ChatInterfacePro
 
         {toolInvocation.result && (
           <div className="text-sm">
-            {renderToolResult(toolInvocation.toolName, toolInvocation.result)}
+            {/* Use better-ui's tool renderer for enhanced display */}
+            {toolRenderer.render(
+              toolInvocation.toolName, 
+              toolInvocation.result, 
+              toolInvocation.state === 'calling',
+              toolInvocation.state === 'error' ? new Error('Tool execution failed') : undefined
+            ) || renderToolResult(toolInvocation.toolName, toolInvocation.result)}
           </div>
         )}
 
@@ -240,7 +248,7 @@ export function ChatInterface({ repositoryContext, className }: ChatInterfacePro
   };
 
   return (
-    <Card className={`flex flex-col h-[600px] ${className || ''}`}>
+    <Card className={`flex flex-col h-[600px] ${className || ''}`} data-testid="chat-interface">
       {/* Header */}
       <div className="border-b p-4">
         <div className="flex items-center gap-2">
@@ -288,6 +296,7 @@ export function ChatInterface({ repositoryContext, className }: ChatInterfacePro
               className={`flex gap-3 ${
                 message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
               }`}
+              data-testid="chat-message"
             >
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
                 message.role === 'user' 
