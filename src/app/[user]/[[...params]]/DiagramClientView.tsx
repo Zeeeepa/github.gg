@@ -76,12 +76,20 @@ function DiagramClientView({
   // Get repo data
   const { files: repoFiles, isLoading: filesLoading, error: filesError, totalFiles } = useRepoData({ user, repo, ref: refName, path });
 
-  // Check user plan
-  const { data: currentPlan, isLoading: planLoading } = trpc.user.getCurrentPlan.useQuery(undefined, {
-    enabled: false, // Disable this query for now to prevent spamming
+  // Check user plan - works for both authenticated and guest users
+  const { data: currentPlan, isLoading: planLoading } = trpc.user.getPublicPlan.useQuery(undefined, {
     retry: false, // Don't retry on failure
   });
-  const hasAccess = useMemo(() => currentPlan?.plan === 'byok' || currentPlan?.plan === 'pro', [currentPlan?.plan]);
+  
+  // Determine user access level
+  const hasAccess = useMemo(() => {
+    // Only users with active paid plans can generate diagrams
+    return currentPlan?.plan === 'byok' || currentPlan?.plan === 'pro';
+  }, [currentPlan?.plan]);
+  
+  const isGuest = useMemo(() => {
+    return currentPlan?.plan === 'guest';
+  }, [currentPlan?.plan]);
 
   // Fetch all available versions
   const { data: versions, isLoading: versionsLoading } = trpc.diagram.getDiagramVersions.useQuery({
@@ -96,8 +104,10 @@ function DiagramClientView({
     ? trpc.diagram.getDiagramByVersion.useQuery({ user, repo, ref: refName || 'main', diagramType, version: selectedVersion }, { enabled: !!user && !!repo && !!diagramType && !!selectedVersion })
     : trpc.diagram.publicGetDiagram.useQuery({ user, repo, ref: refName || 'main', diagramType }, { enabled: !!user && !!repo && !!diagramType });
 
-  // Check if repository is private
+  // Check if repository is private or user lacks access
   const isPrivateRepo = (publicDiagram as { error?: string })?.error === 'This repository is private';
+  const hasNoRepoAccess = (publicDiagram as { error?: string })?.error?.includes('do not have access') || 
+                         (publicDiagram as { error?: string })?.error?.includes('Unable to access');
 
   // Memoize all inputs to useDiagramGeneration to prevent repeated requests
   const stableOptions = useMemo(() => options, [options]);
@@ -170,23 +180,43 @@ function DiagramClientView({
   // Debug logging
   console.log('DiagramClientView Debug:', {
     hasAccess,
+    isGuest,
     currentPlan: currentPlan?.plan,
     isPending,
     error,
     displayDiagramCode: !!displayDiagramCode,
     repoFiles: repoFiles?.length,
     diagramType,
-    diagramToShow: diagramToShow?.substring(0, 100) + '...',
-    editableCode: editableCode?.substring(0, 100) + '...'
+    isPrivateRepo,
+    hasNoRepoAccess,
   });
 
-  // If repository is private, show appropriate message
-  if (isPrivateRepo) {
+  // If repository is private or user lacks access, show appropriate message
+  if (isPrivateRepo || hasNoRepoAccess) {
+    let errorMessage: string;
+    
+    if (isPrivateRepo) {
+      if (isGuest) {
+        errorMessage = "This repository is private. Sign in with GitHub to access private repositories you have permissions for.";
+      } else {
+        errorMessage = "This repository is private and you don't have access to it.";
+      }
+    } else {
+      errorMessage = "You do not have access to this repository.";
+    }
+    
     return (
       <RepoPageLayout user={user} repo={repo} refName={refName} files={repoFiles} totalFiles={totalFiles}>
         <div className="flex flex-col items-center justify-center min-h-[400px]">
-          <h2 className="text-xl font-semibold text-gray-600 mb-2">Repository is Private</h2>
-          <p className="text-gray-500">Diagrams are not available for private repositories.</p>
+          <h2 className="text-xl font-semibold text-gray-600 mb-2">Access Restricted</h2>
+          <p className="text-gray-500 text-center max-w-md">{errorMessage}</p>
+          {isGuest && (
+            <div className="mt-4">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Sign in with GitHub
+              </button>
+            </div>
+          )}
         </div>
       </RepoPageLayout>
     );
@@ -344,6 +374,8 @@ function DiagramClientView({
               ) : (
                 <p className="text-sm text-gray-400">No files found in repository. Please check the repository path.</p>
               )
+            ) : isGuest ? (
+              <p className="text-sm text-gray-400">Sign in and upgrade your plan to generate diagrams.</p>
             ) : (
               <p className="text-sm text-gray-400">Upgrade your plan to generate diagrams.</p>
             )}
@@ -351,9 +383,24 @@ function DiagramClientView({
         )}
         
         {/* Show upgrade prompt if user doesn't have access */}
-        {!hasAccess && (
+        {!hasAccess && !isGuest && (
           <div className="mt-8">
             <UpgradePrompt feature="diagram" />
+          </div>
+        )}
+        
+        {/* Show sign in prompt for guests */}
+        {isGuest && (
+          <div className="mt-8 text-center">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-md mx-auto">
+              <h3 className="text-lg font-semibold text-blue-900 mb-2">Sign In to Generate Diagrams</h3>
+              <p className="text-blue-700 mb-4">
+                You can view existing diagrams, but diagram generation requires a GitHub account and active subscription.
+              </p>
+              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Sign in with GitHub
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Shared diagram type definition
-export const DIAGRAM_TYPE_VALUES = ['flowchart', 'sequence', 'class', 'state', 'pie', 'gantt'] as const;
+export const DIAGRAM_TYPE_VALUES = ['flowchart', 'sequence', 'class', 'state', 'pie', 'gantt', 'timeline'] as const;
 export type DiagramType = typeof DIAGRAM_TYPE_VALUES[number];
 
 // Zod schema for diagram types
@@ -15,6 +15,7 @@ export const DIAGRAM_TYPES = [
   { value: 'state', label: 'State Diagram' },
   { value: 'pie', label: 'Pie Chart' },
   { value: 'gantt', label: 'Gantt Chart' },
+  { value: 'timeline', label: 'Timeline' },
 ] as const;
 
 // Shared schema for common diagram fields
@@ -51,6 +52,10 @@ export const diagramInputSchemaServer = z.object({
   path: z.string().optional(), // Add path for context
   diagramType: diagramTypeSchema.default('flowchart'),
   options: z.record(z.any()).optional(),
+  // Smart filtering options
+  enableSmartFilter: z.boolean().optional().default(true),
+  useAIFileSelection: z.boolean().optional().default(true), // Use AI to select files
+  maxFiles: z.number().min(10).max(200).optional(), // Override max files if needed
   // Retry context
   previousResult: z.string().optional(),
   lastError: z.string().optional(),

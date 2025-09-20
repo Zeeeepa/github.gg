@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { router, protectedProcedure } from '@/lib/trpc/trpc';
+import { router, protectedProcedure, publicProcedure } from '@/lib/trpc/trpc';
 import { db } from '@/db';
 import { userApiKeys, tokenUsage, userSubscriptions } from '@/db/schema';
 import { eq, and, gte, lte, desc } from 'drizzle-orm';
@@ -91,6 +91,25 @@ export const userRouter = router({
     .query(async ({ ctx }) => {
       const subscription = await db.query.userSubscriptions.findFirst({
         where: eq(userSubscriptions.userId, ctx.user.id)
+      });
+      
+      if (!subscription || subscription.status !== 'active') {
+        return { plan: 'free' as const };
+      }
+      
+      return { plan: subscription.plan as 'byok' | 'pro' };
+    }),
+
+  // Public endpoint for checking plan (for guests)
+  getPublicPlan: publicProcedure
+    .query(async ({ ctx }) => {
+      // For unauthenticated users, return guest status
+      if (!ctx.session?.user) {
+        return { plan: 'guest' as const };
+      }
+      
+      const subscription = await db.query.userSubscriptions.findFirst({
+        where: eq(userSubscriptions.userId, ctx.session.user.id)
       });
       
       if (!subscription || subscription.status !== 'active') {
