@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ScoreCardFixButton } from '@/agent/scorecard-button';
+import { ScoreCardFixButton } from '../../../agent/scorecard-button';
 
 export default function ScoreCardFixPage() {
   return (

@@ -23,6 +23,7 @@
   "dependencies": {
     "@ai-sdk/google": "^1.2.19",
     "@google/genai": "^1.6.0",
+    "@lantos1618/better-ui": "^0.2.3",
     "@octokit/app": "^16.0.1",
     "@octokit/rest": "^22.0.0",
     "@octokit/webhooks": "^14.0.2",
