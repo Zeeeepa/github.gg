@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { streamText, convertToCoreMessages } from 'ai';
 import { google } from '@ai-sdk/google';
-import { simplifiedTools } from '@/lib/aui/tools/simple-tools';
+import { toAISDKTools, toolNames } from '@/lib/aui/registry';
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 
@@ -24,43 +24,8 @@ const ChatRequestSchema = z.object({
 
 type ChatRequest = z.infer<typeof ChatRequestSchema>;
 
-// Simplified tools for AI SDK
-const tools = {
-  analyzeRepositoryStructure: {
-    description: 'Analyze repository structure and organization',
-    parameters: z.object({
-      owner: z.string(),
-      repo: z.string(),
-      ref: z.string().optional()
-    }),
-    execute: async (params: any) => {
-      return await simplifiedTools.analyzeRepositoryStructure.execute(params);
-    }
-  },
-  
-  searchRepositoryFiles: {
-    description: 'Search for specific patterns within repository files',
-    parameters: z.object({
-      owner: z.string(),
-      repo: z.string(),
-      query: z.string()
-    }),
-    execute: async (params: any) => {
-      return await simplifiedTools.searchRepositoryFiles.execute(params);
-    }
-  },
-  
-  analyzeCodeWithLynlang: {
-    description: 'Perform deep code analysis using lynlang compiler',
-    parameters: z.object({
-      code: z.string(),
-      language: z.string().optional()
-    }),
-    execute: async (params: any) => {
-      return await simplifiedTools.analyzeCodeWithLynlang.execute(params);
-    }
-  }
-};
+// Get all better-ui tools converted to AI SDK format
+const tools = toAISDKTools();
 
 export async function POST(req: NextRequest) {
   try {
@@ -162,7 +127,7 @@ Be conversational, helpful, and provide actionable insights based on your analys
 export async function GET() {
   return NextResponse.json({
     status: 'ok',
-    availableTools: Object.keys(tools),
-    description: 'GitHub.gg Chat API with repository analysis and lynlang integration'
+    availableTools: toolNames,
+    description: 'GitHub.gg Chat API with repository analysis and lynlang integration powered by better-ui'
   });
 }

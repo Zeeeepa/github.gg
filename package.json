@@ -13,6 +13,10 @@
     "test:payment:full": "bun --env-file=.env.local test tests/payment-integration.test.ts",
     "test:payment:node": "node scripts/test-payment.js",
     "test:all": "bun --env-file=.env.local test tests/",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
     "db:generate": "bun --env-file=.env.local drizzle-kit generate",
     "db:push": "bun --env-file=.env.local drizzle-kit push",
     "db:studio": "bun --env-file=.env.local drizzle-kit studio",
@@ -81,6 +85,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.51.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/chroma-js": "^3.1.1",
     "@types/node": "^24.0.3",
@@ -92,6 +97,7 @@
     "drizzle-kit": "^0.31.1",
     "eslint": "^9.30.0",
     "eslint-config-next": "^15.3.4",
+    "playwright": "^1.51.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
