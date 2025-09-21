@@ -214,7 +214,7 @@ export class LynlangService {
   /**
    * Generate AST for a file
    */
-  async generateAST(filePath: string, options: LynlangExecutorOptions = {}): Promise<any> {
+  async generateAST(filePath: string, options: LynlangExecutorOptions = {}): Promise<Record<string, unknown>> {
     try {
       const args = ['ast', '--json', filePath];
       const result = await this.executeLynlang(args, options);

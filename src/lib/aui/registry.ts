@@ -1,4 +1,4 @@
-import { lynlangTools } from './tools/lynlang-tools';
+import { lynlangToolsClient as lynlangTools } from './tools/lynlang-tools-client';
 import { pageContextTools } from './tools/page-context-tools';
 import { repositoryTools } from './tools/repository-tools';
 
