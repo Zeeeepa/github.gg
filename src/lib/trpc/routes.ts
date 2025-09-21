@@ -8,6 +8,7 @@ import { userRouter } from '@/lib/trpc/routes/user';
 import { featuredRouter } from '@/lib/trpc/routes/featured';
 import { billingRouter } from '@/lib/trpc/routes/billing';
 import { adminRouter } from '@/lib/trpc/routes/admin';
+import { lynlangRouter } from '@/lib/trpc/routes/lynlang';
 import { z } from 'zod';
 import { router } from '@/lib/trpc/trpc';
 import { db } from '@/db';
@@ -87,6 +88,9 @@ export const appRouter = router({
 
   // Admin routes
   admin: adminRouter,
+
+  // Lynlang analysis routes
+  lynlang: lynlangRouter,
 });
 
 export type AppRouter = typeof appRouter; 

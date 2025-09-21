@@ -1,12 +1,21 @@
-import { lynlangToolsClient as lynlangTools } from './tools/lynlang-tools-client';
+import { lynlangToolsServer as lynlangTools } from './tools/lynlang-tools-server';
+import { ecosystemTools } from './tools/ecosystem-tools';
 import { pageContextTools } from './tools/page-context-tools';
 import { repositoryTools } from './tools/repository-tools';
+import { comprehensiveWorkflows } from './workflows/comprehensive-analysis';
 
-// Create a central registry of all better-ui tools
+// Create a central registry of all better-ui tools with full server capabilities
 export const toolRegistry = {
-  // Lynlang tools
+  // Enhanced Lynlang tools with full compiler capabilities
   analyzCodeWithLynlang: lynlangTools.analyzCodeWithLynlang,
   compareCodePatterns: lynlangTools.compareCodePatterns,
+  
+  // Ecosystem integration tools
+  analyzeRepositoryEcosystem: ecosystemTools.analyzeRepositoryEcosystem,
+  realTimeLynlangAnalysis: ecosystemTools.realTimeLynlangAnalysis,
+  
+  // Comprehensive analysis workflows
+  comprehensiveCodebaseAnalysisWorkflow: comprehensiveWorkflows.comprehensiveCodebaseAnalysisWorkflow,
   
   // Page context tools
   analyzePageContext: pageContextTools.analyzePageContext,
