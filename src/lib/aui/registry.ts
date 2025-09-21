@@ -1,6 +1,7 @@
 import { lynlangTools } from './tools/lynlang-tools';
 import { pageContextTools } from './tools/page-context-tools';
 import { repositoryTools } from './tools/repository-tools';
+import { pythonEnhancedTools } from './tools/python-enhanced-tools';
 
 // Create a central registry of all better-ui tools
 export const toolRegistry = {
@@ -17,6 +18,10 @@ export const toolRegistry = {
   analyzeRepositoryStructure: repositoryTools.analyzeRepositoryStructure,
   searchRepositoryFiles: repositoryTools.searchRepositoryFiles,
   getRepositoryInfo: repositoryTools.getRepositoryInfo,
+  
+  // Python-enhanced tools
+  pythonAnalyzeRepository: pythonEnhancedTools.pythonAnalyzeRepository,
+  pythonCodeReview: pythonEnhancedTools.pythonCodeReview,
 };
 
 // Export tools as array for easier iteration
