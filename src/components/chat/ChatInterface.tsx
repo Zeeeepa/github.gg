@@ -188,9 +188,9 @@ export function ChatInterface({ repositoryContext, className }: ChatInterfacePro
       case 'searchRepositoryFiles':
         return (
           <div className="space-y-2 text-xs">
-            <div><strong>Query:</strong> "{result.query}"</div>
+            <div><strong>Query:</strong> &ldquo;{result.query}&rdquo;</div>
             <div><strong>Results:</strong> {result.totalResults} files with matches</div>
-            {result.results?.slice(0, 3).map((file: any, idx: number) => (
+            {result.results?.slice(0, 3).map((file: { file: string; matches: unknown[] }, idx: number) => (
               <div key={idx} className="bg-white p-2 rounded">
                 <div className="font-medium">{file.file}</div>
                 <div className="text-gray-600">{file.matches.length} matches</div>

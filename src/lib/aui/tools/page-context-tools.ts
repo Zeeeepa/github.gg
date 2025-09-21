@@ -1,4 +1,4 @@
-import { aui, z } from '@lantos1618/better-ui';
+import aui, { z } from '@/lib/better-ui-wrapper';
 
 // Tool to analyze current page context
 export const analyzePageContext = aui
@@ -13,7 +13,7 @@ export const analyzePageContext = aui
       height: z.number()
     }).optional().describe('Viewport dimensions')
   }))
-  .clientExecute(async ({ input, ctx }) => {
+  .execute(async ({ input }) => {
     // This runs on the client side to access page context
     const pageInfo = {
       url: input.url || (typeof window !== 'undefined' ? window.location.href : ''),
@@ -84,7 +84,7 @@ export const extractPageContent = aui
     selectors: z.array(z.string()).optional().describe('CSS selectors to focus on'),
     maxLength: z.number().default(5000).describe('Maximum content length')
   }))
-  .clientExecute(async ({ input }) => {
+  .execute(async ({ input }) => {
     if (typeof document === 'undefined') {
       throw new Error('This tool can only run in a browser environment');
     }
@@ -204,7 +204,7 @@ export const trackUserInteractions = aui
     trackScrolling: z.boolean().default(true).describe('Track scroll events'),
     trackKeyboard: z.boolean().default(false).describe('Track keyboard events')
   }))
-  .clientExecute(async ({ input }) => {
+  .execute(async ({ input }) => {
     if (typeof window === 'undefined') {
       throw new Error('This tool can only run in a browser environment');
     }

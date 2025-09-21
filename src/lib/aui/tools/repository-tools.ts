@@ -1,4 +1,4 @@
-import { aui, z } from '@lantos1618/better-ui';
+import aui, { z } from '@/lib/better-ui-wrapper';
 import { createGitHubServiceFromSession } from '@/lib/github';
 
 // Tool to analyze repository structure

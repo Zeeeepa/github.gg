@@ -1,5 +1,9 @@
-import { aui, z } from '@lantos1618/better-ui';
-import { lynlangService } from '@/lib/services/lynlang';
+import aui, { z } from '@/lib/better-ui-wrapper';
+// Import lynlang service only on server side to avoid Node.js modules in browser
+let lynlangService: any = null;
+if (typeof window === 'undefined') {
+  lynlangService = require('@/lib/services/lynlang').lynlangService;
+}
 import React from 'react';
 
 // Tool to analyze code with lynlang
@@ -15,7 +19,16 @@ export const analyzCodeWithLynlang = aui
   }))
   .execute(async ({ input }) => {
     try {
-      // Check if lynlang is available
+      // Check if lynlang service is loaded and available
+      if (!lynlangService) {
+        return {
+          success: false,
+          error: 'Lynlang service is not available in browser context',
+          fallback: 'Using basic text analysis instead',
+          basicAnalysis: analyzeCodeBasic(input.code)
+        };
+      }
+      
       const isAvailable = await lynlangService.isAvailable();
       if (!isAvailable) {
         return {
@@ -161,6 +174,15 @@ export const compareCodePatterns = aui
   }))
   .execute(async ({ input }) => {
     try {
+      // Check if lynlang service is loaded and available
+      if (!lynlangService) {
+        return {
+          success: false,
+          error: 'Lynlang service is not available in browser context',
+          fallback: compareCodeBasic(input.codeA, input.codeB)
+        };
+      }
+      
       const isAvailable = await lynlangService.isAvailable();
       if (!isAvailable) {
         return {
@@ -299,6 +321,11 @@ function getFileExtension(language: string): string {
 }
 
 async function createTempFileForAnalysis(content: string, extension: string): Promise<string> {
+  // Only available on server side
+  if (typeof window !== 'undefined') {
+    throw new Error('File operations not available in browser');
+  }
+  
   const fs = await import('fs/promises');
   const path = await import('path');
   const tempDir = await fs.mkdtemp(path.join(process.cwd(), 'temp-lynlang-'));
@@ -308,6 +335,11 @@ async function createTempFileForAnalysis(content: string, extension: string): Pr
 }
 
 async function cleanupTempFile(tempFile: string): Promise<void> {
+  // Only available on server side
+  if (typeof window !== 'undefined') {
+    return;
+  }
+  
   const fs = await import('fs/promises');
   const path = await import('path');
   try {
@@ -360,19 +392,42 @@ function calculateBasicSimilarity(codeA: string, codeB: string): number {
   return union.size > 0 ? intersection.size / union.size : 0;
 }
 
-function findCommonPatterns(patternsA: any[], patternsB: any[]): any[] {
+interface Pattern {
+  type: string;
+  location?: {
+    line: number;
+    column: number;
+    file: string;
+  };
+  description?: string;
+  confidence?: number;
+}
+
+interface AnalysisResult {
+  success: boolean;
+  patterns?: Pattern[];
+  metrics?: {
+    linesOfCode: number;
+    complexity: number;
+    dependencies?: number;
+  };
+  errors?: string[];
+  warnings?: string[];
+}
+
+function findCommonPatterns(patternsA: Pattern[], patternsB: Pattern[]): Pattern[] {
   return patternsA.filter(patternA => 
     patternsB.some(patternB => patternA.type === patternB.type)
   );
 }
 
-function findUniquePatterns(patternsA: any[], patternsB: any[]): any[] {
+function findUniquePatterns(patternsA: Pattern[], patternsB: Pattern[]): Pattern[] {
   return patternsA.filter(patternA => 
     !patternsB.some(patternB => patternA.type === patternB.type)
   );
 }
 
-function calculateSimilarityScore(analysisA: any, analysisB: any): number {
+function calculateSimilarityScore(analysisA: AnalysisResult, analysisB: AnalysisResult): number {
   // Simple similarity calculation based on metrics and patterns
   const metricsA = analysisA.metrics || {};
   const metricsB = analysisB.metrics || {};
