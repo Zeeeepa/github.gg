@@ -1,0 +1,15 @@
+# ZAI Python SDK Service Requirements
+
+# Core dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+httpx>=0.25.0
+
+# Web-ui-python-sdk dependencies (will be installed from git)
+requests>=2.31.0
+
+# Development dependencies
+pytest>=7.4.0
+pytest-asyncio>=0.21.0

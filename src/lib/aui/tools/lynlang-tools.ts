@@ -1,6 +1,8 @@
-import { aui, z } from '@lantos1618/better-ui';
+import { AUI, z } from '@lantos1618/better-ui';
 import { lynlangService } from '@/lib/services/lynlang';
 import React from 'react';
+
+const aui = new AUI();
 
 // Tool to analyze code with lynlang
 export const analyzCodeWithLynlang = aui
@@ -26,7 +28,7 @@ export const analyzCodeWithLynlang = aui
         };
       }
 
-      const fileExtension = getFileExtension(input.language);
+      const fileExtension = getFileExtension(input.language ?? 'zen');
       
       switch (input.analysisType) {
         case 'ast':
@@ -170,7 +172,7 @@ export const compareCodePatterns = aui
         };
       }
 
-      const fileExtension = getFileExtension(input.language);
+      const fileExtension = getFileExtension(input.language ?? 'zen');
       
       // Analyze both code snippets
       const [analysisA, analysisB] = await Promise.all([
@@ -243,7 +245,7 @@ export const compareCodePatterns = aui
       // Similarity score
       React.createElement('div', { className: 'mb-6 text-center' },
         React.createElement('div', { className: 'text-4xl font-bold text-blue-600' }, 
-          `${Math.round(data.comparison.similarity * 100)}%`
+          `${Math.round((data.comparison?.similarity ?? 0) * 100)}%`
         ),
         React.createElement('div', { className: 'text-gray-600' }, 'Similarity Score')
       ),
@@ -252,19 +254,19 @@ export const compareCodePatterns = aui
       React.createElement('div', { className: 'grid grid-cols-2 gap-4 mb-6' },
         React.createElement('div', { className: 'p-3 bg-blue-50 rounded' },
           React.createElement('h4', { className: 'font-medium mb-2' }, 'Lines of Code'),
-          React.createElement('div', null, `A: ${data.comparison.metrics.linesOfCode.a}`),
-          React.createElement('div', null, `B: ${data.comparison.metrics.linesOfCode.b}`),
+          React.createElement('div', null, `A: ${data.comparison?.metrics?.linesOfCode?.a ?? 0}`),
+          React.createElement('div', null, `B: ${data.comparison?.metrics?.linesOfCode?.b ?? 0}`),
           React.createElement('div', { 
-            className: data.comparison.metrics.linesOfCode.difference > 0 ? 'text-green-600' : 'text-red-600' 
-          }, `Diff: ${data.comparison.metrics.linesOfCode.difference > 0 ? '+' : ''}${data.comparison.metrics.linesOfCode.difference}`)
+            className: (data.comparison?.metrics?.linesOfCode?.difference ?? 0) > 0 ? 'text-green-600' : 'text-red-600' 
+          }, `Diff: ${(data.comparison?.metrics?.linesOfCode?.difference ?? 0) > 0 ? '+' : ''}${data.comparison?.metrics?.linesOfCode?.difference ?? 0}`)
         ),
         React.createElement('div', { className: 'p-3 bg-green-50 rounded' },
           React.createElement('h4', { className: 'font-medium mb-2' }, 'Complexity'),
-          React.createElement('div', null, `A: ${data.comparison.metrics.complexity.a}`),
-          React.createElement('div', null, `B: ${data.comparison.metrics.complexity.b}`),
+          React.createElement('div', null, `A: ${data.comparison?.metrics?.complexity?.a ?? 0}`),
+          React.createElement('div', null, `B: ${data.comparison?.metrics?.complexity?.b ?? 0}`),
           React.createElement('div', { 
-            className: data.comparison.metrics.complexity.difference > 0 ? 'text-red-600' : 'text-green-600' 
-          }, `Diff: ${data.comparison.metrics.complexity.difference > 0 ? '+' : ''}${data.comparison.metrics.complexity.difference}`)
+            className: (data.comparison?.metrics?.complexity?.difference ?? 0) > 0 ? 'text-red-600' : 'text-green-600' 
+          }, `Diff: ${(data.comparison?.metrics?.complexity?.difference ?? 0) > 0 ? '+' : ''}${data.comparison?.metrics?.complexity?.difference ?? 0}`)
         )
       ),
 
@@ -273,13 +275,13 @@ export const compareCodePatterns = aui
         React.createElement('div', null,
           React.createElement('h4', { className: 'font-medium mb-2' }, 'Common Patterns'),
           React.createElement('div', { className: 'text-sm text-gray-600' }, 
-            `${data.comparison.patterns.commonPatterns.length} patterns found in both`
+            `${data.comparison?.patterns?.commonPatterns?.length ?? 0} patterns found in both`
           )
         ),
         React.createElement('div', null,
           React.createElement('h4', { className: 'font-medium mb-2' }, 'Unique Patterns'),
           React.createElement('div', { className: 'text-sm text-gray-600' }, 
-            `A: ${data.comparison.patterns.uniqueToA.length} unique, B: ${data.comparison.patterns.uniqueToB.length} unique`
+            `A: ${data.comparison?.patterns?.uniqueToA?.length ?? 0} unique, B: ${data.comparison?.patterns?.uniqueToB?.length ?? 0} unique`
           )
         )
       )

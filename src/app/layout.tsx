@@ -7,6 +7,7 @@ import { Toaster } from 'sonner'
 import { PostHogProvider } from './providers'
 import { Analytics } from "@vercel/analytics/next";
 import { AUIProvider } from "@/lib/aui/provider";
+import { ChatBubble } from "@/components/chat/ChatBubble";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +67,7 @@ export default function RootLayout({
             )}
               <main>{children}</main>
               <Toaster position="top-right" richColors />
+              <ChatBubble />
             </AUIProvider>
           </TRPCProvider>
         </PostHogProvider>

@@ -104,7 +104,7 @@ Be conversational, helpful, and provide actionable insights based on your analys
       model: google('gemini-1.5-pro-latest'),
       messages: messagesWithSystem,
       tools,
-      maxToolRoundtrips: 5,
+      maxSteps: 5,
       temperature: 0.7,
       maxTokens: 4000,
     });
