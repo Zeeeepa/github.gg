@@ -1,5 +1,7 @@
-import { aui, z } from '@lantos1618/better-ui';
+import { AUI, z } from '@lantos1618/better-ui';
 import { createGitHubServiceFromSession } from '@/lib/github';
+
+const aui = new AUI();
 
 // Tool to analyze repository structure
 export const analyzeRepositoryStructure = aui

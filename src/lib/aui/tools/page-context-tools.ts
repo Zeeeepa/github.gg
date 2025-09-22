@@ -1,4 +1,6 @@
-import { aui, z } from '@lantos1618/better-ui';
+import { AUI, z } from '@lantos1618/better-ui';
+
+const aui = new AUI();
 
 // Tool to analyze current page context
 export const analyzePageContext = aui
@@ -176,8 +178,8 @@ export const extractPageContent = aui
     });
 
     // Truncate if necessary
-    if (extractedText.length > input.maxLength) {
-      extractedText = extractedText.substring(0, input.maxLength) + '...';
+    if (extractedText.length > (input.maxLength ?? 5000)) {
+      extractedText = extractedText.substring(0, (input.maxLength ?? 5000)) + '...';
     }
 
     return {
@@ -264,13 +266,14 @@ export const trackUserInteractions = aui
 
       // Track keyboard events
       if (input.trackKeyboard) {
-        const keyHandler = (e: KeyboardEvent) => {
+        const keyHandler = (e: Event) => {
+          const keyEvent = e as KeyboardEvent;
           addInteraction('keydown', 'document', {
-            key: e.key,
-            code: e.code,
-            ctrlKey: e.ctrlKey,
-            altKey: e.altKey,
-            shiftKey: e.shiftKey
+            key: keyEvent.key,
+            code: keyEvent.code,
+            ctrlKey: keyEvent.ctrlKey,
+            altKey: keyEvent.altKey,
+            shiftKey: keyEvent.shiftKey
           });
         };
         addEventListener(document, 'keydown', keyHandler);

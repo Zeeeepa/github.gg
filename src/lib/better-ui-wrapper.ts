@@ -1,10 +1,13 @@
 // Better-UI wrapper for consistent imports and compatibility
-import { aui as auiImport, z } from '@lantos1618/better-ui';
+import { AUI, z } from '@lantos1618/better-ui';
+
+// Create a singleton AUI instance
+const aui = new AUI();
 
 // Re-export the main aui object and z (zod) for type validation
 export { z };
-export default auiImport;
-export const aui = auiImport;
+export default aui;
+export { aui };
 
 // Type definitions for better-ui tool structure
 export interface ToolDefinition {
